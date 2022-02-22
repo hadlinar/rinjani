@@ -73,6 +73,7 @@ flutter:
     - assets/icon/ic_back.png
     - assets/icon/ic_calendar.png
     - assets/icon/ic_clock.png
+    - assets/icon/ic_add.png
 
     #dummy
     - assets/dummy.json

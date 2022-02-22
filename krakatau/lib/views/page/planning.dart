@@ -26,15 +26,27 @@ class _Planning extends State<Planning> {
   late List<String> autoCompletion;
   var _selectedCust = null;
   var _selectedPIC = null;
-  // late TextEditingController controller;
-
-
+  int _count = 1;
+  List<Widget> _container = [];
 
   List typeVal = [
     "In-office",
     "Out-office",
     "Off"
   ];
+
+  void _addCount() {
+    print('masuk');
+    setState((){
+      _count++;
+    });
+    print('count di addCount $_count');
+  }
+
+  void _addContainer() {
+    print('masuk add container');
+    List.generate(_count, (int i) => AddPlan(autoCompletion));
+  }
 
   void startTime(ctx) {
     showCupertinoModalPopup(
@@ -130,6 +142,8 @@ class _Planning extends State<Planning> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _container = List.generate(_count, (int i) => AddPlan(autoCompletion));
+
     return SafeArea(
       top: false,
       bottom: false,
@@ -345,63 +359,46 @@ class _Planning extends State<Planning> {
                 defaultType == "Out-office" ? (isLoading ? const Center(
                   child: CircularProgressIndicator()
                 ) : Container(
-                    padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
-                    child: Column(
-                      children: <Widget> [
-                        Container(
-                          child: DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            showClearButton: true,
-                            showSelectedItems: true,
-                            items: autoCompletion,
-                            dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                            label: "Customer",
-                            showSearchBox: true,
-                            onChanged: (val) {
-                              print(val);
-                              _selectedCust = val;
-                            },
-                            selectedItem: _selectedCust,
-                            dropdownSearchDecoration: InputDecoration(
-                              labelText: "Select a customer",
-                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                              alignLabelWithHint: true,
-                              contentPadding: EdgeInsets.only(left: 12),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius .circular(10),
-                                  borderSide: BorderSide()),
+                      child: Column(
+                          children: <Widget> [
+                            Column(
+                              children: _container,
                             ),
-                          )
-                        ),
-                        Container(
-                            padding: const EdgeInsets.only(top: 17),
-                            child: DropdownSearch<String>(
-                              mode: Mode.MENU,
-                              showClearButton: true,
-                              showSelectedItems: true,
-                              items: ["PIC1", "PIC2", "PIC3", "PIC4"],
-                              dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                              label: "Person in Charge",
-                              showSearchBox: true,
-                              onChanged: (val) {
-                                print(val);
-                                _selectedPIC = val;
-                              },
-                              selectedItem: _selectedPIC,
-                              dropdownSearchDecoration: InputDecoration(
-                                labelText: "Select a PIC",
-                                labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                alignLabelWithHint: true,
-                                contentPadding: EdgeInsets.only(left: 12),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius .circular(10),
-                                    borderSide: BorderSide()),
-                              ),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                    width: 130,
+                                    padding: const EdgeInsets.only(left: 21, right: 21),
+                                    margin: const EdgeInsets.only(bottom: 30),
+                                    child: InkWell(
+                                        onTap: _addCount,
+                                        child: Container(
+                                            child: Row(
+                                                children: <Widget> [
+                                                  const ImageIcon(
+                                                    AssetImage(Global.ADD_ICON),
+                                                    size: 18,
+                                                  ),
+                                                  Container(
+                                                      padding: const EdgeInsets.only(left: 17),
+                                                      child: const Text('Add plan',
+                                                          style: TextStyle(
+                                                            color: Color(0xff4F4F4F),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                            decoration: TextDecoration.underline,
+                                                          )
+                                                      )
+                                                  )
+                                                ]
+                                            )
+                                        )
+                                    )
+                                )
                             )
-                        ),
-                      ]
+                          ]
+                      )
                     )
-                  )
                 ) : (
                   defaultType == "Off" ? Container(
                     padding: const EdgeInsets.only(top: 17, right: 21, left: 21, bottom: 17),
@@ -463,6 +460,92 @@ class _Planning extends State<Planning> {
           )
         )
       )
+    );
+  }
+}
+
+class AddPlan extends StatefulWidget {
+  final List<String> autoCompletion;
+  AddPlan(this.autoCompletion);
+
+  @override
+  State<StatefulWidget> createState() => _AddPlan();
+}
+
+class _AddPlan extends State<AddPlan> {
+  var _selectedCust = null;
+  var _selectedPIC = null;
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        children: <Widget> [
+          Container(
+              padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
+              child: Column(
+                  children: <Widget> [
+                    Container(
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          showClearButton: true,
+                          showSelectedItems: true,
+                          items: widget.autoCompletion,
+                          dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                          label: "Customer",
+                          showSearchBox: true,
+                          onChanged: (val) {
+                            print(val);
+                            _selectedCust = val;
+                          },
+                          selectedItem: _selectedCust,
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Select a customer",
+                            labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                            alignLabelWithHint: true,
+                            contentPadding: EdgeInsets.only(left: 12),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius .circular(10),
+                                borderSide: BorderSide()),
+                          ),
+                        )
+                    ),
+                    Container(
+                        padding: const EdgeInsets.only(top: 17),
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          showClearButton: true,
+                          showSelectedItems: true,
+                          items: ["PIC1", "PIC2", "PIC3", "PIC4"],
+                          dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                          label: "Person in Charge",
+                          showSearchBox: true,
+                          onChanged: (val) {
+                            print(val);
+                            _selectedPIC = val;
+                          },
+                          selectedItem: _selectedPIC,
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Select a PIC",
+                            labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                            alignLabelWithHint: true,
+                            contentPadding: EdgeInsets.only(left: 12),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius .circular(10),
+                                borderSide: BorderSide()),
+                          ),
+                        )
+                    ),
+                  ]
+              )
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: const Divider(
+              height: 30,
+            ),
+          ),
+        ]
     );
   }
 }

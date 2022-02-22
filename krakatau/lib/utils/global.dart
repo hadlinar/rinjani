@@ -11,6 +11,7 @@ class Global {
   static const BACK_ICON = "assets/icon/ic_back.png";
   static const CALENDAR_ICON = "assets/icon/ic_calendar.png";
   static const CLOCK_ICON = "assets/icon/ic_clock.png";
+  static const ADD_ICON = "assets/icon/ic_add.png";
 
   static TextStyle getCustomFont(int color, double fontSize, String fontName) {
     return TextStyle(
