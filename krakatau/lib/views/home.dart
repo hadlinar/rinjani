@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:krakatau/utils/global.dart';
+import 'package:krakatau/views/page/planning.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -72,13 +73,16 @@ class Home extends StatelessWidget {
                     Column(
                       children: <Widget>[
                         GestureDetector(
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => Planning()
+                            ));
+                          },
                           child: Global.getMenuCard("planning.png", 0xffE1BBBB)
                         ),
                         Global.getMenuText("Planning")
                       ],
                     ),
-                    // Spacer(),
                     Column(
                       children: <Widget>[
                         GestureDetector(

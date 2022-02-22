@@ -5,13 +5,30 @@ import 'package:flutter/material.dart';
 
 class Global {
   static int BLACK = 0xff333333;
+  static int BLUE = 0xff2F80ED;
+  static int GREY = 0xff828282;
 
-  
+  static const BACK_ICON = "assets/icon/ic_back.png";
+  static const CALENDAR_ICON = "assets/icon/ic_calendar.png";
+  static const CLOCK_ICON = "assets/icon/ic_clock.png";
+  static const ADD_ICON = "assets/icon/ic_add.png";
+
   static TextStyle getCustomFont(int color, double fontSize, String fontName) {
     return TextStyle(
         color: Color(color),
         fontFamily: fontName,
         fontSize: fontSize);
+  }
+
+  static Text getDefaultText(String textToShown, int color) {
+    return Text(
+      textToShown,
+      style: TextStyle(
+          color: Color(color),
+          fontFamily: 'medium',
+          fontSize: 15
+      )
+    );
   }
 
   static Text getMenuText(String textToShown) {
@@ -41,5 +58,7 @@ class Global {
         )
     );
   }
+
+  static void setState(Null Function() param0) {}
 
 } 
