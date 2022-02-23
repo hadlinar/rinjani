@@ -65,7 +65,7 @@ class _CalendarState extends State<Calendar> {
           ),
           weekendTextStyle: TextStyle(color: Color(Global.GREY), fontFamily: 'medium'),
           selectedTextStyle: TextStyle(color: Colors.white, fontFamily: 'medium'),
-          todayTextStyle: TextStyle(color: Colors.white, fontFamily: 'medium'),
+          todayTextStyle: const TextStyle(color: Colors.white, fontFamily: 'medium'),
           todayDecoration: BoxDecoration(
             color: Color(0xff7AC8B5),
             shape: BoxShape.circle,
@@ -74,6 +74,32 @@ class _CalendarState extends State<Calendar> {
         selectedDayPredicate: (DateTime date) {
           return isSameDay(selectedDay, date);
         },
+      ),
+      bottomNavigationBar: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+            width: double.infinity,
+            height: 56,
+            color: Colors.white,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Color(Global.BLUE)),
+                borderRadius: BorderRadius.circular(10)
+              ),
+              color: Color(Global.BLUE),
+              onPressed: () {},
+              child: const Text(
+                "Save",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'bold',
+                  fontSize: 15
+                ),
+              )
+            ),
+          ),
+        ]
       )
     );
   }

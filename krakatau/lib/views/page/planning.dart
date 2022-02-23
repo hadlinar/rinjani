@@ -27,7 +27,6 @@ class _Planning extends State<Planning> {
   var _selectedCust = null;
   var _selectedPIC = null;
   int _count = 1;
-  List<Widget> _container = [];
 
   List typeVal = [
     "In-office",
@@ -36,16 +35,9 @@ class _Planning extends State<Planning> {
   ];
 
   void _addCount() {
-    print('masuk');
     setState((){
       _count++;
     });
-    print('count di addCount $_count');
-  }
-
-  void _addContainer() {
-    print('masuk add container');
-    List.generate(_count, (int i) => AddPlan(autoCompletion));
   }
 
   void startTime(ctx) {
@@ -458,7 +450,33 @@ class _Planning extends State<Planning> {
               ),
             ],
           )
-        )
+        ),
+        bottomNavigationBar: Stack(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                width: double.infinity,
+                height: 56,
+                color: Colors.white,
+                child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Color(Global.BLUE)),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    color: Color(Global.BLUE),
+                    onPressed: () {},
+                    child: const Text(
+                      "Submit",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'bold',
+                          fontSize: 15
+                      ),
+                    )
+                ),
+              ),
+            ]
+        ),
       )
     );
   }
