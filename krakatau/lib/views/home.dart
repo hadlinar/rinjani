@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:krakatau/utils/global.dart';
 import 'package:krakatau/views/page/planning.dart';
+import 'package:krakatau/views/page/realization.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -86,7 +87,11 @@ class Home extends StatelessWidget {
                     Column(
                       children: <Widget>[
                         GestureDetector(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => Realization()
+                              ));
+                            },
                             child: Global.getMenuCard("realization.png", 0xffDAC2ED)
                         ),
                         Global.getMenuText("Realization")
