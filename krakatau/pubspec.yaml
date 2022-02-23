@@ -37,6 +37,7 @@ dependencies:
   table_calendar: ^3.0.3
   substring_highlight: ^1.0.33
   dropdown_search: ^2.0.1
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   dropdownfield: 1.0.0
@@ -74,9 +75,22 @@ flutter:
     - assets/icon/ic_calendar.png
     - assets/icon/ic_clock.png
     - assets/icon/ic_add.png
+    - assets/icon/ic_customer.png
+    - assets/icon/ic_pic.png
+    - assets/icon/ic_result.png
+    - assets/icon/ic_visit.png
+    - assets/icon/ic_arrow.png
+
+
+    #background
+    - assets/images/bg_customer.png
+    - assets/images/bg_pic.png
+    - assets/images/bg_visit.png
+    - assets/images/bg_result.png
 
     #dummy
     - assets/dummy.json
+    - assets/dummyData.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

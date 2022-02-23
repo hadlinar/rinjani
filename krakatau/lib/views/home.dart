@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:krakatau/utils/global.dart';
 import 'package:krakatau/views/page/planning.dart';
 import 'package:krakatau/views/page/realization.dart';
+import 'package:krakatau/views/page/report.dart';
+import 'package:krakatau/widget/calendar.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -76,7 +78,7 @@ class Home extends StatelessWidget {
                         GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => Planning()
+                              builder: (context) => Calendar()
                             ));
                           },
                           child: Global.getMenuCard("planning.png", 0xffE1BBBB)
@@ -100,7 +102,11 @@ class Home extends StatelessWidget {
                     Column(
                       children: <Widget>[
                         GestureDetector(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => Report()
+                              ));
+                            },
                             child: Global.getMenuCard("report.png", 0xffF2EFA7)
                         ),
                         Global.getMenuText("Report")
