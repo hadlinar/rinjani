@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:substring_highlight/substring_highlight.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../utils/global.dart';
@@ -11,6 +10,9 @@ import '../../widget/calendar.dart';
 import 'package:intl/intl.dart';
 
 class Planning extends StatefulWidget {
+  DateTime focusedDay;
+  Planning(this.focusedDay);
+
   @override
   State<StatefulWidget> createState() {
     return _Planning();
@@ -21,7 +23,6 @@ class _Planning extends State<Planning> {
   String? defaultType;
   String? offType;
   DateTime timeStart = DateTime.now();
-  DateTime timeEnd = DateTime.now();
   bool isLoading = false;
   late List<String> autoCompletion;
   var _selectedCust = null;
@@ -75,42 +76,6 @@ class _Planning extends State<Planning> {
     );
   }
 
-  void endTime(ctx) {
-    showCupertinoModalPopup(
-        context: ctx,
-        builder: (_) => Container(
-          height: 300,
-          color: const Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 200,
-                child: CupertinoDatePicker(
-                    initialDateTime: DateTime.now().add(
-                      Duration(minutes: 60 - DateTime.now().minute % 30),
-                    ),
-                    mode: CupertinoDatePickerMode.time,
-                    minuteInterval: 15,
-                    minimumDate: timeStart,
-                    use24hFormat: true,
-                    onDateTimeChanged: (val) {
-                      setState(() {
-                        timeEnd = val;
-                      });
-                    }),
-              ),
-              CupertinoButton(
-                child: Text("Save",
-                  style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
-                ),
-                onPressed: () => Navigator.of(ctx).pop(),
-              )
-            ],
-          ),
-        )
-    );
-  }
-
   Future fetchAutoCompleteData() async {
     setState(() {
       isLoading = true;
@@ -134,6 +99,7 @@ class _Planning extends State<Planning> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.focusedDay);
     List<Widget> _container = List.generate(_count, (int i) => AddPlan(autoCompletion));
 
     return SafeArea(
@@ -152,7 +118,7 @@ class _Planning extends State<Planning> {
               )
           ),
           title: Text(
-              "Home",
+              "Back",
               style: Global.getCustomFont(Global.BLUE, 18, 'medium')
           ),
         ),
@@ -162,8 +128,8 @@ class _Planning extends State<Planning> {
           child: Column(
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.only(top: 26, right: 21, left: 21, bottom: 17),
-                child: DropdownButtonFormField<String>(
+                  padding: const EdgeInsets.only(top: 22, right: 21, left: 21),
+                  child: DropdownButtonFormField<String>(
                     hint: Text("Choose type of plan"),
                     dropdownColor: Colors.white,
                     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
@@ -192,165 +158,69 @@ class _Planning extends State<Planning> {
                           borderSide: BorderSide()
                       ),
                     ),
-                )
-              ),
-              Row(
-                children: <Widget> [
-                  Container(
-                    padding: const EdgeInsets.only(right: 21, left: 21),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Start date",
-                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => Calendar()
-                                ));
-                              },
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 6, right: 22),
-                                    child: Global.getDefaultText(DateFormat('dd - MM - yyyy').format(DateTime.now()), Global.GREY),
-                                  ),
-                                  ImageIcon(
-                                    AssetImage(Global.CALENDAR_ICON),
-                                    color: Color(Global.BLUE),
-                                    size: 18,
-                                  )
-                                ],
-                              )
-                          ),
-                        ],
-                      ),
-                    )
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(right: 21, left: 21),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("End date",
-                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => Calendar()
-                                ));
-                              },
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 6, right: 22),
-                                    child: Global.getDefaultText(DateFormat('dd - MM - yyyy').format(DateTime.now()), Global.GREY),
-                                  ),
-                                  ImageIcon(
-                                    AssetImage(Global.CALENDAR_ICON),
-                                    color: Color(Global.BLUE),
-                                    size: 18,
-                                  )
-                                ],
-                              )
-                          ),
-                        ],
-                      ),
-                    )
                   )
-                ]
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 26, right: 21, left: 21),
-                child:
-                Column(
-                  children: <Widget> [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Time",
-                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    Row(
-                      children: <Widget> [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: CupertinoButton(
-                            child: Row(
-                                children: <Widget> [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 22),
-                                    child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
-                                  ),
-                                  ImageIcon(
-                                    AssetImage(Global.CLOCK_ICON),
-                                    color: Color(Global.BLUE),
-                                    size: 18,
-                                  )
-                                ]
-                            ),
-                            onPressed: () => startTime(context),
-                          ),
-                        ),
-                        Global.getDefaultText("-", Global.BLACK),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: CupertinoButton(
-                            child: Row(
-                                children: <Widget> [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 22),
-                                    child: Global.getDefaultText(DateFormat("HH:mm").format(timeEnd), Global.GREY),
-                                  ),
-                                  ImageIcon(
-                                    AssetImage(Global.CLOCK_ICON),
-                                    color: Color(Global.BLUE),
-                                    size: 18,
-                                  )
-                                ]
-                            ),
-                            onPressed: () => endTime(context),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                )
               ),
               defaultType == "In-office" ? Container(
                 padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
-                child: TextFormField(
-                  style:
-                  Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                  maxLines: 5,
-                  maxLength: 200,
-                  decoration: InputDecoration(
-                    labelText: "Description",
-                    alignLabelWithHint: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius .circular(10),
-                      borderSide: BorderSide()),
-                  ),
-                ),
-              ) : (
+                child: Column(
+                  children: <Widget> [
+                    Container(
+                        padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17),
+                        child:
+                        Column(
+                          children: <Widget> [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Time",
+                                style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            Row(
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CupertinoButton(
+                                    child: Row(
+                                        children: <Widget> [
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 22),
+                                            child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                          ),
+                                          ImageIcon(
+                                            AssetImage(Global.CLOCK_ICON),
+                                            color: Color(Global.BLUE),
+                                            size: 18,
+                                          )
+                                        ]
+                                    ),
+                                    onPressed: () => startTime(context),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                    ),
+                    TextFormField(
+                      style:
+                      Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                      maxLines: 5,
+                      maxLength: 200,
+                      decoration: InputDecoration(
+                        labelText: "Description",
+                        alignLabelWithHint: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius .circular(10),
+                            borderSide: BorderSide()),
+                      ),
+                    ),
+                  ]
+                )) : (
                 defaultType == "Out-office" ? (isLoading ? const Center(
                   child: CircularProgressIndicator()
-                ) : Container(
+                ) :
+                Container(
                       child: Column(
                           children: <Widget> [
                             Column(
@@ -494,13 +364,87 @@ class _AddPlan extends State<AddPlan> {
   var _selectedCust = null;
   var _selectedPIC = null;
   bool isLoading = false;
+  DateTime timeStart = DateTime.now();
+
+  void startTime(ctx) {
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+          height: 300,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 200,
+                child: CupertinoDatePicker(
+                    initialDateTime: DateTime.now().add(
+                      Duration(minutes: 60 - DateTime.now().minute % 30),
+                    ),
+                    mode: CupertinoDatePickerMode.time,
+                    minuteInterval: 15,
+                    use24hFormat: true,
+                    onDateTimeChanged: (val) {
+                      setState(() {
+                        timeStart = val;
+                      });
+                    }),
+              ),
+              CupertinoButton(
+                child: Text("Save",
+                  style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
+            ],
+          ),
+        )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
         children: <Widget> [
           Container(
-              padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
+              padding: const EdgeInsets.only(top: 17, right: 21, left: 21),
+              child:
+              Column(
+                children: <Widget> [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Time",
+                      style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget> [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: CupertinoButton(
+                          child: Row(
+                              children: <Widget> [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 22),
+                                  child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                ),
+                                ImageIcon(
+                                  AssetImage(Global.CLOCK_ICON),
+                                  color: Color(Global.BLUE),
+                                  size: 18,
+                                )
+                              ]
+                          ),
+                          onPressed: () => startTime(context),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+          ),
+          Container(
+              padding: const EdgeInsets.only(left: 21, right: 21),
               child: Column(
                   children: <Widget> [
                     Container(

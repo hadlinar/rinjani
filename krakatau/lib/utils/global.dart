@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Global {
   static int BLACK = 0xff333333;
@@ -12,6 +13,11 @@ class Global {
   static const CALENDAR_ICON = "assets/icon/ic_calendar.png";
   static const CLOCK_ICON = "assets/icon/ic_clock.png";
   static const ADD_ICON = "assets/icon/ic_add.png";
+  static const CUSTOMER_ICON = "assets/icon/ic_customer.png";
+  static const PIC_ICON = "assets/icon/ic_pic.png";
+  static const RESULT_ICON = "assets/icon/ic_result.png";
+  static const VISIT_ICON = "assets/icon/ic_visit.png";
+  static const ARROW_ICON = "assets/icon/ic_arrow.png";
 
   static TextStyle getCustomFont(int color, double fontSize, String fontName) {
     return TextStyle(
@@ -36,6 +42,59 @@ class Global {
       textToShown,
       style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
     );
+  }
+
+  static getReportCard(String text, int baseColor, int circleColor, String icon) {
+    return Container(
+      width: 151,
+      height: 72,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: AssetImage("assets/images/bg_$icon.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.only(top: 17, left: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Image.asset(
+                'assets/icon/ic_$icon.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // db customer
+          Container(
+            padding: const EdgeInsets.only(top: 5, left: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                text,
+                style: TextStyle(color: Color(BLACK), fontSize: 14, fontFamily: 'medium'),
+              ),
+            )
+          )
+        ],
+      )
+    );
+    //   Card(
+    //     elevation: 0,
+    //     color: Color(baseColor),
+    //     shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(15)
+    //     ),
+    //     child: SizedBox(
+    //         width: 80,
+    //         height: 80,
+    //         child: Container(
+    //           padding: EdgeInsets.all(13),
+    //         )
+    //     )
+    // );
   }
 
   static Card getMenuCard(String imageCard, int color) {
