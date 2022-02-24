@@ -1,17 +1,20 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../utils/global.dart';
-import '../../widget/calendar.dart';
 import 'package:intl/intl.dart';
 
 class Planning extends StatefulWidget {
-  DateTime focusedDay;
-  Planning(this.focusedDay);
+  final DateTime? focusedDay;
+  final List<String>? autoCompletion;
+  final String? onChangedPIC;
+  final String? onChangedCust;
+
+  Planning({this.focusedDay,
+      this.autoCompletion,
+      this.onChangedPIC,
+      this.onChangedCust});
 
   @override
   State<StatefulWidget> createState() {
@@ -23,17 +26,17 @@ class _Planning extends State<Planning> {
   String? defaultType;
   String? offType;
   DateTime timeStart = DateTime.now();
-  bool isLoading = false;
-  late List<String> autoCompletion;
-  var _selectedCust = null;
-  var _selectedPIC = null;
   int _count = 1;
+
+  final descriptionController = TextEditingController();
+  final descOffController = TextEditingController();
 
   List typeVal = [
     "In-office",
     "Out-office",
     "Off"
   ];
+
 
   void _addCount() {
     setState((){
@@ -76,32 +79,9 @@ class _Planning extends State<Planning> {
     );
   }
 
-  Future fetchAutoCompleteData() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String stringData = await rootBundle.loadString("assets/dummy.json");
-    final List<dynamic> json = jsonDecode(stringData);
-    final List<String> jsonStringData = json.cast<String>();
-
-    setState((){
-      isLoading = false;
-      autoCompletion = jsonStringData;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchAutoCompleteData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(widget.focusedDay);
-    List<Widget> _container = List.generate(_count, (int i) => AddPlan(autoCompletion));
-
+    List<Widget> _container = List.generate(_count, (int i) => AddPlan(widget.autoCompletion));
     return SafeArea(
       top: false,
       bottom: false,
@@ -112,7 +92,7 @@ class _Planning extends State<Planning> {
           leading: IconButton(
               onPressed: Navigator.of(context).pop,
               icon: ImageIcon(
-                  AssetImage(Global.BACK_ICON),
+                  const AssetImage(Global.BACK_ICON),
                   color: Color(Global.BLUE),
                   size: 18,
               )
@@ -176,35 +156,31 @@ class _Planning extends State<Planning> {
                                 textAlign: TextAlign.left,
                               ),
                             ),
-                            Row(
-                              children: <Widget> [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: CupertinoButton(
-                                    child: Row(
-                                        children: <Widget> [
-                                          Padding(
-                                            padding: const EdgeInsets.only(right: 22),
-                                            child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
-                                          ),
-                                          ImageIcon(
-                                            AssetImage(Global.CLOCK_ICON),
-                                            color: Color(Global.BLUE),
-                                            size: 18,
-                                          )
-                                        ]
-                                    ),
-                                    onPressed: () => startTime(context),
-                                  ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: CupertinoButton(
+                                child: Row(
+                                    children: <Widget> [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 22),
+                                        child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                      ),
+                                      ImageIcon(
+                                        AssetImage(Global.CLOCK_ICON),
+                                        color: Color(Global.BLUE),
+                                        size: 18,
+                                      )
+                                    ]
                                 ),
-                              ],
-                            )
+                                onPressed: () => startTime(context),
+                              ),
+                            ),
                           ],
                         )
                     ),
                     TextFormField(
-                      style:
-                      Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                      controller: descriptionController,
                       maxLines: 5,
                       maxLength: 200,
                       decoration: InputDecoration(
@@ -217,9 +193,7 @@ class _Planning extends State<Planning> {
                     ),
                   ]
                 )) : (
-                defaultType == "Out-office" ? (isLoading ? const Center(
-                  child: CircularProgressIndicator()
-                ) :
+                defaultType == "Out-office" ?
                 Container(
                       child: Column(
                           children: <Widget> [
@@ -261,8 +235,7 @@ class _Planning extends State<Planning> {
                           ]
                       )
                     )
-                ) : (
-                  defaultType == "Off" ? Container(
+                 : (defaultType == "Off" ? Container(
                     padding: const EdgeInsets.only(top: 17, right: 21, left: 21, bottom: 17),
                     child: Column(
                       children: <Widget> [
@@ -299,12 +272,11 @@ class _Planning extends State<Planning> {
                         offType == "Other" ? Container(
                           padding: const EdgeInsets.only(top: 17),
                           child: TextFormField(
-                            style:
-                            Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                            style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                             maxLines: 4,
+                            controller: descOffController,
                             maxLength: 150,
-                            decoration:
-                            InputDecoration(
+                            decoration: InputDecoration(
                               labelText: "Description",
                               alignLabelWithHint: true,
                               border: OutlineInputBorder(
@@ -315,8 +287,7 @@ class _Planning extends State<Planning> {
                         ) : Container()
                       ]
                     )
-                  ) : Container()
-                )
+                  ) : Container())
               ),
             ],
           )
@@ -334,7 +305,21 @@ class _Planning extends State<Planning> {
                         borderRadius: BorderRadius.circular(10)
                     ),
                     color: Color(Global.BLUE),
-                    onPressed: () {},
+                    onPressed: () {
+                      print(defaultType);
+                      print(timeStart);
+                      if(defaultType == "In-office") {
+                        print(descriptionController.text);
+                      } else if(defaultType == "Off") {
+                        print(offType);
+                        if(offType == "Other") {
+                          print(descOffController.text);
+                        }
+                      } else {
+                        print("widget customer ${widget.onChangedCust}");
+                        print("widget pic ${widget.onChangedPIC}");
+                      }
+                    },
                     child: const Text(
                       "Submit",
                       style: TextStyle(
@@ -346,14 +331,16 @@ class _Planning extends State<Planning> {
                 ),
               ),
             ]
-        ),
+        )
       )
     );
   }
 }
 
+typedef OnChangeCallback = void Function(dynamic value);
+
 class AddPlan extends StatefulWidget {
-  final List<String> autoCompletion;
+  final List<String>? autoCompletion;
   AddPlan(this.autoCompletion);
 
   @override
@@ -457,8 +444,11 @@ class _AddPlan extends State<AddPlan> {
                           label: "Customer",
                           showSearchBox: true,
                           onChanged: (val) {
-                            print(val);
-                            _selectedCust = val;
+                            // print(val);
+                            setState(() {
+                              _selectedCust = val;
+                              Planning(onChangedCust: val);
+                            });
                           },
                           selectedItem: _selectedCust,
                           dropdownSearchDecoration: InputDecoration(
@@ -483,8 +473,11 @@ class _AddPlan extends State<AddPlan> {
                           label: "Person in Charge",
                           showSearchBox: true,
                           onChanged: (val) {
-                            print(val);
-                            _selectedPIC = val;
+                            // print(val);
+                            setState(() {
+                              _selectedPIC = val;
+                              Planning(onChangedPIC: val);
+                            });
                           },
                           selectedItem: _selectedPIC,
                           dropdownSearchDecoration: InputDecoration(

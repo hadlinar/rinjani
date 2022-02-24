@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../utils/global.dart';
@@ -13,7 +16,30 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
-  DateTime focusedDay = DateTime.now();
+  DateTime? focusedDay = DateTime.now();
+  bool isLoading = false;
+  late List<String>? autoCompletion;
+
+  Future fetchAutoCompleteData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/dummy.json");
+    final List<dynamic> json = jsonDecode(stringData);
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState((){
+      isLoading = false;
+      autoCompletion = jsonStringData;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAutoCompleteData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +129,7 @@ class _CalendarState extends State<Calendar> {
                           color: Color(Global.BLUE),
                           onPressed: () {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => Planning(focusedDay)
+                                builder: (context) => Planning(focusedDay: focusedDay, autoCompletion: autoCompletion)
                             ));
                           },
                           child: const Text(

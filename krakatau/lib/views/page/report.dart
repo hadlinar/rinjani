@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:krakatau/views/page/list_customer.dart';
+import 'package:krakatau/views/page/list_pic.dart';
+import 'package:krakatau/views/page/list_reports.dart';
 
 import '../../utils/global.dart';
+import 'list_visit.dart';
 
 class Report extends StatefulWidget {
   @override
@@ -54,10 +58,20 @@ class _Report extends State<Report> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ListCustomer()
+                              ));
+                            },
                             child: Global.getReportCard('Customer', 0xff7DE0B3, 0xff6ECCA1, 'customer')
                           ),
                           InkWell(
-                              child: Global.getReportCard('PICs', 0xffFFC17E, 0xffECA85E, 'pic')
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ListPIC()
+                              ));
+                            },
+                            child: Global.getReportCard('PICs', 0xffFFC17E, 0xffECA85E, 'pic')
                           )
                         ],
                       ),
@@ -69,10 +83,20 @@ class _Report extends State<Report> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ListVisit()
+                              ));
+                            },
                               child: Global.getReportCard('Visits', 0xffFA898D, 0xffD1777A, 'visit')
                           ),
                           InkWell(
-                              child: Global.getReportCard('Result', 0xff73C6F2, 0xff5894B4, 'result')
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ListReport()
+                              ));
+                            },
+                            child: Global.getReportCard('Result', 0xff73C6F2, 0xff5894B4, 'result')
                           )
                         ],
                       )
@@ -100,6 +124,7 @@ class _Report extends State<Report> {
                             itemCount: 3,
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, i){
                               return ListTile(
                                   title: Container(
@@ -124,25 +149,31 @@ class _Report extends State<Report> {
                             }
                         )
                       ),
-                      Container(
-                        child: Container(
-                          child: Row(
-                              children: <Widget> [
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                      padding: const EdgeInsets.only(left: 17),
-                                      child: Text('More',
-                                        style: TextStyle(color: Color(Global.BLUE), fontSize: 13, fontFamily: 'medium'),
-                                      )
-                                  ),
-                                ),
-                                const ImageIcon(
-                                  AssetImage(Global.ARROW_ICON),
-                                  size: 18,
-                                ),
-                              ]
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => ListVisit()
+                          ));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget> [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'More',
+                                style: TextStyle(color: Color(Global.BLUE), fontSize: 15, fontFamily: 'book'),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4, left: 10),
+                              child: ImageIcon(
+                                AssetImage(Global.ARROW_ICON),
+                                size: 18,
+                              ),
                             )
+
+                          ],
                         )
                       )
                     ],
@@ -164,17 +195,64 @@ class _Report extends State<Report> {
                           ),
                         ),
                         Container(
-                            // child: ListView.builder(
-                            //     itemCount: autoCompletion.length,
-                            //     itemBuilder: (context, i){
-                            //       print("test ${autoCompletion[i]}");
-                            //       return ListTile(
-                            //           leading: Icon(Icons.list),
-                            //           title:Text(autoCompletion[i])
-                            //       );
-                            //     }
-                            // )
+                            padding: const EdgeInsets.only(top: 7),
+                            child: ListView.builder(
+                                itemCount: 3,
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, i){
+                                  return ListTile(
+                                      title: Container(
+                                        child: Column(
+                                            children: <Widget>[
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('PIC ${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(top: 5),
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Text('Customer ${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                ),
+                                              ),
+                                              Divider()
+                                            ]
+                                        ),
+                                      )
+                                  );
+                                }
+                            )
+                        ),
+                        InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ListPIC()
+                              ));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'More',
+                                    style: TextStyle(color: Color(Global.BLUE), fontSize: 15, fontFamily: 'book'),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 4, left: 10),
+                                  child: ImageIcon(
+                                    AssetImage(Global.ARROW_ICON),
+                                    size: 18,
+                                  ),
+                                )
+
+                              ],
+                            )
                         )
+
                       ],
                     )
                 ),
@@ -194,16 +272,58 @@ class _Report extends State<Report> {
                           ),
                         ),
                         Container(
-                            // child: ListView.builder(
-                            //     itemCount: autoCompletion.length,
-                            //     itemBuilder: (context, i){
-                            //       print("test ${autoCompletion[i]}");
-                            //       return ListTile(
-                            //           leading: Icon(Icons.list),
-                            //           title:Text(autoCompletion[i])
-                            //       );
-                            //     }
-                            // )
+                            padding: const EdgeInsets.only(top: 7),
+                            child: ListView.builder(
+                                itemCount: 3,
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, i){
+                                  return ListTile(
+                                      title: Container(
+                                        child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: const EdgeInsets.only(top: 5),
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Text('Customer ${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                ),
+                                              ),
+                                              Divider()
+                                            ]
+                                        ),
+                                      )
+                                  );
+                                }
+                            )
+                        ),
+                        InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ListCustomer()
+                              ));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'More',
+                                    style: TextStyle(color: Color(Global.BLUE), fontSize: 15, fontFamily: 'book'),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 4, left: 10),
+                                  child: ImageIcon(
+                                    AssetImage(Global.ARROW_ICON),
+                                    size: 18,
+                                  ),
+                                )
+
+                              ],
+                            )
                         )
                       ],
                     )

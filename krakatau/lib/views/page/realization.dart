@@ -121,44 +121,44 @@ class _Realization extends State<Realization> {
                             ),
                           )
                       ),
-                      Container(
-                          padding: const EdgeInsets.only(top: 17, right: 21, left: 21),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child:Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Start date",
-                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                                GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) => Calendar()
-                                      ));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 6, right: 22),
-                                          child: Global.getDefaultText(DateFormat('dd - MM - yyyy').format(DateTime.now()), Global.GREY),
-                                        ),
-                                        ImageIcon(
-                                          AssetImage(Global.CALENDAR_ICON),
-                                          color: Color(Global.BLUE),
-                                          size: 18,
-                                        )
-                                      ],
-                                    )
-                                ),
-                              ],
-                            ),
-                          )
-                      ),
+                      // Container(
+                      //     padding: const EdgeInsets.only(top: 17, right: 21, left: 21),
+                      //     child: Align(
+                      //       alignment: Alignment.centerLeft,
+                      //       child:Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Align(
+                      //             alignment: Alignment.centerLeft,
+                      //             child: Text("Select a date",
+                      //               style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                      //               textAlign: TextAlign.left,
+                      //             ),
+                      //           ),
+                      //           GestureDetector(
+                      //               onTap: (){
+                      //                 Navigator.push(context, MaterialPageRoute(
+                      //                     builder: (context) => Calendar()
+                      //                 ));
+                      //               },
+                      //               child: Row(
+                      //                 children: [
+                      //                   Padding(
+                      //                     padding: EdgeInsets.only(top: 6, right: 22),
+                      //                     child: Global.getDefaultText(DateFormat('dd - MM - yyyy').format(DateTime.now()), Global.GREY),
+                      //                   ),
+                      //                   ImageIcon(
+                      //                     AssetImage(Global.CALENDAR_ICON),
+                      //                     color: Color(Global.BLUE),
+                      //                     size: 18,
+                      //                   )
+                      //                 ],
+                      //               )
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     )
+                      // ),
                     ]
                 )
             ),
