@@ -1,11 +1,8 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:krakatau/utils/global.dart';
-import 'package:krakatau/views/page/planning.dart';
-import 'package:krakatau/views/page/realization.dart';
 import 'package:krakatau/views/page/report.dart';
-import 'package:krakatau/widget/calendar.dart';
+
+import '../widget/calendar.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -91,7 +88,8 @@ class Home extends StatelessWidget {
                         GestureDetector(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => Realization()
+                                  // builder: (context) => Realization()
+                                  builder: (context) => Calendar()
                               ));
                             },
                             child: Global.getMenuCard("realization.png", 0xffDAC2ED)

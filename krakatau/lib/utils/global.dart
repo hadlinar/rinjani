@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Global {
+
   static int BLACK = 0xff333333;
   static int BLUE = 0xff2F80ED;
   static int GREY = 0xff828282;
@@ -18,6 +20,9 @@ class Global {
   static const RESULT_ICON = "assets/icon/ic_result.png";
   static const VISIT_ICON = "assets/icon/ic_visit.png";
   static const ARROW_ICON = "assets/icon/ic_arrow.png";
+  static const CANCEL_ICON = "assets/icon/ic_cancel.png";
+
+  static void setState(Null Function() param0) {}
 
   static TextStyle getCustomFont(int color, double fontSize, String fontName) {
     return TextStyle(
@@ -81,20 +86,6 @@ class Global {
         ],
       )
     );
-    //   Card(
-    //     elevation: 0,
-    //     color: Color(baseColor),
-    //     shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(15)
-    //     ),
-    //     child: SizedBox(
-    //         width: 80,
-    //         height: 80,
-    //         child: Container(
-    //           padding: EdgeInsets.all(13),
-    //         )
-    //     )
-    // );
   }
 
   static Card getMenuCard(String imageCard, int color) {
@@ -117,7 +108,5 @@ class Global {
         )
     );
   }
-
-  static void setState(Null Function() param0) {}
 
 } 

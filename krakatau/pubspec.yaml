@@ -80,6 +80,7 @@ flutter:
     - assets/icon/ic_result.png
     - assets/icon/ic_visit.png
     - assets/icon/ic_arrow.png
+    - assets/icon/ic_cancel.png
 
 
     #background

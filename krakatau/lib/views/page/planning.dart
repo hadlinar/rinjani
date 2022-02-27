@@ -5,6 +5,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import '../../utils/global.dart';
 import 'package:intl/intl.dart';
 
+import '../../widget/custom_text_field.dart';
+
 class Planning extends StatefulWidget {
   final DateTime? focusedDay;
   final List<String>? autoCompletion;
@@ -45,6 +47,41 @@ class _Planning extends State<Planning> {
   }
 
   void startTime(ctx) {
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+          height: 300,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 200,
+                child: CupertinoDatePicker(
+                    initialDateTime: DateTime.now().add(
+                      Duration(minutes: 60 - DateTime.now().minute % 30),
+                    ),
+                    mode: CupertinoDatePickerMode.time,
+                    minuteInterval: 15,
+                    use24hFormat: true,
+                    onDateTimeChanged: (val) {
+                      setState(() {
+                        timeStart = val;
+                      });
+                    }),
+              ),
+              CupertinoButton(
+                child: Text("Save",
+                  style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
+            ],
+          ),
+        )
+    );
+  }
+
+  void endTime(ctx) {
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
@@ -156,25 +193,58 @@ class _Planning extends State<Planning> {
                                 textAlign: TextAlign.left,
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: CupertinoButton(
-                                child: Row(
-                                    children: <Widget> [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 22),
-                                        child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
-                                      ),
-                                      ImageIcon(
-                                        AssetImage(Global.CLOCK_ICON),
-                                        color: Color(Global.BLUE),
-                                        size: 18,
-                                      )
-                                    ]
+                            Row(
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CupertinoButton(
+                                    child: Row(
+                                        children: <Widget> [
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 22),
+                                            child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                          ),
+                                          ImageIcon(
+                                            AssetImage(Global.CLOCK_ICON),
+                                            color: Color(Global.BLUE),
+                                            size: 18,
+                                          ),
+                                        ]
+                                    ),
+                                    onPressed: () => startTime(context),
+                                  ),
                                 ),
-                                onPressed: () => startTime(context),
-                              ),
-                            ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 22),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text("-",
+                                      style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CupertinoButton(
+                                    child: Row(
+                                        children: <Widget> [
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 22),
+                                            child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                          ),
+                                          ImageIcon(
+                                            AssetImage(Global.CLOCK_ICON),
+                                            color: Color(Global.BLUE),
+                                            size: 18,
+                                          ),
+                                        ]
+                                    ),
+                                    onPressed: () => endTime(context),
+                                  ),
+                                ),
+                              ]
+                            )
                           ],
                         )
                     ),
@@ -193,45 +263,49 @@ class _Planning extends State<Planning> {
                     ),
                   ]
                 )) : (
-                defaultType == "Out-office" ?
-                Container(
+                defaultType == "Out-office" ? Container(
                       child: Column(
                           children: <Widget> [
                             Column(
                               children: _container,
                             ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: const Divider(),
+                            ),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
-                                    width: 130,
-                                    padding: const EdgeInsets.only(left: 21, right: 21),
-                                    margin: const EdgeInsets.only(bottom: 30),
-                                    child: InkWell(
-                                        onTap: _addCount,
-                                        child: Container(
-                                            child: Row(
-                                                children: <Widget> [
-                                                  const ImageIcon(
-                                                    AssetImage(Global.ADD_ICON),
-                                                    size: 18,
-                                                  ),
-                                                  Container(
-                                                      padding: const EdgeInsets.only(left: 17),
-                                                      child: const Text('Add plan',
-                                                          style: TextStyle(
-                                                            color: Color(0xff4F4F4F),
-                                                            fontFamily: 'book',
-                                                            fontSize: 13,
-                                                            decoration: TextDecoration.underline,
-                                                          )
-                                                      )
-                                                  )
-                                                ]
-                                            )
-                                        )
-                                    )
+                                  width: double.infinity,
+                                  color: Colors.white,
+                                  child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                                          width: 153,
+                                          height: 56,
+                                          color: Colors.white,
+                                          child: RaisedButton(
+                                              shape: RoundedRectangleBorder(
+                                                  side: BorderSide(color: Color(Global.BLUE)),
+                                                  borderRadius: BorderRadius.circular(20)
+                                              ),
+                                              color: Color(Global.BLUE),
+                                              onPressed: _addCount,
+                                              child: const Text(
+                                                "Add visit",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'bold',
+                                                    fontSize: 15
+                                                ),
+                                              )
+                                          ),
+                                        ),
+                                      ]
+                                  ),
                                 )
-                            )
+                            ),
                           ]
                       )
                     )
@@ -337,8 +411,6 @@ class _Planning extends State<Planning> {
   }
 }
 
-typedef OnChangeCallback = void Function(dynamic value);
-
 class AddPlan extends StatefulWidget {
   final List<String>? autoCompletion;
   AddPlan(this.autoCompletion);
@@ -348,12 +420,92 @@ class AddPlan extends StatefulWidget {
 }
 
 class _AddPlan extends State<AddPlan> {
+  var positionPIC = <TextEditingController>[];
+  var namePIC = <TextEditingController>[];
+  var cards = <Column>[];
   var _selectedCust = null;
-  var _selectedPIC = null;
+
+  Column createCard() {
+    var positionController = TextEditingController();
+    var nameController = TextEditingController();
+    positionPIC.add(positionController);
+    namePIC.add(nameController);
+
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            children: <Widget> [
+              Container(
+                padding: const EdgeInsets.only(left: 21, right: 21, bottom: 17),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Person in Charge",
+                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+
+            ]
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 21, right: 21),
+            child: CustomTextField(label: 'Position', controller: positionController),
+          ),
+          Container(
+              padding: const EdgeInsets.only(left: 21, right: 21),
+              child: CustomTextField(label: 'Name', controller: nameController)
+          )
+        ],
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cards.add(createCard());
+  }
+
   bool isLoading = false;
   DateTime timeStart = DateTime.now();
 
   void startTime(ctx) {
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+          height: 300,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 200,
+                child: CupertinoDatePicker(
+                    initialDateTime: DateTime.now().add(
+                      Duration(minutes: 60 - DateTime.now().minute % 30),
+                    ),
+                    mode: CupertinoDatePickerMode.time,
+                    minuteInterval: 15,
+                    use24hFormat: true,
+                    onDateTimeChanged: (val) {
+                      setState(() {
+                        timeStart = val;
+                      });
+                    }),
+              ),
+              CupertinoButton(
+                child: Text("Save",
+                  style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
+            ],
+          ),
+        )
+    );
+  }
+
+  void endTime(ctx) {
     showCupertinoModalPopup(
         context: ctx,
         builder: (_) => Container(
@@ -394,8 +546,7 @@ class _AddPlan extends State<AddPlan> {
         children: <Widget> [
           Container(
               padding: const EdgeInsets.only(top: 17, right: 21, left: 21),
-              child:
-              Column(
+              child: Column(
                 children: <Widget> [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -425,82 +576,142 @@ class _AddPlan extends State<AddPlan> {
                           onPressed: () => startTime(context),
                         ),
                       ),
+                      const Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text('-'),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: CupertinoButton(
+                          child: Row(
+                              children: <Widget> [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 22),
+                                  child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                ),
+                                ImageIcon(
+                                  AssetImage(Global.CLOCK_ICON),
+                                  color: Color(Global.BLUE),
+                                  size: 18,
+                                )
+                              ]
+                          ),
+                          onPressed: () => endTime(context),
+                        ),
+                      ),
                     ],
                   )
                 ],
               )
           ),
           Container(
-              padding: const EdgeInsets.only(left: 21, right: 21),
-              child: Column(
-                  children: <Widget> [
-                    Container(
-                        child: DropdownSearch<String>(
-                          mode: Mode.MENU,
-                          showClearButton: true,
-                          showSelectedItems: true,
-                          items: widget.autoCompletion,
-                          dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                          label: "Customer",
-                          showSearchBox: true,
-                          onChanged: (val) {
-                            // print(val);
-                            setState(() {
-                              _selectedCust = val;
-                              Planning(onChangedCust: val);
-                            });
-                          },
-                          selectedItem: _selectedCust,
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: "Select a customer",
-                            labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                            alignLabelWithHint: true,
-                            contentPadding: EdgeInsets.only(left: 12),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius .circular(10),
-                                borderSide: BorderSide()),
-                          ),
-                        )
-                    ),
-                    Container(
-                        padding: const EdgeInsets.only(top: 17),
-                        child: DropdownSearch<String>(
-                          mode: Mode.MENU,
-                          showClearButton: true,
-                          showSelectedItems: true,
-                          items: ["PIC1", "PIC2", "PIC3", "PIC4"],
-                          dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                          label: "Person in Charge",
-                          showSearchBox: true,
-                          onChanged: (val) {
-                            // print(val);
-                            setState(() {
-                              _selectedPIC = val;
-                              Planning(onChangedPIC: val);
-                            });
-                          },
-                          selectedItem: _selectedPIC,
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: "Select a PIC",
-                            labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                            alignLabelWithHint: true,
-                            contentPadding: EdgeInsets.only(left: 12),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius .circular(10),
-                                borderSide: BorderSide()),
-                          ),
-                        )
-                    ),
-                  ]
+              padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17),
+              child: DropdownSearch<String>(
+                mode: Mode.MENU,
+                showClearButton: true,
+                showSelectedItems: true,
+                items: widget.autoCompletion,
+                dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                label: "Customer",
+                showSearchBox: true,
+                onChanged: (val) {
+                  // print(val);
+                  setState(() {
+                    _selectedCust = val;
+                    Planning(onChangedCust: val);
+                  });
+                },
+                selectedItem: _selectedCust,
+                dropdownSearchDecoration: InputDecoration(
+                  labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                  alignLabelWithHint: true,
+                  contentPadding: EdgeInsets.only(left: 12),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius .circular(10),
+                      borderSide: BorderSide()),
+                ),
               )
           ),
           Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: const Divider(
-              height: 30,
+            child: Column(
+              children: <Widget>[
+                ListView.builder(
+                  itemCount: cards.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Stack(
+                      children: <Widget> [
+                        cards[index],
+                        cards.length > 1 ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                cards.removeAt(index);
+                              });
+                            },
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 21),
+                                child: ImageIcon(
+                                  AssetImage(Global.CANCEL_ICON),
+                                  size: 18,
+                                  color: Color(Global.GREY),
+                                ),
+                              )
+                            )
+                        ) : Container()
+                      ]
+                    );
+                  },
+                ),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                        width: 130,
+                        padding: const EdgeInsets.only(left: 21, right: 21),
+                        margin: const EdgeInsets.only(bottom: 30),
+                        child: InkWell(
+                            onTap: () => setState(() => cards.add(createCard())),
+                            child: Container(
+                                child: Row(
+                                    children: <Widget> [
+                                      const ImageIcon(
+                                        AssetImage(Global.ADD_ICON),
+                                        size: 18,
+                                      ),
+                                      Container(
+                                          padding: const EdgeInsets.only(left: 17),
+                                          child: const Text('Add PIC',
+                                              style: TextStyle(
+                                                color: Color(0xff4F4F4F),
+                                                fontFamily: 'book',
+                                                fontSize: 13,
+                                                decoration: TextDecoration.underline,
+                                              )
+                                          )
+                                      )
+                                    ]
+                                )
+                            )
+                        )
+                    )
+                ),
+              ],
             ),
           ),
         ]
     );
+  }
+}
+
+class PICEntry {
+  final String position;
+  final String name;
+
+  PICEntry(this.position, this.name);
+  @override
+  String toString() {
+    return 'PIC: position = $position, name = $name';
   }
 }

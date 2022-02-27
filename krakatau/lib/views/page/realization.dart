@@ -4,10 +4,9 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:krakatau/widget/custom_text_field.dart';
 
 import '../../utils/global.dart';
-import '../../widget/calendar.dart';
 
 class Realization extends StatefulWidget{
   @override
@@ -21,6 +20,11 @@ class _Realization extends State<Realization> {
   late List<String> autoCompletion;
   var _selectedCust = null;
   var _selectedPIC = null;
+
+
+  final descriptionController = TextEditingController();
+  final positionController = TextEditingController();
+  final nameController = TextEditingController();
 
   Future fetchAutoCompleteData() async {
     setState(() {
@@ -96,66 +100,88 @@ class _Realization extends State<Realization> {
                           )
                       ),
                       Container(
-                          padding: const EdgeInsets.only(top: 17),
-                          child: DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            showClearButton: true,
-                            showSelectedItems: true,
-                            items: ["PIC1", "PIC2", "PIC3", "PIC4"],
-                            dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                            label: "Person in Charge",
-                            showSearchBox: true,
-                            onChanged: (val) {
-                              print(val);
-                              _selectedPIC = val;
-                            },
-                            selectedItem: _selectedPIC,
-                            dropdownSearchDecoration: InputDecoration(
-                              labelText: "Select a PIC",
-                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                              alignLabelWithHint: true,
-                              contentPadding: EdgeInsets.only(left: 12),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius .circular(10),
-                                  borderSide: BorderSide()),
+                        padding: const EdgeInsets.only(top: 30),
+                        child: CustomTextField(label: 'Position', controller: positionController),
+                      ),
+                      Container(
+                        child: CustomTextField(label: 'Name', controller: nameController),
+                      ),
+                      Container(
+                        child: TextFormField(
+                          style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                          controller: descriptionController,
+                          maxLines: 5,
+                          maxLength: 200,
+                          decoration: InputDecoration(
+                            labelText: "Description",
+                            alignLabelWithHint: true,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius .circular(10),
+                                borderSide: BorderSide()),
+                          ),
+                        ),
+                      ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: double.infinity,
+                            color: Colors.white,
+                            child: Stack(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                                    width: 163,
+                                    height: 56,
+                                    color: Colors.white,
+                                    child: RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                            side: BorderSide(color: Color(Global.BLUE)),
+                                            borderRadius: BorderRadius.circular(20)
+                                        ),
+                                        color: Color(Global.BLUE),
+                                        onPressed: () {},
+                                        child: const Text(
+                                          "Set location",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'bold',
+                                              fontSize: 15
+                                          ),
+                                        )
+                                    ),
+                                  ),
+                                ]
                             ),
                           )
                       ),
                       // Container(
-                      //     padding: const EdgeInsets.only(top: 17, right: 21, left: 21),
-                      //     child: Align(
-                      //       alignment: Alignment.centerLeft,
-                      //       child:Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           Align(
-                      //             alignment: Alignment.centerLeft,
-                      //             child: Text("Select a date",
-                      //               style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                      //               textAlign: TextAlign.left,
-                      //             ),
-                      //           ),
-                      //           GestureDetector(
-                      //               onTap: (){
-                      //                 Navigator.push(context, MaterialPageRoute(
-                      //                     builder: (context) => Calendar()
-                      //                 ));
-                      //               },
-                      //               child: Row(
-                      //                 children: [
-                      //                   Padding(
-                      //                     padding: EdgeInsets.only(top: 6, right: 22),
-                      //                     child: Global.getDefaultText(DateFormat('dd - MM - yyyy').format(DateTime.now()), Global.GREY),
-                      //                   ),
-                      //                   ImageIcon(
-                      //                     AssetImage(Global.CALENDAR_ICON),
-                      //                     color: Color(Global.BLUE),
-                      //                     size: 18,
-                      //                   )
-                      //                 ],
-                      //               )
-                      //           ),
-                      //         ],
+                      //     padding: const EdgeInsets.only(top: 17),
+                      //     child: Column(
+                      //       children: <Widget> [
+                      //
+                      //       ],
+                      //     )
+                      //     DropdownSearch<String>(
+                      //       mode: Mode.MENU,
+                      //       showClearButton: true,
+                      //       showSelectedItems: true,
+                      //       items: ["PIC1", "PIC2", "PIC3", "PIC4"],
+                      //       dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                      //       label: "Person in Charge",
+                      //       showSearchBox: true,
+                      //       onChanged: (val) {
+                      //         print(val);
+                      //         _selectedPIC = val;
+                      //       },
+                      //       selectedItem: _selectedPIC,
+                      //       dropdownSearchDecoration: InputDecoration(
+                      //         labelText: "Select a PIC",
+                      //         labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                      //         alignLabelWithHint: true,
+                      //         contentPadding: EdgeInsets.only(left: 12),
+                      //         border: OutlineInputBorder(
+                      //             borderRadius: BorderRadius .circular(10),
+                      //             borderSide: BorderSide()),
                       //       ),
                       //     )
                       // ),
