@@ -16,7 +16,7 @@ class InOffice extends StatefulWidget {
 final GlobalState store = GlobalState.instance;
 
 class _InOffice extends State<InOffice> {
-  final descriptionController = TextEditingController();
+  String? descriptionController;
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
 
@@ -93,7 +93,7 @@ class _InOffice extends State<InOffice> {
 
   @override
   Widget build(BuildContext context) {
-    store.set("desc", descriptionController.text);
+    store.set("desc", descriptionController);
     store.set("timeStart", DateFormat("HH:mm").format(timeStart));
     store.set("timeEnd", DateFormat("HH:mm").format(timeEnd));
     return GestureDetector (
@@ -164,7 +164,11 @@ class _InOffice extends State<InOffice> {
                 ),
                 TextFormField(
                   style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                  controller: descriptionController,
+                  onChanged: (text) {
+                    setState(() {
+                      descriptionController = text;
+                    });
+                  },
                   maxLines: 5,
                   maxLength: 200,
                   decoration: InputDecoration(

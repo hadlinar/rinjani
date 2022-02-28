@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:krakatau/views/page/plan_in_office.dart';
+import 'package:krakatau/views/page/plan_off.dart';
+import 'package:krakatau/views/page/plan_out_office.dart';
 
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
@@ -94,10 +96,12 @@ class _Plan extends State<Plan> {
                   defaultType == "In-office" ? Container(
                       child: InOffice()
                   )
-                      : (defaultType == "Out-office" ? Container()
-                      : (defaultType == "Off" ? Container() : Container()
+                      : (defaultType == "Out-office" ? Container(
+                      child: OutOffice(widget.autoCompletion)
                   )
-                  )
+                      : (defaultType == "Off" ? Container(
+                      child: Off()
+                  ) : Container()))
                 ],
               )
           ),
@@ -115,12 +119,15 @@ class _Plan extends State<Plan> {
                       ),
                       color: Color(Global.BLUE),
                       onPressed: () {
+                        print(defaultType);
+                        print(DateFormat("dd/MM/yyyy").format(widget.focusedDay));
                         if(defaultType == "In-office") {
-                          print(defaultType);
-                          print(DateFormat("dd/MM/yyyy").format(widget.focusedDay));
                           print(store.get("desc"));
                           print(store.get("timeStart"));
                           print(store.get("timeEnd"));
+                        } else if(defaultType == "Off") {
+                          print(store.get("descOff"));
+                          print(store.get("offType"));
                         }
                       },
                       child: const Text(
