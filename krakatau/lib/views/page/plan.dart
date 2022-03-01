@@ -128,6 +128,8 @@ class _Plan extends State<Plan> {
                         } else if(defaultType == "Off") {
                           print(store.get("descOff"));
                           print(store.get("offType"));
+                        } else {
+                          print(store.get("result"));
                         }
                       },
                       child: const Text(

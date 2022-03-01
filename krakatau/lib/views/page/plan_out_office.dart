@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,6 @@ final GlobalState store = GlobalState.instance;
 
 class _OutOffice extends State<OutOffice> {
   var visitCard = <Column>[];
-  var picCard = <Column>[];
 
   int _count = 1;
 
@@ -34,7 +35,9 @@ class _OutOffice extends State<OutOffice> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _container = List.generate(_count, (int i) => AddPlan(widget.autoCompletion));
+    List<Widget> _container = List.generate(_count, (int i) {
+      return AddPlan(widget.autoCompletion, _count-1);
+    });
     return GestureDetector (
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -91,23 +94,42 @@ class _OutOffice extends State<OutOffice> {
 
 class AddPlan extends StatefulWidget {
   final List<String>? autoCompletion;
-  AddPlan(this.autoCompletion);
+  final int indexVisit;
+  AddPlan(this.autoCompletion, this.indexVisit);
 
   @override
   State<StatefulWidget> createState() => _AddPlan();
 }
 
 class _AddPlan extends State<AddPlan> {
-  var positionPIC = <TextEditingController>[];
-  var namePIC = <TextEditingController>[];
+  late List<Map<String, dynamic>> _values;
+  late List<Map<String, dynamic>> value;
+
+  var positionTextEditing = <TextEditingController>[];
+  var nameTextEditing = <TextEditingController>[];
+  var positionPIC = <String>[];
+  var namePIC = <String>[];
   var cards = <Column>[];
   var _selectedCust = null;
 
-  Column createCard() {
+
+  // bool isLoading = false;
+  DateTime timeStart = DateTime.now();
+  DateTime timeEnd = DateTime.now();
+
+  int indexCard = 0;
+  int indexPIC = 0;
+
+  late String _result;
+  late String result;
+
+  Column createCard(int key) {
+    String pos = '';
+    String name = '';
     var positionController = TextEditingController();
     var nameController = TextEditingController();
-    positionPIC.add(positionController);
-    namePIC.add(nameController);
+    positionTextEditing.add(positionController);
+    nameTextEditing.add(nameController);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -124,30 +146,120 @@ class _AddPlan extends State<AddPlan> {
                   ),
                 ),
               ),
-
             ]
         ),
         Container(
           padding: const EdgeInsets.only(left: 21, right: 21),
-          child: CustomTextField(label: 'Position', controller: positionController),
+          child: CustomTextField(
+            label: 'Position',
+            controller: positionController,
+            onChange: (val) {
+              pos = val;
+              if(name == null) {
+                _onUpdate(indexPIC: indexPIC, valPos: val, valName: '');
+              } else {
+                _onUpdate(indexPIC: indexPIC, valPos: val, valName: name);
+              }
+            },
+          ),
         ),
         Container(
             padding: const EdgeInsets.only(left: 21, right: 21),
-            child: CustomTextField(label: 'Name', controller: nameController)
+            child: CustomTextField(
+              label: 'Name',
+              controller: nameController,
+              onChange: (val) {
+                name = val;
+                if(pos == null) {
+                  _onUpdate(indexPIC: indexPIC, valPos: '', valName: val);
+                } else {
+                  _onUpdate(indexPIC: indexPIC, valPos: pos, valName: val);
+                }
+              },
+            )
         )
       ],
     );
   }
 
+
+  _onUpdate({int? indexPIC, String? valPos, String? valName}){
+    int? foundKey = -1;
+
+    for(var map in _values) {
+      if(map.containsKey('id_customer')) {
+        if(map['list_pic']['id'] == indexPIC) {
+          foundKey = indexPIC;
+          break;
+        }
+      }
+    }
+
+    if(-1 != foundKey) {
+      _values.removeWhere((map) {
+        return map['list_pic']['id'] == foundKey;
+      });
+    }
+
+    Map<String, dynamic> jsonPIC = {
+      'id' : indexPIC,
+      'pic': {
+        'position': valPos,
+        'name': valName
+      }
+    };
+
+    Map<String, dynamic> json = {
+      'id_customer': widget.indexVisit,
+      'startTime': DateFormat("HH:mm").format(timeStart).toString(),
+      'endTime': DateFormat("HH:mm").format(timeEnd).toString(),
+      'customer': _selectedCust,
+      'list_pic': {
+        'id' : indexPIC,
+        'pic': {
+          'position': valPos,
+          'name': valName
+        }
+      }
+    };
+
+    _values.add(json);
+
+    setState(() {
+      _result = printJson(_values);
+    });
+  }
+
+  _onRemove(int key){
+    setState(() {
+      _values.removeWhere((e) => e.values.first == key);
+      for(var map in _values) {
+        if(map.containsKey('id')) {
+          if(map['id'] > key) {
+            map['id'] -= 1;
+          }
+        }
+      }
+      _result = printJson(_values);
+      store.set("positionPIC", _result);
+    });
+  }
+
+  String printJson(jsonObject) {
+    var encoder = const JsonEncoder.withIndent('      ');
+    return encoder.convert(jsonObject);
+  }
+
+
   @override
   void initState() {
     super.initState();
-    cards.add(createCard());
+    cards.add(createCard(indexPIC));
+    _values = [];
+    _result = '';
+    // value = [];
+    // result = '';
   }
-
-  bool isLoading = false;
-  DateTime timeStart = DateTime.now();
-  DateTime timeEnd = DateTime.now();
 
   void startTime(ctx) {
     showCupertinoModalPopup(
@@ -222,9 +334,8 @@ class _AddPlan extends State<AddPlan> {
 
   @override
   Widget build(BuildContext context) {
-    store.set("selectedCustomer", _selectedCust);
-    store.set("timeStartOut", DateFormat("HH:mm").format(timeStart));
-    store.set("timeEndOut", DateFormat("HH:mm").format(timeEnd));
+
+    store.set("result", _result);
     return Column(
         children: <Widget> [
           Container(
@@ -299,9 +410,9 @@ class _AddPlan extends State<AddPlan> {
                 label: "Customer",
                 showSearchBox: true,
                 onChanged: (val) {
-                  // print(val);
                   setState(() {
                     _selectedCust = val;
+                    _onUpdate(indexPIC: indexPIC);
                   });
                 },
                 selectedItem: _selectedCust,
@@ -329,7 +440,10 @@ class _AddPlan extends State<AddPlan> {
                           cards.length > 1 ? GestureDetector(
                               onTap: () {
                                 setState(() {
+                                  indexPIC--;
                                   cards.removeAt(index);
+                                  _onUpdate(indexPIC: index);
+                                  _onRemove(index);
                                 });
                               },
                               child: Align(
@@ -355,7 +469,10 @@ class _AddPlan extends State<AddPlan> {
                         padding: const EdgeInsets.only(left: 21, right: 21),
                         margin: const EdgeInsets.only(bottom: 30),
                         child: InkWell(
-                            onTap: () => setState(() => cards.add(createCard())),
+                            onTap: () => setState(() {
+                              indexPIC++;
+                              cards.add(createCard(indexPIC));
+                            }),
                             child: Container(
                                 child: Row(
                                     children: <Widget> [
@@ -385,16 +502,5 @@ class _AddPlan extends State<AddPlan> {
           ),
         ]
     );
-  }
-}
-
-class PICEntry {
-  final String position;
-  final String name;
-
-  PICEntry(this.position, this.name);
-  @override
-  String toString() {
-    return 'PIC: position = $position, name = $name';
   }
 }
