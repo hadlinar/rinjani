@@ -1,0 +1,43 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'user.g.dart';
+
+// "user_id": "1984409004",
+// "nik": "1984409004",
+// "branch_id": "11",
+// "password": "$2y$10$XPm1TQruFZv1gEy9PShrkePa4qVWEauJJZ7viambJ0f.xlcWlIhT2",
+// "email": "iskak@nusindo.co.id",
+// "role_id": "2",
+// "flg_used": "y"
+
+@JsonSerializable()
+class User{
+  static const SUCCESS_LOCATION = "ok";
+
+  String user_id;
+  String nik;
+  String branch_id;
+  String email;
+  String role_id;
+  String flg_used;
+
+  User({
+    required this.user_id,
+    required this.nik,
+    required this.branch_id,
+    required this.email,
+    required this.role_id,
+    required this.flg_used
+  });
+
+  factory User.fromJson(Map<String,dynamic> json) => _$UserFromJson(json);
+}
+
+@JsonSerializable()
+class UserResponse{
+  String message;
+  List<User> result;
+
+  UserResponse(this.message, this.result);
+
+  factory UserResponse.fromJson(Map<String,dynamic> json) => _$UserResponseFromJson(json);
+}

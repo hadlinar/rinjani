@@ -1,0 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+@immutable
+abstract class CustomerBlocEvent{}
+
+class GetCustomerCategoryEvent extends CustomerBlocEvent{}
+
+class GetCustomerEvent extends CustomerBlocEvent{}

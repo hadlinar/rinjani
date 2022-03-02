@@ -3,10 +3,14 @@ import 'dart:convert';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rinjani/bloc/customer/customer_bloc.dart';
+import 'package:rinjani/models/customer.dart';
 
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 import 'package:intl/intl.dart';
+import 'package:rinjani/app_module.dart';
 
 import '../../widget/custom_text_field.dart';
 
@@ -102,6 +106,8 @@ class AddPlan extends StatefulWidget {
 }
 
 class _AddPlan extends State<AddPlan> {
+  static List<Customer> listCustomer = [];
+
   late List<Map<String, dynamic>> _values;
   late List<Map<String, dynamic>> value;
 
@@ -112,8 +118,6 @@ class _AddPlan extends State<AddPlan> {
   var cards = <Column>[];
   var _selectedCust = null;
 
-
-  // bool isLoading = false;
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
 
@@ -203,10 +207,8 @@ class _AddPlan extends State<AddPlan> {
 
     Map<String, dynamic> jsonPIC = {
       'id' : indexPIC,
-      'pic': {
-        'position': valPos,
-        'name': valName
-      }
+      'position': valPos,
+      'name': valName
     };
 
     Map<String, dynamic> json = {
@@ -250,15 +252,13 @@ class _AddPlan extends State<AddPlan> {
     return encoder.convert(jsonObject);
   }
 
-
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<CustomerBloc>(context).add(GetCustomerCategoryEvent());
     cards.add(createCard(indexPIC));
     _values = [];
     _result = '';
-    // value = [];
-    // result = '';
   }
 
   void startTime(ctx) {
@@ -336,171 +336,193 @@ class _AddPlan extends State<AddPlan> {
   Widget build(BuildContext context) {
 
     store.set("result", _result);
-    return Column(
-        children: <Widget> [
-          Container(
-              padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17, top: 17),
-              child:
-              Column(
-                children: <Widget> [
-                  Container(
-                    padding: const EdgeInsets.only(right: 21, left: 21),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Time",
-                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ),
-                  Row(
+    return BlocBuilder<CustomerBloc, CustomerBlocState>(
+      builder: (context, state){
+        print(state.toString());
+        if(state is CustomerList) {
+          var customer = state.getCustomer;
+
+          List<String> customerName = [];
+          for(int i=0; i < customer.length; i++) {
+            customerName.add(customer[i].cust_name);
+          }
+
+          return Column(
+              children: <Widget> [
+                Container(
+                    padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17, top: 17),
+                    child: Column(
                       children: <Widget> [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: CupertinoButton(
-                            child: Row(
-                                children: <Widget> [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 22),
-                                    child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
-                                  ),
-                                  ImageIcon(
-                                    AssetImage(Global.CLOCK_ICON),
-                                    color: Color(Global.BLUE),
-                                    size: 18,
-                                  )
-                                ]
+                        Container(
+                          padding: const EdgeInsets.only(right: 21, left: 21),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Time",
+                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                              textAlign: TextAlign.left,
                             ),
-                            onPressed: () => startTime(context),
                           ),
                         ),
-                        Global.getDefaultText("-", Global.BLACK),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: CupertinoButton(
-                            child: Row(
-                                children: <Widget> [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 22),
-                                    child: Global.getDefaultText(DateFormat("HH:mm").format(timeEnd), Global.GREY),
+                        Row(
+                            children: <Widget> [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: CupertinoButton(
+                                  child: Row(
+                                      children: <Widget> [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 22),
+                                          child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
+                                        ),
+                                        ImageIcon(
+                                          AssetImage(Global.CLOCK_ICON),
+                                          color: Color(Global.BLUE),
+                                          size: 18,
+                                        )
+                                      ]
                                   ),
-                                  ImageIcon(
-                                    AssetImage(Global.CLOCK_ICON),
-                                    color: Color(Global.BLUE),
-                                    size: 18,
-                                  )
-                                ]
-                            ),
-                            onPressed: () => endTime(context),
-                          ),
-                        ),
-                      ]
-                  )
-                ],
-              )
-          ),
-          Container(
-              padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17),
-              child: DropdownSearch<String>(
-                mode: Mode.MENU,
-                showClearButton: true,
-                showSelectedItems: true,
-                items: widget.autoCompletion,
-                dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                label: "Customer",
-                showSearchBox: true,
-                onChanged: (val) {
-                  setState(() {
-                    _selectedCust = val;
-                    _onUpdate(indexPIC: indexPIC);
-                  });
-                },
-                selectedItem: _selectedCust,
-                dropdownSearchDecoration: InputDecoration(
-                  labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                  alignLabelWithHint: true,
-                  contentPadding: EdgeInsets.only(left: 12),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius .circular(10),
-                      borderSide: BorderSide()),
-                ),
-              )
-          ),
-          Container(
-            child: Column(
-              children: <Widget>[
-                ListView.builder(
-                  itemCount: cards.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Stack(
-                        children: <Widget> [
-                          cards[index],
-                          cards.length > 1 ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  indexPIC--;
-                                  cards.removeAt(index);
-                                  _onUpdate(indexPIC: index);
-                                  _onRemove(index);
-                                });
-                              },
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(right: 21),
-                                    child: ImageIcon(
-                                      AssetImage(Global.CANCEL_ICON),
-                                      size: 18,
-                                      color: Color(Global.GREY),
-                                    ),
-                                  )
-                              )
-                          ) : Container()
-                        ]
-                    );
-                  },
-                ),
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                        width: 130,
-                        padding: const EdgeInsets.only(left: 21, right: 21),
-                        margin: const EdgeInsets.only(bottom: 30),
-                        child: InkWell(
-                            onTap: () => setState(() {
-                              indexPIC++;
-                              cards.add(createCard(indexPIC));
-                            }),
-                            child: Container(
-                                child: Row(
-                                    children: <Widget> [
-                                      const ImageIcon(
-                                        AssetImage(Global.ADD_ICON),
-                                        size: 18,
-                                      ),
-                                      Container(
-                                          padding: const EdgeInsets.only(left: 17),
-                                          child: const Text('Add PIC',
-                                              style: TextStyle(
-                                                color: Color(0xff4F4F4F),
-                                                fontFamily: 'book',
-                                                fontSize: 13,
-                                                decoration: TextDecoration.underline,
-                                              )
-                                          )
-                                      )
-                                    ]
-                                )
-                            )
+                                  onPressed: () => startTime(context),
+                                ),
+                              ),
+                              Global.getDefaultText("-", Global.BLACK),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: CupertinoButton(
+                                  child: Row(
+                                      children: <Widget> [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 22),
+                                          child: Global.getDefaultText(DateFormat("HH:mm").format(timeEnd), Global.GREY),
+                                        ),
+                                        ImageIcon(
+                                          AssetImage(Global.CLOCK_ICON),
+                                          color: Color(Global.BLUE),
+                                          size: 18,
+                                        )
+                                      ]
+                                  ),
+                                  onPressed: () => endTime(context),
+                                ),
+                              ),
+                            ]
                         )
+                      ],
                     )
                 ),
-              ],
-            ),
-          ),
-        ]
+                Container(
+                    padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17),
+                    child: DropdownSearch<String>(
+                      mode: Mode.MENU,
+                      showClearButton: true,
+                      showSelectedItems: true,
+                      items: customerName,
+                      dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                      label: "Customer",
+                      showSearchBox: true,
+                      onChanged: (val) {
+                        setState(() {
+                          _selectedCust = val;
+                          _onUpdate(indexPIC: indexPIC);
+                        });
+                      },
+                      selectedItem: _selectedCust,
+                      dropdownSearchDecoration: InputDecoration(
+                        labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                        alignLabelWithHint: true,
+                        contentPadding: EdgeInsets.only(left: 12),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius .circular(10),
+                            borderSide: BorderSide()),
+                      ),
+                    )
+                ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      ListView.builder(
+                        itemCount: cards.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Stack(
+                              children: <Widget> [
+                                cards[index],
+                                cards.length > 1 ? GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        indexPIC--;
+                                        cards.removeAt(index);
+                                        _onUpdate(indexPIC: index);
+                                        _onRemove(index);
+                                      });
+                                    },
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          padding: const EdgeInsets.only(right: 21),
+                                          child: ImageIcon(
+                                            AssetImage(Global.CANCEL_ICON),
+                                            size: 18,
+                                            color: Color(Global.GREY),
+                                          ),
+                                        )
+                                    )
+                                ) : Container()
+                              ]
+                          );
+                        },
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                              width: 130,
+                              padding: const EdgeInsets.only(left: 21, right: 21),
+                              margin: const EdgeInsets.only(bottom: 30),
+                              child: InkWell(
+                                  onTap: () => setState(() {
+                                    indexPIC++;
+                                    cards.add(createCard(indexPIC));
+                                  }),
+                                  child: Container(
+                                      child: Row(
+                                          children: <Widget> [
+                                            const ImageIcon(
+                                              AssetImage(Global.ADD_ICON),
+                                              size: 18,
+                                            ),
+                                            Container(
+                                                padding: const EdgeInsets.only(left: 17),
+                                                child: const Text('Add PIC',
+                                                    style: TextStyle(
+                                                      color: Color(0xff4F4F4F),
+                                                      fontFamily: 'book',
+                                                      fontSize: 13,
+                                                      decoration: TextDecoration.underline,
+                                                    )
+                                                )
+                                            )
+                                          ]
+                                      )
+                                  )
+                              )
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              ]
+          );
+        }
+        else if(state is LoadingCustomerState) {
+          return Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: CircularProgressIndicator()
+          );
+        }
+        else {
+          return Container();
+        }
+      },
     );
   }
 }

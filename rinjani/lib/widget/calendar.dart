@@ -8,7 +8,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../utils/event.dart';
 import '../utils/global.dart';
 import '../views/page/plan.dart';
-import '../views/page/planning.dart';
 
 class Calendar extends StatefulWidget {
   @override
