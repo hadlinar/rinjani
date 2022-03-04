@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rinjani/bloc/branch/branch_bloc.dart';
 import 'package:rinjani/bloc/customer/customer_bloc.dart';
+import 'package:rinjani/bloc/role/role_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/data_source/network/customer_service.dart';
+import 'package:rinjani/data_source/network/role_service.dart';
 import 'package:rinjani/data_source/network/visit_service.dart';
 import 'package:rinjani/data_source/repository/customer_repository.dart';
 import 'package:dio/dio.dart';
@@ -17,6 +19,7 @@ import 'data_source/network/employee_service.dart';
 import 'data_source/network/user_service.dart';
 import 'data_source/repository/branch_repository.dart';
 import 'data_source/repository/employee_repository.dart';
+import 'data_source/repository/role_repository.dart';
 import 'data_source/repository/user_repository.dart';
 
 class AppModule {
@@ -43,6 +46,9 @@ class AppModule {
     injector.registerSingleton<UserService>(
         UserService.create(injector.get(), baseUrl: base_url)
     );
+    injector.registerSingleton<RoleService>(
+        UserService.create(injector.get(), baseUrl: base_url)
+    );
   }
 
   void configureRepository() {
@@ -51,6 +57,7 @@ class AppModule {
     injector.registerSingleton(BranchRepository(injector.get()));
     injector.registerSingleton(EmployeeRepository(injector.get()));
     injector.registerSingleton(UserRepository(injector.get()));
+    injector.registerSingleton(RoleRepository(injector.get()));
   }
 
   Widget configureBloc(Widget app) {
@@ -69,6 +76,9 @@ class AppModule {
       ),
       BlocProvider<UserBloc>(
         create: (_) => UserBloc.create(injector.get()),
+      ),
+      BlocProvider<RoleBloc>(
+        create: (_) => RoleBloc.create(injector.get()),
       ),
     ], child: app);
   }

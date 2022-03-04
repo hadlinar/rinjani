@@ -22,3 +22,138 @@ class VisitCategoryResponse{
 
   factory VisitCategoryResponse.fromJson(Map<String,dynamic> json) => _$VisitCategoryResponseFromJson(json);
 }
+
+@JsonSerializable()
+class VisitReal{
+  static const SUCCESS_LOCATION = "ok";
+
+  String real_no;
+  String visit_no;
+  String branch_id;
+  String cust_id;
+  DateTime time_start;
+  DateTime time_finish;
+  String user_id;
+  String description;
+  String pic_position;
+  String pic_name;
+  String status_visit;
+  double latitude;
+  double longitude;
+
+  VisitReal({
+    required this.real_no,
+    required this.visit_no,
+    required this.branch_id,
+    required this.cust_id,
+    required this.time_start,
+    required this.time_finish,
+    required this.user_id,
+    required this.description,
+    required this.pic_position,
+    required this.pic_name,
+    required this.status_visit,
+    required this.latitude,
+    required this.longitude
+  });
+
+  factory VisitReal.fromJson(Map<String,dynamic> json) => _$VisitRealFromJson(json);
+}
+
+@JsonSerializable()
+class VisitRealResponse{
+  String message;
+  List<VisitReal> result;
+
+  VisitRealResponse(this.message, this.result);
+
+  factory VisitRealResponse.fromJson(Map<String,dynamic> json) => _$VisitRealResponseFromJson(json);
+}
+
+@JsonSerializable()
+class PostVisit{
+  static const SUCCESS_LOCATION = "ok";
+
+  String visit_cat;
+  String branch_id;
+  String cust_id;
+  DateTime time_start;
+  DateTime time_finish;
+  String user_id;
+  String description;
+  String pic_position;
+  String pic_name;
+  String status_visit;
+
+
+  PostVisit({
+    required this.visit_cat,
+    required this.branch_id,
+    required this.cust_id,
+    required this.time_start,
+    required this.time_finish,
+    required this.user_id,
+    required this.description,
+    required this.pic_position,
+    required this.pic_name,
+    required this.status_visit,
+  });
+
+  factory PostVisit.fromJson(Map<String,dynamic> json) => _$PostVisitFromJson(json);
+}
+
+@JsonSerializable()
+class PostVisitResponse{
+  String message;
+  List<PostVisit> result;
+
+  PostVisitResponse(this.message, this.result);
+
+  factory PostVisitResponse.fromJson(Map<String,dynamic> json) => _$PostVisitResponseFromJson(json);
+}
+
+@JsonSerializable()
+class PostReal{
+  static const SUCCESS_LOCATION = "ok";
+
+        String visit_no;
+        String branch_id;
+        String cust_id;
+        DateTime time_start;
+        DateTime time_finish;
+        String user_id;
+        String description;
+        String pic_position;
+        String pic_name;
+        String status_visit;
+        double latitude;
+        double longitude;
+
+
+  PostReal({
+    required this.visit_no,
+    required this.branch_id,
+    required this.cust_id,
+    required this.time_start,
+    required this.time_finish,
+    required this.user_id,
+    required this.description,
+    required this.pic_position,
+    required this.pic_name,
+    required this.status_visit,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  factory PostReal.fromJson(Map<String,dynamic> json) => _$PostRealFromJson(json);
+}
+
+@JsonSerializable()
+class PostRealResponse{
+  String message;
+  List<PostReal> result;
+
+  PostRealResponse(this.message, this.result);
+
+  factory PostRealResponse.fromJson(Map<String,dynamic> json) => _$PostRealResponseFromJson(json);
+}

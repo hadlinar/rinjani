@@ -4,4 +4,62 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class VisitBlocEvent{}
 
+class AddVisitEvent extends VisitBlocEvent{
+  final String visit_cat;
+  final String branch_id;
+  final String cust_id;
+  final DateTime time_start;
+  final DateTime time_finish;
+  final String user_id;
+  final String description;
+  final String pic_position;
+  final String pic_name;
+  final String status_visit;
+
+  AddVisitEvent(
+    this.visit_cat,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.user_id,
+    this.description,
+    this.pic_position,
+    this.pic_name,
+    this.status_visit
+  );
+}
+
+class AddRealizationEvent extends VisitBlocEvent{
+  final String visit_no;
+  final String branch_id;
+  final String cust_id;
+  final DateTime time_start;
+  final DateTime time_finish;
+  final String user_id;
+  final String description;
+  final String pic_position;
+  final String pic_name;
+  final String status_visit;
+  final double latitude;
+  final double longitude;
+
+  AddRealizationEvent(
+      this.visit_no,
+      this.branch_id,
+      this.cust_id,
+      this.time_start,
+      this.time_finish,
+      this.user_id,
+      this.description,
+      this.pic_position,
+      this.pic_name,
+      this.status_visit,
+      this.latitude,
+      this.longitude,
+      );
+}
+
 class GetVisitCategoryEvent extends VisitBlocEvent{}
+
+class GetVisitRealizationEvent extends VisitBlocEvent{}

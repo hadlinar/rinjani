@@ -19,3 +19,13 @@ class VisitCategoryList extends VisitBlocState{
   VisitCategoryList(this.getVisitCategory);
 }
 
+class VisitRealizationList extends VisitBlocState{
+  List<VisitReal> getVisitRealization;
+
+  VisitRealizationList(this.getVisitRealization);
+}
+
+class SuccessAddVisitState extends VisitBlocState{}
+
+class SuccessAddRealizationState extends VisitBlocState{}
+

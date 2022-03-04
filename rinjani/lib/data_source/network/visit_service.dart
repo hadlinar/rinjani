@@ -14,4 +14,13 @@ abstract class VisitService{
 
   @GET('/visit_cat')
   Future<VisitCategoryResponse> getVisitCategory();
+
+  @GET('/realization')
+  Future<VisitRealResponse> getVisitRealization();
+
+  @POST('/add_realization')
+  Future<PostRealResponse> addRealization(@Body() Map<String,dynamic> body);
+
+  @POST('/add_visit')
+  Future<PostVisitResponse> addVisit(@Body() Map<String,dynamic> body);
 }
