@@ -50,6 +50,22 @@ class _VisitService implements VisitService {
   }
 
   @override
+  Future<VisitResponse> getVisit() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<VisitResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/visit',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = VisitResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<PostRealResponse> addRealization(body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

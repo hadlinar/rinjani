@@ -163,3 +163,45 @@ Map<String, dynamic> _$PostRealResponseToJson(PostRealResponse instance) =>
       'message': instance.message,
       'result': instance.result,
     };
+
+Visit _$VisitFromJson(Map<String, dynamic> json) => Visit(
+      visit_no: json['visit_no'] as String,
+      visit_cat: json['visit_cat'] as String,
+      branch_id: json['branch_id'] as String,
+      cust_id: json['cust_id'] as String,
+      time_start: DateTime.parse(json['time_start'] as String),
+      time_finish: DateTime.parse(json['time_finish'] as String),
+      user_id: json['user_id'] as String,
+      description: json['description'] as String,
+      pic_position: json['pic_position'] as String,
+      pic_name: json['pic_name'] as String,
+      status_visit: json['status_visit'] as String,
+    );
+
+Map<String, dynamic> _$VisitToJson(Visit instance) => <String, dynamic>{
+      'visit_no': instance.visit_no,
+      'visit_cat': instance.visit_cat,
+      'branch_id': instance.branch_id,
+      'cust_id': instance.cust_id,
+      'time_start': instance.time_start.toIso8601String(),
+      'time_finish': instance.time_finish.toIso8601String(),
+      'user_id': instance.user_id,
+      'description': instance.description,
+      'pic_position': instance.pic_position,
+      'pic_name': instance.pic_name,
+      'status_visit': instance.status_visit,
+    };
+
+VisitResponse _$VisitResponseFromJson(Map<String, dynamic> json) =>
+    VisitResponse(
+      json['message'] as String,
+      (json['result'] as List<dynamic>)
+          .map((e) => Visit.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$VisitResponseToJson(VisitResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'result': instance.result,
+    };

@@ -18,6 +18,9 @@ abstract class VisitService{
   @GET('/realization')
   Future<VisitRealResponse> getVisitRealization();
 
+  @GET('/visit')
+  Future<VisitResponse> getVisit();
+
   @POST('/add_realization')
   Future<PostRealResponse> addRealization(@Body() Map<String,dynamic> body);
 

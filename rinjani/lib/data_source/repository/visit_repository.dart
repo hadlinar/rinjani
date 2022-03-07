@@ -17,6 +17,11 @@ class VisitRepository {
     return response;
   }
 
+  Future<VisitResponse> getVisit() async {
+    final response = await visitService.getVisit();
+    return response;
+  }
+
   Future<PostVisitResponse> postVisit({
     required String visit_cat,
     required String branch_id,
@@ -73,7 +78,4 @@ class VisitRepository {
     });
     return response;
   }
-
-
-
 }

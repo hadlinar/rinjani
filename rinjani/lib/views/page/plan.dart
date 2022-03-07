@@ -13,9 +13,8 @@ import 'package:intl/intl.dart';
 
 class Plan extends StatefulWidget {
   final DateTime focusedDay;
-  final List<String>? autoCompletion;
 
-  Plan(this.focusedDay,{this.autoCompletion});
+  Plan(this.focusedDay);
 
   @override
   State<StatefulWidget> createState() {
@@ -44,6 +43,7 @@ class _Plan extends State<Plan> {
             for(int i=0; i < 3; i++) {
               visitName.add(state.getVisitCategory[i].visit_name);
             }
+            print(visitName.length);
 
             return GestureDetector(
                 onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -109,7 +109,7 @@ class _Plan extends State<Plan> {
                                 child: InOffice()
                             )
                                 : (defaultType == "out-office" ? Container(
-                                child: OutOffice(widget.autoCompletion)
+                                child: OutOffice()
                             )
                                 : (defaultType == "off" ? Container(
                                 child: Off()

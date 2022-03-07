@@ -157,3 +157,56 @@ class PostRealResponse{
 
   factory PostRealResponse.fromJson(Map<String,dynamic> json) => _$PostRealResponseFromJson(json);
 }
+
+// "visit_no": "VST-2022-JK1-0001",
+// "visit_cat": "01",
+// "branch_id": "12",
+// "cust_id": "",
+// "time_start": "2022-03-04T08:29:13.000Z",
+// "time_finish": "2022-03-04T08:29:13.000Z",
+// "user_id": "1984409004",
+// "description": "test description",
+// "pic_position": "",
+// "pic_name": "",
+// "status_visit": "n"
+
+@JsonSerializable()
+class Visit{
+  String visit_no;
+  String visit_cat;
+  String branch_id;
+  String cust_id;
+  DateTime time_start;
+  DateTime time_finish;
+  String user_id;
+  String description;
+  String pic_position;
+  String pic_name;
+  String status_visit;
+
+  Visit({
+    required this.visit_no,
+    required this.visit_cat,
+    required this.branch_id,
+    required this.cust_id,
+    required this.time_start,
+    required this.time_finish,
+    required this.user_id,
+    required this.description,
+    required this.pic_position ,
+    required this.pic_name,
+    required this.status_visit,
+  });
+
+  factory Visit.fromJson(Map<String,dynamic> json) => _$VisitFromJson(json);
+}
+
+@JsonSerializable()
+class VisitResponse{
+  String message;
+  List<Visit> result;
+
+  VisitResponse(this.message, this.result);
+
+  factory VisitResponse.fromJson(Map<String,dynamic> json) => _$VisitResponseFromJson(json);
+}

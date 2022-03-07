@@ -27,6 +27,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is GetVisitRealizationEvent) {
       yield* _mapVisitRealizationToState(event);
     }
+    if(event is GetVisitEvent) {
+      yield* _mapVisitToState(event);
+    }
     if(event is AddVisitEvent) {
       yield* _mapAddVisitToState(event);
     }
@@ -39,6 +42,12 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     yield LoadingVisitState();
     final response = await _visitRepository.getVisitCategory();
     yield VisitCategoryList(response.result);
+  }
+
+  Stream<VisitBlocState> _mapVisitToState(GetVisitEvent event) async* {
+    yield LoadingVisitState();
+    final response = await _visitRepository.getVisit();
+    yield VisitList(response.result);
   }
 
   Stream<VisitBlocState> _mapVisitRealizationToState(GetVisitRealizationEvent event) async* {

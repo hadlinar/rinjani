@@ -60,6 +60,8 @@ class AddRealizationEvent extends VisitBlocEvent{
       );
 }
 
+class GetVisitEvent extends VisitBlocEvent{}
+
 class GetVisitCategoryEvent extends VisitBlocEvent{}
 
 class GetVisitRealizationEvent extends VisitBlocEvent{}

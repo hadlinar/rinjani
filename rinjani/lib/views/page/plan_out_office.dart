@@ -15,8 +15,6 @@ import 'package:rinjani/app_module.dart';
 import '../../widget/custom_text_field.dart';
 
 class OutOffice extends StatefulWidget {
-  final List<String>? autoCompletion;
-  OutOffice(this.autoCompletion);
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +38,7 @@ class _OutOffice extends State<OutOffice> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _container = List.generate(_count, (int i) {
-      return AddPlan(widget.autoCompletion, _count-1);
+      return AddPlan(_count-1);
     });
     return GestureDetector (
         onTap: () {
@@ -97,17 +95,14 @@ class _OutOffice extends State<OutOffice> {
 }
 
 class AddPlan extends StatefulWidget {
-  final List<String>? autoCompletion;
   final int indexVisit;
-  AddPlan(this.autoCompletion, this.indexVisit);
+  AddPlan(this.indexVisit);
 
   @override
   State<StatefulWidget> createState() => _AddPlan();
 }
 
 class _AddPlan extends State<AddPlan> {
-  static List<Customer> listCustomer = [];
-
   late List<Map<String, dynamic>> _values;
   late List<Map<String, dynamic>> value;
 
