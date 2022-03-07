@@ -213,8 +213,8 @@ class _AddPlan extends State<AddPlan> {
 
     Map<String, dynamic> json = {
       'id_customer': widget.indexVisit,
-      'startTime': DateFormat("HH:mm").format(timeStart).toString(),
-      'endTime': DateFormat("HH:mm").format(timeEnd).toString(),
+      'startTime': timeStart.toString(),
+      'endTime': timeEnd.toString(),
       'customer': _selectedCust,
       'list_pic': {
         'id' : indexPIC,
@@ -255,7 +255,8 @@ class _AddPlan extends State<AddPlan> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CustomerBloc>(context).add(GetCustomerCategoryEvent());
+    // BlocProvider.of<CustomerBloc>(context).add(GetCustomerCategoryEvent());
+    BlocProvider.of<CustomerBloc>(context).add(GetCustomerEvent());
     cards.add(createCard(indexPIC));
     _values = [];
     _result = '';
@@ -280,6 +281,7 @@ class _AddPlan extends State<AddPlan> {
                     use24hFormat: true,
                     onDateTimeChanged: (val) {
                       setState(() {
+                        print(val);
                         timeStart = val;
                       });
                     }),

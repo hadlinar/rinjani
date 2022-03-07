@@ -47,7 +47,7 @@ class AppModule {
         UserService.create(injector.get(), baseUrl: base_url)
     );
     injector.registerSingleton<RoleService>(
-        UserService.create(injector.get(), baseUrl: base_url)
+        RoleService.create(injector.get(), baseUrl: base_url)
     );
   }
 
