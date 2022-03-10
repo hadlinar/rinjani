@@ -31,6 +31,18 @@ class VisitRealizationList extends VisitBlocState{
   VisitRealizationList(this.getVisitRealization);
 }
 
+class VisitByIdList extends VisitBlocState{
+  List<VisitById> getVisit;
+
+  VisitByIdList(this.getVisit);
+}
+
+class VisitRealizationByIdList extends VisitBlocState{
+  List<VisitRealById> getVisitRealization;
+
+  VisitRealizationByIdList(this.getVisitRealization);
+}
+
 class SuccessAddVisitState extends VisitBlocState{}
 
 class SuccessAddRealizationState extends VisitBlocState{}

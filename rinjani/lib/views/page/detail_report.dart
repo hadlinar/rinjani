@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../../models/visit.dart';
 import '../../utils/global.dart';
 
 class DetailReport extends StatefulWidget {
+  VisitRealById visit;
+
+  DetailReport(this.visit);
+
   @override
   State<StatefulWidget> createState() {
     return _DetailReport();
@@ -64,7 +70,7 @@ class _DetailReport extends State<DetailReport> {
                           Container(
                             padding: const EdgeInsets.only(left: 30),
                             child: Text(
-                              'Customer 1',
+                              widget.visit.cust_id,
                               style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                             ),
                           )
@@ -85,7 +91,7 @@ class _DetailReport extends State<DetailReport> {
                             Container(
                               padding: const EdgeInsets.only(left: 74),
                               child: Text(
-                                'PIC 1',
+                                "${widget.visit.pic_name} - ${widget.visit.pic_position}",
                                 style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                               ),
                             )
@@ -106,7 +112,7 @@ class _DetailReport extends State<DetailReport> {
                             Container(
                               padding: const EdgeInsets.only(left: 64),
                               child: Text(
-                                'dd/mm/yyyy',
+                                DateFormat("dd/MM/yyyy").format(widget.visit.time_finish),
                                 style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                               ),
                             )
@@ -129,7 +135,7 @@ class _DetailReport extends State<DetailReport> {
                             Container(
                               padding: const EdgeInsets.only(left: 24, top: 17, bottom: 17),
                               child: Text(
-                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                widget.visit.description,
                                 style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
                               ),
                             )

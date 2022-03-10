@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rinjani/utils/global.dart';
+import 'package:rinjani/views/page/realization.dart';
 import 'package:rinjani/views/page/report.dart';
+import 'package:rinjani/views/page/report1.dart';
+import 'package:rinjani/widget/calendar_1.dart';
 
 import '../widget/calendar.dart';
 
@@ -88,8 +91,8 @@ class Home extends StatelessWidget {
                         GestureDetector(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(
-                                  // builder: (context) => Realization()
-                                  builder: (context) => Calendar()
+                                  builder: (context) => Realization()
+                                  // builder: (context) => Calendar()
                               ));
                             },
                             child: Global.getMenuCard("realization.png", 0xffDAC2ED)
@@ -101,8 +104,9 @@ class Home extends StatelessWidget {
                       children: <Widget>[
                         GestureDetector(
                             onTap: (){
+                              // print("test");
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => Report()
+                                  builder: (context) => Report1()
                               ));
                             },
                             child: Global.getMenuCard("report.png", 0xffF2EFA7)

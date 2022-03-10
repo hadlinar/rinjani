@@ -10,7 +10,7 @@ part of 'customer_service.dart';
 
 class _CustomerService implements CustomerService {
   _CustomerService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://172.20.30.22:3000';
+    baseUrl ??= 'http://172.20.30.22:4000';
   }
 
   final Dio _dio;
@@ -26,7 +26,7 @@ class _CustomerService implements CustomerService {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CustomerCategoryResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/customer_cat',
+                .compose(_dio.options, '/customer/category',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = CustomerCategoryResponse.fromJson(_result.data!);

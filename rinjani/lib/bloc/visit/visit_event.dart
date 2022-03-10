@@ -62,6 +62,18 @@ class AddRealizationEvent extends VisitBlocEvent{
 
 class GetVisitEvent extends VisitBlocEvent{}
 
+class GetVisitByIdEvent extends VisitBlocEvent{
+  String id;
+
+  GetVisitByIdEvent(this.id);
+}
+
 class GetVisitCategoryEvent extends VisitBlocEvent{}
 
 class GetVisitRealizationEvent extends VisitBlocEvent{}
+
+class GetVisitRealizationByIdEvent extends VisitBlocEvent{
+  String id;
+
+  GetVisitRealizationByIdEvent(this.id);
+}

@@ -1,9 +1,14 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/visit.dart';
 import '../../utils/global.dart';
 
 class ListCustomer extends StatefulWidget {
+  List<VisitRealById> visit;
+
+  ListCustomer(this.visit);
+
   @override
   State<StatefulWidget> createState() {
     return _ListCustomer();
@@ -49,6 +54,7 @@ class _ListCustomer extends State<ListCustomer> {
           child: Container(
             padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
             color: Colors.white,
+            height: MediaQuery.of(context).size.height,
             child: Column(
               children: <Widget> [
                 Container(
@@ -109,7 +115,7 @@ class _ListCustomer extends State<ListCustomer> {
                 Container(
                   padding: const EdgeInsets.only(top: 17),
                   child: ListView.builder(
-                    itemCount: 10,
+                    itemCount: widget.visit.length,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -126,7 +132,7 @@ class _ListCustomer extends State<ListCustomer> {
                                       ),
                                       Container(
                                         padding: const EdgeInsets.only(left: 17),
-                                        child: Text('Customer ${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                        child: Text(widget.visit[i].cust_id, style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
                                       ),
                                     ]
                                 ),

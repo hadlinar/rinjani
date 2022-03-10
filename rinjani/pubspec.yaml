@@ -31,12 +31,13 @@ dependencies:
     sdk: flutter
   retrofit: ^3.0.1+1
   cupertino_icons: ^1.0.2
-  table_calendar: ^3.0.3
+  table_calendar: ^2.2.2
   substring_highlight: ^1.0.33
   dropdown_search: ^2.0.1
   flutter_bloc: 4.0.0
   get_it: ^3.1.0
-  flutter_osm_plugin: ^0.15.0
+#  flutter_osm_plugin: ^0.15.0
+  http: ^0.13.4
 
 dev_dependencies:
   dropdownfield: 1.0.0

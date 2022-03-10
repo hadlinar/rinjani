@@ -104,7 +104,6 @@ class AddPlan extends StatefulWidget {
 
 class _AddPlan extends State<AddPlan> {
   late List<Map<String, dynamic>> _values;
-  late List<Map<String, dynamic>> value;
 
   var positionTextEditing = <TextEditingController>[];
   var nameTextEditing = <TextEditingController>[];
@@ -199,12 +198,6 @@ class _AddPlan extends State<AddPlan> {
         return map['list_pic']['id'] == foundKey;
       });
     }
-
-    Map<String, dynamic> jsonPIC = {
-      'id' : indexPIC,
-      'position': valPos,
-      'name': valName
-    };
 
     Map<String, dynamic> json = {
       'id_customer': widget.indexVisit,

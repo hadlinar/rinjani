@@ -12,7 +12,7 @@ part 'customer_service.g.dart';
 abstract class CustomerService{
   static create(Dio dio, {required String baseUrl}) => _CustomerService(dio, baseUrl: baseUrl);
 
-  @GET('/customer_cat')
+  @GET('/customer/category')
   Future<CustomerCategoryResponse> getCustomerCategory();
 
   @GET('/customer')

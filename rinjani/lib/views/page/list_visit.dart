@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rinjani/models/visit.dart';
 
 import '../../utils/global.dart';
 
 class ListVisit extends StatefulWidget {
+  List<VisitRealById> visit;
+
+  ListVisit(this.visit);
+
   @override
   State<StatefulWidget> createState() {
     return _ListVisit();
@@ -49,6 +54,7 @@ class _ListVisit extends State<ListVisit> {
                 child: Container(
                   padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
                   color: Colors.white,
+                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget> [
                       Container(
@@ -109,7 +115,7 @@ class _ListVisit extends State<ListVisit> {
                       Container(
                           padding: const EdgeInsets.only(top: 17),
                           child: ListView.builder(
-                              itemCount: 10,
+                              itemCount: widget.visit.length,
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -136,13 +142,13 @@ class _ListVisit extends State<ListVisit> {
                                                   children: [
                                                     Align(
                                                       alignment: Alignment.centerLeft,
-                                                      child: Text('PIC ${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                      child: Text("${widget.visit[i].pic_name} - ${widget.visit[i].pic_position}", style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 5),
                                                       child: Align(
                                                         alignment: Alignment.centerLeft,
-                                                        child: Text('Customer ${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                        child: Text(widget.visit[i].cust_id, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                       ),
                                                     ),
                                                   ],
