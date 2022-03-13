@@ -21,13 +21,12 @@ class Report1 extends StatefulWidget {
 }
 
 class _Report extends State<Report1> {
-  late List _visitRealization;
 
   @override
   void initState() {
     super.initState();
     // BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
-    BlocProvider.of<VisitBloc>(context).add(GetVisitRealizationByIdEvent('1985417002'));
+    BlocProvider.of<VisitBloc>(context).add(GetVisitRealizationByIdEvent('2014457001'));
     // BlocProvider.of<CustomerBloc>(context).add(GetCustomerEvent());
   }
   @override

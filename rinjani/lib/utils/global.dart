@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 
 class Global {
 
-  static const String baseURL = "http://172.20.30.22:4000";
+  static const String baseURL = "http://172.20.30.22:3000";
+  // static const String baseURL = "http://172.20.30.22:4000";
   static int BLACK = 0xff333333;
   static int BLUE = 0xff2F80ED;
   static int GREY = 0xff828282;
+  static int WHITE = 0xffffffff;
 
   static const BACK_ICON = "assets/icon/ic_back.png";
   static const CALENDAR_ICON = "assets/icon/ic_calendar.png";
@@ -21,6 +23,7 @@ class Global {
   static const VISIT_ICON = "assets/icon/ic_visit.png";
   static const ARROW_ICON = "assets/icon/ic_arrow.png";
   static const CANCEL_ICON = "assets/icon/ic_cancel.png";
+  static const CHECK_ICON = "assets/icon/ic_check.png";
 
   static void setState(Null Function() param0) {}
 
@@ -106,6 +109,86 @@ class Global {
               ),
             )
         )
+    );
+  }
+
+  static AlertDialog defaultModal(
+      VoidCallback action,
+      BuildContext context,
+      String iconPath,
+      String titleModal,
+      String positiveBtnText,
+      bool isShowingNegativeButton) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      title: Image.asset(
+        iconPath,
+        height: 50,
+        width: 50,
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            child: Center(
+              child: Text(
+                titleModal,
+                style: getCustomFont(BLACK, 16, 'bold'),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          Container(
+            height: 12,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              isShowingNegativeButton
+                  ? Expanded(
+                  flex: 1,
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                              color: Theme.of(context).accentColor,
+                              width: 3)),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Ok",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'bold',
+                            fontSize: 15
+                        ),
+                      )))
+                  : Container(),
+              isShowingNegativeButton
+                  ? Container(
+                width: 20,
+              )
+                  : Container(),
+              Expanded(
+                  flex: 1,
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          side:
+                          BorderSide(color: Theme.of(context).accentColor),
+                          borderRadius: BorderRadius.circular(10)),
+                      color: Theme.of(context).accentColor,
+                      onPressed: action,
+                      child: Text(
+                        positiveBtnText,
+                        style: getCustomFont(WHITE, 14, 'bold'),
+                      ))),
+            ],
+          )
+        ],
+      ),
     );
   }
 

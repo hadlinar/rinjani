@@ -10,7 +10,7 @@ part 'user_service.g.dart';
 @RestApi(baseUrl: Global.baseURL)
 
 abstract class UserService{
-  static create(Dio dio, {required String baseUrl}) => _UserService(dio, baseUrl: baseUrl);
+  static create(Dio dio, {String baseUrl}) => _UserService(dio, baseUrl: baseUrl);
 
   @GET('/users')
   Future<UserResponse> getUser();

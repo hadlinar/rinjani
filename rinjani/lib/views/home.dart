@@ -3,7 +3,9 @@ import 'package:rinjani/utils/global.dart';
 import 'package:rinjani/views/page/realization.dart';
 import 'package:rinjani/views/page/report.dart';
 import 'package:rinjani/views/page/report1.dart';
-import 'package:rinjani/widget/calendar_1.dart';
+// import 'package:rinjani/widget/calendar_1.dart';
+
+// import '../widget/calendar_2.dart';
 
 import '../widget/calendar.dart';
 
@@ -78,7 +80,7 @@ class Home extends StatelessWidget {
                         GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => Calendar()
+                              builder: (context) => Calendar(title: 'test calendar',)
                             ));
                           },
                           child: Global.getMenuCard("planning.png", 0xffE1BBBB)
@@ -91,8 +93,13 @@ class Home extends StatelessWidget {
                         GestureDetector(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => Realization()
-                                  // builder: (context) => Calendar()
+                                builder: (context) => Realization(
+                                  successAddRealization: (int resMessage, BuildContext ctx) {
+                                  if (resMessage == 200) {
+                                    Navigator.of(ctx).pop();
+                                  }
+                                },
+                              )
                               ));
                             },
                             child: Global.getMenuCard("realization.png", 0xffDAC2ED)

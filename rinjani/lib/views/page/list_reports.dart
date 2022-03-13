@@ -15,8 +15,8 @@ class ListReport extends StatefulWidget {
 
 class _ListReport extends State<ListReport> {
 
-  String? defaultType;
-  String? defaultSort;
+  String defaultType;
+  String defaultSort;
 
   List showOnly = [
     "Today",
@@ -112,7 +112,7 @@ class _ListReport extends State<ListReport> {
                                             child: Text(e),
                                           );
                                         }).toList(),
-                                        onChanged: (String? value) {
+                                        onChanged: (String value) {
                                           setState(() {
                                             defaultType = value;
                                           });
@@ -145,7 +145,7 @@ class _ListReport extends State<ListReport> {
                                             child: Text(e),
                                           );
                                         }).toList(),
-                                        onChanged: (String? value) {
+                                        onChanged: (String value) {
                                           setState(() {
                                             defaultType = value;
                                           });

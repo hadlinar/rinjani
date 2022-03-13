@@ -10,7 +10,7 @@ part 'visit_service.g.dart';
 @RestApi(baseUrl: Global.baseURL)
 
 abstract class VisitService{
-  static create(Dio dio, {required String baseUrl}) => _VisitService(dio, baseUrl: baseUrl);
+  static create(Dio dio, {String baseUrl}) => _VisitService(dio, baseUrl: baseUrl);
 
   @GET('/visit/category')
   Future<VisitCategoryResponse> getVisitCategory();
@@ -24,13 +24,13 @@ abstract class VisitService{
   @GET('/visits')
   Future<VisitResponse> getVisit();
 
-  @GET('/visit/')
+  @GET('/visit/{userId}')
   Future<VisitByIdResponse> getVisitById(@Path('userId') String userId);
 
-  @POST('/realization/userId?userId={userId}')
-  Future<PostRealResponse> addRealization(@Body() Map<String,dynamic> body, @Path("id") String id);
+  @POST('/realization/{userId}')
+  Future<PostRealResponse> addRealization(@Body() Map<String,dynamic> body, @Path("userId") String userId);
 
-  @POST('/visit/add/{id}')
-  Future<PostVisitResponse> addVisit(@Body() Map<String,dynamic> body, @Path("id") String id);
+  @POST('/visit/{userId}')
+  Future<PostVisitResponse> addVisit(@Body() Map<String,dynamic> body, @Path("userId") String userId);
 
 }

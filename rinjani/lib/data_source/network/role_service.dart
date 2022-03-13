@@ -10,7 +10,7 @@ part 'role_service.g.dart';
 @RestApi(baseUrl: Global.baseURL)
 
 abstract class RoleService{
-  static create(Dio dio, {required String baseUrl}) => _RoleService(dio, baseUrl: baseUrl);
+  static create(Dio dio, {String baseUrl}) => _RoleService(dio, baseUrl: baseUrl);
 
   @GET('/role')
   Future<RoleResponse> getRole();

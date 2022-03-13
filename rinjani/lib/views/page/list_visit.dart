@@ -17,7 +17,7 @@ class ListVisit extends StatefulWidget {
 
 class _ListVisit extends State<ListVisit> {
 
-  String? defaultType;
+  String defaultType;
 
   List typeVal = [
     "Today",
@@ -90,7 +90,7 @@ class _ListVisit extends State<ListVisit> {
                                     child: Text(e),
                                   );
                                 }).toList(),
-                                onChanged: (String? value) {
+                                onChanged: (String value) {
                                   setState(() {
                                     defaultType = value;
                                   });

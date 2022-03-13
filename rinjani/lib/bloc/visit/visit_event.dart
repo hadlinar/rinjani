@@ -8,8 +8,8 @@ class AddVisitEvent extends VisitBlocEvent{
   final String visit_cat;
   final String branch_id;
   final String cust_id;
-  final DateTime time_start;
-  final DateTime time_finish;
+  final String time_start;
+  final String time_finish;
   final String user_id;
   final String description;
   final String pic_position;
@@ -34,15 +34,15 @@ class AddRealizationEvent extends VisitBlocEvent{
   final String visit_no;
   final String branch_id;
   final String cust_id;
-  final DateTime time_start;
-  final DateTime time_finish;
+  final String time_start;
+  final String time_finish;
   final String user_id;
   final String description;
   final String pic_position;
   final String pic_name;
   final String status_visit;
-  final double latitude;
-  final double longitude;
+  final String latitude;
+  final String longitude;
 
   AddRealizationEvent(
       this.visit_no,
@@ -57,7 +57,7 @@ class AddRealizationEvent extends VisitBlocEvent{
       this.status_visit,
       this.latitude,
       this.longitude,
-      );
+    );
 }
 
 class GetVisitEvent extends VisitBlocEvent{}

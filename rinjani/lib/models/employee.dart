@@ -14,9 +14,9 @@ class Employee{
   String name;
 
   Employee({
-    required this.nik,
-    required this.branch_id,
-    required this.name
+    this.nik,
+    this.branch_id,
+    this.name
   });
 
   factory Employee.fromJson(Map<String,dynamic> json) => _$EmployeeFromJson(json);

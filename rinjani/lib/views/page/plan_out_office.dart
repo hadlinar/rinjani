@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:core';
+import 'dart:core';
 
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_search/dropdownSearch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,7 +105,7 @@ class AddPlan extends StatefulWidget {
 }
 
 class _AddPlan extends State<AddPlan> {
-  late List<Map<String, dynamic>> _values;
+  List<Map<String, dynamic>> _values;
 
   var positionTextEditing = <TextEditingController>[];
   var nameTextEditing = <TextEditingController>[];
@@ -111,6 +113,12 @@ class _AddPlan extends State<AddPlan> {
   var namePIC = <String>[];
   var cards = <Column>[];
   var _selectedCust = null;
+  String name;
+
+
+  List<String> customerName;
+  List<String> customerId;
+  List<Customer> listCust;
 
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
@@ -118,8 +126,8 @@ class _AddPlan extends State<AddPlan> {
   int indexCard = 0;
   int indexPIC = 0;
 
-  late String _result;
-  late String result;
+  String _result;
+  String result;
 
   Column createCard(int key) {
     String pos = '';
@@ -180,9 +188,8 @@ class _AddPlan extends State<AddPlan> {
     );
   }
 
-
-  _onUpdate({int? indexPIC, String? valPos, String? valName}){
-    int? foundKey = -1;
+  _onUpdate({int indexPIC, String valPos, String valName}){
+    int foundKey = -1;
 
     for(var map in _values) {
       if(map.containsKey('id_customer')) {
@@ -243,7 +250,9 @@ class _AddPlan extends State<AddPlan> {
   @override
   void initState() {
     super.initState();
-    // BlocProvider.of<CustomerBloc>(context).add(GetCustomerCategoryEvent());
+    customerName = [];
+    customerId = [];
+    listCust = [];
     BlocProvider.of<CustomerBloc>(context).add(GetCustomerEvent());
     cards.add(createCard(indexPIC));
     _values = [];
@@ -269,7 +278,7 @@ class _AddPlan extends State<AddPlan> {
                     use24hFormat: true,
                     onDateTimeChanged: (val) {
                       setState(() {
-                        print(val);
+                        // print(val);
                         timeStart = val;
                       });
                     }),
@@ -297,9 +306,7 @@ class _AddPlan extends State<AddPlan> {
               SizedBox(
                 height: 200,
                 child: CupertinoDatePicker(
-                    initialDateTime: DateTime.now().add(
-                      Duration(minutes: 60 - DateTime.now().minute % 30),
-                    ),
+                    initialDateTime: timeStart,
                     mode: CupertinoDatePickerMode.time,
                     minuteInterval: 15,
                     minimumDate: timeStart,
@@ -332,11 +339,11 @@ class _AddPlan extends State<AddPlan> {
         if(state is CustomerList) {
           var customer = state.getCustomer;
 
-          List<String> customerName = [];
-          for(int i=0; i < customer.length; i++) {
+          for (int i=0; i < customer.length; i++) {
             customerName.add(customer[i].cust_name);
+            customerId.add(customer[i].cust_id);
           }
-
+          print(customer.length);
           return Column(
               children: <Widget> [
                 Container(
@@ -404,9 +411,12 @@ class _AddPlan extends State<AddPlan> {
                     child: DropdownSearch<String>(
                       mode: Mode.MENU,
                       showClearButton: true,
-                      showSelectedItems: true,
+                      showSelectedItem: true,
                       items: customerName,
-                      dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                      // customer.map((e) {
+                      //   return e.cust_name;
+                      // }).toList(),
+                      // dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
                       label: "Customer",
                       showSearchBox: true,
                       onChanged: (val) {
@@ -414,6 +424,7 @@ class _AddPlan extends State<AddPlan> {
                           _selectedCust = val;
                           _onUpdate(indexPIC: indexPIC);
                         });
+                        print("name $name");
                       },
                       selectedItem: _selectedCust,
                       dropdownSearchDecoration: InputDecoration(
@@ -503,9 +514,8 @@ class _AddPlan extends State<AddPlan> {
               ]
           );
         }
-        else if(state is LoadingCustomerState) {
-          return Container(
-              padding: const EdgeInsets.only(top: 30),
+        if(state is LoadingCustomerState || state is InitialCustomerBlocState) {
+          return const Center(
               child: CircularProgressIndicator()
           );
         }

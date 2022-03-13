@@ -10,7 +10,7 @@ part 'customer_service.g.dart';
 @RestApi(baseUrl: Global.baseURL)
 
 abstract class CustomerService{
-  static create(Dio dio, {required String baseUrl}) => _CustomerService(dio, baseUrl: baseUrl);
+  static create(Dio dio, {String baseUrl}) => _CustomerService(dio, baseUrl: baseUrl);
 
   @GET('/customer/category')
   Future<CustomerCategoryResponse> getCustomerCategory();

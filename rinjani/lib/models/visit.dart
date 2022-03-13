@@ -8,7 +8,7 @@ class VisitCategory{
   String visit_id;
   String visit_name;
 
-  VisitCategory({required this.visit_id, required this.visit_name});
+  VisitCategory({this.visit_id, this.visit_name});
 
   factory VisitCategory.fromJson(Map<String,dynamic> json) => _$VisitCategoryFromJson(json);
 }
@@ -42,19 +42,19 @@ class VisitReal{
   double longitude;
 
   VisitReal({
-    required this.real_no,
-    required this.visit_no,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position,
-    required this.pic_name,
-    required this.status_visit,
-    required this.latitude,
-    required this.longitude
+    this.real_no,
+    this.visit_no,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.user_id,
+    this.description,
+    this.pic_position,
+    this.pic_name,
+    this.status_visit,
+    this.latitude,
+    this.longitude
   });
 
   factory VisitReal.fromJson(Map<String,dynamic> json) => _$VisitRealFromJson(json);
@@ -77,8 +77,8 @@ class PostVisit{
   String visit_cat;
   String branch_id;
   String cust_id;
-  DateTime time_start;
-  DateTime time_finish;
+  String time_start;
+  String time_finish;
   String user_id;
   String description;
   String pic_position;
@@ -87,16 +87,16 @@ class PostVisit{
 
 
   PostVisit({
-    required this.visit_cat,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position,
-    required this.pic_name,
-    required this.status_visit,
+    this.visit_cat,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.user_id,
+    this.description,
+    this.pic_position,
+    this.pic_name,
+    this.status_visit,
   });
 
   factory PostVisit.fromJson(Map<String,dynamic> json) => _$PostVisitFromJson(json);
@@ -105,9 +105,9 @@ class PostVisit{
 @JsonSerializable()
 class PostVisitResponse{
   String message;
-  List<PostVisit> result;
+  // List<PostVisit> result;
 
-  PostVisitResponse(this.message, this.result);
+  PostVisitResponse(this.message);
 
   factory PostVisitResponse.fromJson(Map<String,dynamic> json) => _$PostVisitResponseFromJson(json);
 }
@@ -119,30 +119,28 @@ class PostReal{
         String visit_no;
         String branch_id;
         String cust_id;
-        DateTime time_start;
-        DateTime time_finish;
-        String user_id;
+        String time_start;
+        String time_finish;
         String description;
         String pic_position;
         String pic_name;
         String status_visit;
-        double latitude;
-        double longitude;
+        String latitude;
+        String longitude;
 
 
   PostReal({
-    required this.visit_no,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position,
-    required this.pic_name,
-    required this.status_visit,
-    required this.latitude,
-    required this.longitude,
+    this.visit_no,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.description,
+    this.pic_position,
+    this.pic_name,
+    this.status_visit,
+    this.latitude,
+    this.longitude,
   });
 
   factory PostReal.fromJson(Map<String,dynamic> json) => _$PostRealFromJson(json);
@@ -151,9 +149,9 @@ class PostReal{
 @JsonSerializable()
 class PostRealResponse{
   String message;
-  List<PostReal> result;
+  // PostReal result;
 
-  PostRealResponse(this.message, this.result);
+  PostRealResponse(this.message);
 
   factory PostRealResponse.fromJson(Map<String,dynamic> json) => _$PostRealResponseFromJson(json);
 }
@@ -173,17 +171,17 @@ class Visit{
   String status_visit;
 
   Visit({
-    required this.visit_no,
-    required this.visit_cat,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position ,
-    required this.pic_name,
-    required this.status_visit,
+    this.visit_no,
+    this.visit_cat,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.user_id,
+    this.description,
+    this.pic_position ,
+    this.pic_name,
+    this.status_visit,
   });
 
   factory Visit.fromJson(Map<String,dynamic> json) => _$VisitFromJson(json);
@@ -214,16 +212,16 @@ class VisitById{
   String status_visit;
 
   VisitById({
-    required this.visit_no,
-    required this.visit_cat,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.description,
-    required this.pic_position ,
-    required this.pic_name,
-    required this.status_visit,
+    this.visit_no,
+    this.visit_cat,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.description,
+    this.pic_position ,
+    this.pic_name,
+    this.status_visit,
   });
 
   factory VisitById.fromJson(Map<String,dynamic> json) => _$VisitByIdFromJson(json);
@@ -258,18 +256,18 @@ class VisitRealById{
   double longitude;
 
   VisitRealById({
-    required this.real_no,
-    required this.visit_no,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.description,
-    required this.pic_position,
-    required this.pic_name,
-    required this.status_visit,
-    required this.latitude,
-    required this.longitude
+    this.real_no,
+    this.visit_no,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.description,
+    this.pic_position,
+    this.pic_name,
+    this.status_visit,
+    this.latitude,
+    this.longitude
   });
 
   factory VisitRealById.fromJson(Map<String,dynamic> json) => _$VisitRealByIdFromJson(json);

@@ -1,5 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:core';
+import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,17 +31,17 @@ class Visit {
   String status_visit;
 
   Visit({
-    required this.visit_no,
-    required this.visit_cat,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position,
-    required this.pic_name,
-    required this.status_visit,
+    this.visit_no,
+    this.visit_cat,
+    this.branch_id,
+    this.cust_id,
+    this.time_start,
+    this.time_finish,
+    this.user_id,
+    this.description,
+    this.pic_position,
+    this.pic_name,
+    this.status_visit,
   });
 
   factory Visit.fromJson(Map<String, dynamic> json) =>
@@ -93,7 +95,7 @@ class VisitResponse{
 }
 
 
-late List<Visit> _visit;
+List<Visit> _visit;
 
 Future<List<Visit>> fetchPost() async {
   final response = await http.get(Uri.parse(Global.baseURL+"/visit"));

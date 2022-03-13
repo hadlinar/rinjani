@@ -1,92 +1,512 @@
-import 'dart:convert';
+// import 'package:flutter/material.dart';
+// import 'package:table_calendar/table_calendar.dart';
+// import 'dart:convert';
+// import 'package:intl/intl.dart';
+// import 'package:http/http.dart' as http;
+//
+//
+// import '../utils/global.dart';
+//
+// Event eventFromJson(String str) => Event.fromJson(json.decode(str));
+// String eventToJson(Event data) => json.encode(data.toJson());
+//
+// class Event {
+//   List<Datum> data;
+//
+//   Event({
+//     required this.data,
+//   });
+//
+//   factory Event.fromJson(Map<String, dynamic> json) => Event(
+//     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+//   );
+//
+//   Map<String, dynamic> toJson() => {
+//     "data": List<dynamic>.from(data.map((x) => x.toJson())),
+//   };
+// }
+//
+// class Datum {
+//   String visit_no;
+//   String visit_cat;
+//   String branch_id;
+//   String cust_id;
+//   DateTime time_start;
+//   DateTime time_finish;
+//   String user_id;
+//   String description;
+//   String pic_position;
+//   String pic_name;
+//   String status_visit;
+//
+//   Datum({
+//     required this.visit_no,
+//     required this.visit_cat,
+//     required this.branch_id,
+//     required this.cust_id,
+//     required this.time_start,
+//     required this.time_finish,
+//     required this.user_id,
+//     required this.description,
+//     required this.pic_position,
+//     required this.pic_name,
+//     required this.status_visit,
+//   });
+//
+//   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+//     visit_no: json["visit_no"],
+//     visit_cat: json["visit_cat"],
+//     branch_id: json["branch_id"],
+//     cust_id: json["cust_id"],
+//     time_start: DateTime.parse(json["time_start"]),
+//     time_finish: DateTime.parse(json["time_finish"]),
+//     user_id: json["user_id"],
+//     description: json["description"],
+//     pic_position: json["pic_position"],
+//     pic_name:json["pic_name"],
+//     status_visit: json["status_visit"]
+//   );
+//
+//   Map<String, dynamic> toJson() => {
+//     "visit_no": visit_no,
+//     "visit_cat": visit_cat,
+//     "branch_id": branch_id,
+//     "cust_id": cust_id,
+//     "time_start": "${time_start.year.toString().padLeft(4, '0')}-${time_start.month.toString().padLeft(2, '0')}-${time_start.day.toString().padLeft(2, '0')}",
+//     "time_finish": time_start.toIso8601String(),
+//     "user_id": user_id,
+//     "description": description,
+//     "pic_position": pic_position,
+//     "pic_name" : pic_name,
+//     "status_visit": status_visit
+//
+//   };
+// }
+//
+// class Calendar extends StatefulWidget {
+//   @override
+//   _CalendarState createState() => _CalendarState();
+// }
+//
+// class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
+//   late List _selectedEvents;
+//   late Map<DateTime, List> _events;
+//   late CalendarController _calendarController;
+//  
+//   Future<List<EventModel>> getAllEvent() async {
+//     try {
+//       final responseString = await http.get(Uri.parse(Global.baseURL+"/visits"));
+//
+//       final Map<String, dynamic> responseJson = json.decode(responseString.body);
+//       // if (responseJson[result] == "ok") {
+//       List eventList = responseJson['data'];
+//       final result = eventList
+//           .map<EventModel>((json) => EventModel.fromJson(json))
+//           .toList();
+//       return result;
+//       // } 
+//     } catch (e) {
+//       return Future.error(e.toString());
+//    
+//     }
+//   }
+//
+//   Future<Map<DateTime, List>> getTask1() async {
+//     Map<DateTime, List> mapFetch = {};
+//     List<EventModel> event = await getAllEvent();
+//     for (int i = 0; i < event.length; i++) {
+//       var createTime = DateTime(event[i].time_start.year,
+//           event[i].time_start.month, event[i].time_start.day);
+//       var original = mapFetch[createTime];
+//       if (original == null) {
+//         print("null");
+//         mapFetch[createTime] = [event[i].time_start];
+//       } else {
+//         print(event[i].time_start);
+//         mapFetch[createTime] = List.from(original)
+//           ..addAll([event[i].time_start]);
+//       }
+//     }
+//     return mapFetch;
+//   }
+//
+//   Future<Map<DateTime, List>> getTask() async {
+//     var responseString;
+//     Map<DateTime, List> mapFetch = {};
+//
+//     await Future.delayed(const Duration(seconds: 3), () {});
+//
+//     final response = await http.get(Uri.parse(Global.baseURL+"/visits"));
+//     await http.get(Uri.parse(Global.baseURL+"/visits")).then((response) {
+//       var data = json.decode(response.body);
+//
+//       setState(() {
+//         responseString = data;
+//       });
+//     });
+//
+//     if (response.statusCode == 200) {
+//       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+//
+//       return parsed.map<EventModel>((json) => EventModel.fromJson(json)).toList();
+//     }
+//
+//     Event event = eventFromJson(responseString);
+//
+//     for (int i = 0; i < event.data.length; i++) {
+//       var time_start = DateTime(event.data[i].time_start.year,
+//           event.data[i].time_start.month, event.data[i].time_start.day);
+//       var original = mapFetch[time_start];
+//       if (original == null) {
+//         print("null");
+//         mapFetch[time_start] = [event.data[i].time_start];
+//       } else {
+//         print(event.data[i].time_start);
+//         mapFetch[time_start] = List.from(original)
+//           ..addAll([event.data[i].time_start]);
+//       }
+//     }
+//
+//     return mapFetch;
+//   }
+//
+//   void _onDaySelected(DateTime day, List events) {
+//     print('CALLBACK: _onDaySelected');
+//     setState(() {
+//       _selectedEvents = events;
+//     });
+//   }
+//
+//    @override
+//   void initState() {
+//     final _selectedDay = DateTime.now();
+//     _selectedEvents = [];
+//     _events = {};
+//     _calendarController = CalendarController();
+//     super.initState();
+//   }
+//
+//   @override
+//   void dispose() {
+//     _calendarController.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             _buildTableCalendarWithBuilders(),
+//             const SizedBox(height: 8.0),
+//             const SizedBox(height: 8.0),
+//             Expanded(child: _buildEventList()),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildTableCalendarWithBuilders() {
+//     return TableCalendar(
+//       //locale: 'pl_PL',
+//       calendarController: _calendarController,
+//       events: _events,
+//       //holidays: _holidays,
+//       initialCalendarFormat: CalendarFormat.month,
+//       formatAnimation: FormatAnimation.slide,
+//       startingDayOfWeek: StartingDayOfWeek.sunday,
+//       availableGestures: AvailableGestures.all,
+//       availableCalendarFormats: const {
+//         CalendarFormat.month: '',
+//         CalendarFormat.week: '',
+//       },
+//       calendarStyle: CalendarStyle(
+//         outsideDaysVisible: false,
+//         weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
+//         holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
+//       ),
+//       daysOfWeekStyle: DaysOfWeekStyle(
+//         weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
+//       ),
+//       headerStyle: HeaderStyle(
+//         centerHeaderTitle: true,
+//         formatButtonVisible: false,
+//       ),
+//       builders: CalendarBuilders(
+//         // selectedDayBuilder: (context, date, _) {
+//         //   return FadeTransition(
+//         //     child: Container(
+//         //       margin: const EdgeInsets.all(4.0),
+//         //       padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+//         //       color: Colors.deepOrange[300],
+//         //       width: 100,
+//         //       height: 100,
+//         //       child: Text(
+//         //         '${date.day}',
+//         //         style: TextStyle().copyWith(fontSize: 16.0),
+//         //       ),
+//         //     ),
+//         //   );
+//         // },
+//         todayDayBuilder: (context, date, _) {
+//           return Container(
+//             margin: const EdgeInsets.all(4.0),
+//             padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+//             color: Colors.amber[400],
+//             width: 100,
+//             height: 100,
+//             child: Text(
+//               '${date.day}',
+//               style: TextStyle().copyWith(fontSize: 16.0),
+//             ),
+//           );
+//         },
+//         markersBuilder: (context, date, events, holidays) {
+//           final children = <Widget>[];
+//
+//           if (events.isNotEmpty) {
+//             children.add(
+//               Positioned(
+//                 right: 1,
+//                 bottom: 1,
+//                 child: _buildEventsMarker(date, events),
+//               ),
+//             );
+//           }
+//
+//           if (holidays.isNotEmpty) {
+//             children.add(
+//               Positioned(
+//                 right: -2,
+//                 top: -2,
+//                 child: _buildHolidaysMarker(),
+//               ),
+//             );
+//           }
+//
+//           return children;
+//         },
+//       ),
+//       onDaySelected: (date, events, _) {
+//         _onDaySelected(date, events);
+//       },
+//       onVisibleDaysChanged: _onVisibleDaysChanged,
+//     );
+//   }
+//
+//   void _onVisibleDaysChanged(
+//       DateTime first, DateTime last, CalendarFormat format) {
+//     print('CALLBACK: _onVisibleDaysChanged');
+//   }
+//
+//   Widget _buildEventsMarker(DateTime date, List events) {
+//     return AnimatedContainer(
+//       duration: const Duration(milliseconds: 300),
+//       decoration: BoxDecoration(
+//         shape: BoxShape.rectangle,
+//         color: _calendarController.isSelected(date)
+//             ? Colors.brown[500]
+//             : _calendarController.isToday(date)
+//                 ? Colors.brown[300]
+//                 : Colors.blue[400],
+//       ),
+//       width: 16.0,
+//       height: 16.0,
+//       child: Center(
+//         child: Text(
+//           '${events.length}',
+//           style: TextStyle().copyWith(
+//             color: Colors.white,
+//             fontSize: 12.0,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildHolidaysMarker() {
+//     return Icon(
+//       Icons.add_box,
+//       size: 20.0,
+//       color: Colors.blueGrey[800],
+//     );
+//   }
+//
+//   Widget _buildEventList() {
+//     return ListView(
+//       children: _selectedEvents
+//           .map((event) => Container(
+//                 decoration: BoxDecoration(
+//                   border: Border.all(width: 0.8),
+//                   borderRadius: BorderRadius.circular(12.0),
+//                 ),
+//                 margin:
+//                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+//                 child: ListTile(
+//                   title: Text(event.toString()),
+//                   onTap: () => print('$event tapped!'),
+//                 ),
+//               ))
+//           .toList(),
+//     );
+//   }
+// }
+//
+// class EventModel {
+//   String visit_no;
+//   String visit_cat;
+//   String branch_id;
+//   String cust_id;
+//   DateTime time_start;
+//   DateTime time_finish;
+//   String user_id;
+//   String description;
+//   String pic_position;
+//   String pic_name;
+//   String status_visit;
+//
+//   EventModel({
+//     required this.visit_no,
+//     required this.visit_cat,
+//     required this.branch_id,
+//     required this.cust_id,
+//     required this.time_start,
+//     required this.time_finish,
+//     required this.user_id,
+//     required this.description,
+//     required this.pic_position,
+//     required this.pic_name,
+//     required this.status_visit,
+//   });
+//
+//   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
+//     visit_no: json["visit_no"],
+//     visit_cat: json["visit_cat"],
+//     branch_id: json["branch_id"],
+//     cust_id: json["cust_id"],
+//     time_start: DateTime.parse(json["time_start"]),
+//     time_finish: DateTime.parse(json["time_finish"]),
+//     user_id: json["user_id"],
+//     description: json["description"],
+//     pic_position: json["pic_position"],
+//     pic_name:json["pic_name"],
+//     status_visit: json["status_visit"]
+//   );
+// }
+
+// dart 2.9
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/bloc/visit/visit_bloc.dart';
-import 'package:rinjani/views/page/realization.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-import '../utils/event.dart';
-import '../utils/global.dart';
-import '../views/page/plan.dart';
+Event eventFromJson(String str) => Event.fromJson(json.decode(str));
 
-class Visit{
-  String visit_no;
-  String visit_cat;
-  String branch_id;
-  String cust_id;
-  DateTime time_start;
-  DateTime time_finish;
-  String user_id;
-  String description;
-  String pic_position;
-  String pic_name;
-  String status_visit;
+String eventToJson(Event data) => json.encode(data.toJson());
 
-  Visit({
-    required this.visit_no,
-    required this.visit_cat,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position ,
-    required this.pic_name,
-    required this.status_visit,
+class Event {
+  String status;
+  String message;
+  List<Datum> data;
+
+  Event({
+    this.status,
+    this.message,
+    this.data,
   });
 
-  factory Visit.fromJson(Map<String, dynamic> json) => Visit(
-    visit_no: json["visit_no"],
-    visit_cat: json["visit_cat"],
-    branch_id: json["branch_id"],
-    cust_id: json["cust_id"],
-    time_start: DateTime.parse(json["time_start"]),
-    time_finish: DateTime.parse(json["time_finish"]),
-    user_id: json["user_id"],
-    description: json["description"],
-    pic_position: json["pic_position"],
-    pic_name: json["pic_name"],
-    status_visit: json["status_visit"],
+  factory Event.fromJson(Map<String, dynamic> json) => Event(
+    status: json["status"],
+    message: json["message"],
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "visit_no": visit_no,
-    "visit_cat": visit_cat,
-    "branch_id": branch_id,
-    "cust_id": cust_id,
-    "time_start": "${time_start.year.toString().padLeft(4, '0')}-${time_start.month.toString().padLeft(2, '0')}-${time_start.day.toString().padLeft(2, '0')}",
-    "time_finish": "${time_finish.year.toString().padLeft(4, '0')}-${time_finish.month.toString().padLeft(2, '0')}-${time_finish.day.toString().padLeft(2, '0')}",
-    "user_id": user_id,
-    "description": description,
-    "pic_position": pic_position,
-    "pic_name": pic_name,
-    // "status_visit": createTime.toIso8601String(),
-    "status_visit": status_visit,
+    "status": status,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
+}
+
+class Datum {
+  String kodeEvent;
+  DateTime tanggalEvent;
+  String judulEvent;
+  String lokasiEvent;
+  String isiEvent;
+  String fotoEvent;
+  String waktuEvent;
+  String statusEvent;
+  String createBy;
+  DateTime createTime;
+  String updateBy;
+  String updateTime;
+
+  Datum({
+    this.kodeEvent,
+    this.tanggalEvent,
+    this.judulEvent,
+    this.lokasiEvent,
+    this.isiEvent,
+    this.fotoEvent,
+    this.waktuEvent,
+    this.statusEvent,
+    this.createBy,
+    this.createTime,
+    this.updateBy,
+    this.updateTime,
+  });
+
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    kodeEvent: json["kodeEvent"],
+    tanggalEvent: DateTime.parse(json["tanggalEvent"]),
+    judulEvent: json["judulEvent"],
+    lokasiEvent: json["lokasiEvent"],
+    isiEvent: json["isiEvent"],
+    fotoEvent: json["fotoEvent"],
+    waktuEvent: json["waktuEvent"],
+    statusEvent: json["statusEvent"],
+    createBy: json["createBy"],
+    createTime: DateTime.parse(json["createTime"]),
+    updateBy: json["updateBy"],
+    updateTime: json["updateTime"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "kodeEvent": kodeEvent,
+    "tanggalEvent":
+    "${tanggalEvent.year.toString().padLeft(4, '0')}-${tanggalEvent.month.toString().padLeft(2, '0')}-${tanggalEvent.day.toString().padLeft(2, '0')}",
+    "judulEvent": judulEvent,
+    "lokasiEvent": lokasiEvent,
+    "isiEvent": isiEvent,
+    "fotoEvent": fotoEvent,
+    "waktuEvent": waktuEvent,
+    "statusEvent": statusEvent,
+    "createBy": createBy,
+    "createTime": createTime.toIso8601String(),
+    "updateBy": updateBy,
+    "updateTime": updateTime,
   };
 }
 
 class Calendar extends StatefulWidget {
+  Calendar({Key key, this.title}) : super(key: key);
+
+  final String title;
+
   @override
   _CalendarState createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
-  late List _selectedEvents;
+class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
+  List _selectedEvents;
   int _counter = 0;
-  late Map<DateTime, List> _events;
-  late CalendarController _calendarController;
-  late AnimationController _animationController;
-
-  // late final ValueNotifier<List<Event>> _selectedEvents;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  // DateTime _focusedDay = DateTime.now().add(const Duration(days: 1));
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  Map<DateTime, List> _events;
+  CalendarController _calendarController;
+  AnimationController _animationController;
 
   void _incrementCounter() {
     setState(() {
@@ -94,17 +514,71 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
     });
   }
 
-  Future<List<VisitModel>> getVisitAll() async {
+  Future<List<EventModel>> getAllEvent() async {
     try {
-      final response = await http.get(Uri.parse(Global.baseURL+"/visit"));
+      //final response = await http.get(_baseUrl);
 
-      final Map<String, dynamic> responseJson = json.decode(response.body);
-      List eventList = responseJson['data'];
-      final result = eventList
-          .map<VisitModel>((json) => VisitModel.fromJson(json))
-          .toList();
-      return result;
+      String responseString = '''
+{
+    "status": "ok",
+    "message": "Event Is Found",
+    "data": [
+        {
+            "kodeEvent": "1",
+            "tanggalEvent": "2020-01-15",
+            "judulEvent": "Bangun Kembali 200 Masjid dan Mushalla Anti Gempa",
+            "lokasiEvent": "Lombok",
+            "isiEvent": "Gempa Bumi dahsyat bertubi-tubi guncang lombok, kini Pulau seribu Masjid lemah tak berdaya, Lebih dari 500 Masjid dan Mushalla rata dengan tanah, kini ibadah saudara kita harus bertebaran dimana-mana , masih banyak warga yang tak bisa melaksanakan shalat dengan nyaman. Lokasi masjid dan mushalla sudah tak dapat dipake kembali , semua rusak parah dan bahkan sudh rata dengan tanah.<br /><br />Terpaksa mereka shalat di luar, tempat terbuka , bahkan di atas reruntuhan bangunan rumah sekalipun. Kini tak kurang dari 300 Masjid dan Mushalla yang dilaporkan rusak, dan lebih dari 70 masjid yang hancur rata dengan tanah karena gempa. semua masjid ini tersebar di 3 kabupaten (lombok utara, lombok barat dan lombok timur).",
+            "fotoEvent": "event_5e4b8cd198530_202002181405.jpg",
+            "waktuEvent": "09:00 s.d Selesai",
+            "statusEvent": "t",
+            "createBy": "0",
+            "createTime": "2020-01-29 16:37:26",
+            "updateBy": "",
+            "updateTime": "2020-02-18 14:05:53"
+        },
+        {
+            "kodeEvent": "2",
+            "tanggalEvent": "2020-03-31",
+            "judulEvent": "Bangun Kembali 100 Masjid dan Mushalla Anti Gempa",
+            "lokasiEvent": "Jakarta",
+            "isiEvent": "Gempa Bumi dahsyat bertubi-tubi guncang lombok, kini Pulau seribu Masjid lemah tak berdaya, Lebih dari 500 Masjid dan Mushalla rata dengan tanah, kini ibadah saudara kita harus bertebaran dimana-mana , masih banyak warga yang tak bisa melaksanakan shalat dengan nyaman. Lokasi masjid dan mushalla sudah tak dapat dipake kembali , semua rusak parah dan bahkan sudh rata dengan tanah.<br /><br />Terpaksa mereka shalat di luar, tempat terbuka , bahkan di atas reruntuhan bangunan rumah sekalipun. Kini tak kurang dari 300 Masjid dan Mushalla yang dilaporkan rusak, dan lebih dari 70 masjid yang hancur rata dengan tanah karena gempa. semua masjid ini tersebar di 3 kabupaten (lombok utara, lombok barat dan lombok timur).",
+            "fotoEvent": "event_5e4b8d3d74b44_202002181407.jpg",
+            "waktuEvent": "09:00 s.d Selesai",
+            "statusEvent": "t",
+            "createBy": "",
+            "createTime": "2020-02-18 14:07:41",
+            "updateBy": "",
+            "updateTime": "0000-00-00 00:00:00"
+        },
+        {
+            "kodeEvent": "3",
+            "tanggalEvent": "2020-01-31",
+            "judulEvent": "Bangun Kembali 200 Masjid dan Mushalla Anti Gempa",
+            "lokasiEvent": "Bandung",
+            "isiEvent": "Gempa Bumi dahsyat bertubi-tubi guncang lombok, kini Pulau seribu Masjid lemah tak berdaya, Lebih dari 500 Masjid dan Mushalla rata dengan tanah, kini ibadah saudara kita harus bertebaran dimana-mana , masih banyak warga yang tak bisa melaksanakan shalat dengan nyaman. Lokasi masjid dan mushalla sudah tak dapat dipake kembali , semua rusak parah dan bahkan sudh rata dengan tanah.<br /><br />Terpaksa mereka shalat di luar, tempat terbuka , bahkan di atas reruntuhan bangunan rumah sekalipun. Kini tak kurang dari 300 Masjid dan Mushalla yang dilaporkan rusak, dan lebih dari 70 masjid yang hancur rata dengan tanah karena gempa. semua masjid ini tersebar di 3 kabupaten (lombok utara, lombok barat dan lombok timur).",
+            "fotoEvent": "event_5e4b8d72e2d37_202002181408.jpg",
+            "waktuEvent": "09:00 s.d Selesai",
+            "statusEvent": "t",
+            "createBy": "",
+            "createTime": "2020-02-18 14:08:34",
+            "updateBy": "",
+            "updateTime": "0000-00-00 00:00:00"
+        }      
+    ]
+}
+    ''';
 
+      final Map<String, dynamic> responseJson = json.decode(responseString);
+      if (responseJson["status"] == "ok") {
+        List eventList = responseJson['data'];
+        final result = eventList
+            .map<EventModel>((json) => EventModel.fromJson(json))
+            .toList();
+        return result;
+      } else {
+        //throw CustomError(responseJson['message']);
+      }
     } catch (e) {
       return Future.error(e.toString());
     }
@@ -112,58 +586,99 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
 
   Future<Map<DateTime, List>> getTask1() async {
     Map<DateTime, List> mapFetch = {};
-    List<VisitModel> event = await getVisitAll();
+    List<EventModel> event = await getAllEvent();
     for (int i = 0; i < event.length; i++) {
-      var createTime = DateTime(event[i].time_start.year,
-          event[i].time_start.month, event[i].time_start.day);
+      var createTime = DateTime(event[i].createTime.year,
+          event[i].createTime.month, event[i].createTime.day);
       var original = mapFetch[createTime];
       if (original == null) {
         print("null");
-        mapFetch[createTime] = [event[i].time_start];
+        mapFetch[createTime] = [event[i].tanggalEvent];
       } else {
-        print(event[i].time_start);
+        print(event[i].tanggalEvent);
         mapFetch[createTime] = List.from(original)
-          ..addAll([event[i].time_start]);
+          ..addAll([event[i].tanggalEvent]);
       }
     }
+
     return mapFetch;
   }
-
-  var _visit;
 
   Future<Map<DateTime, List>> getTask() async {
     Map<DateTime, List> mapFetch = {};
 
     await Future.delayed(const Duration(seconds: 3), () {});
 
-    final response = await http.get(Uri.parse(Global.baseURL+"/visit"));
-    await http.get(Uri.parse(Global.baseURL+"/visit")).then((response) {
-      var data = json.decode(response.body);
+    /*String link = baseURL + fetchTodoByDate;
+    var res = await http.post(Uri.encodeFull(link), headers: {"Accept": "application/json"});
+    if (res.statusCode == 200) {
+      // need help in creating fetch logic here
+    }*/
 
-      setState(() {
-        _visit = data['result'];
-      });
-    });
+    String responseString = '''
+{
+    "status": "ok",
+    "message": "Event Is Found",
+    "data": [
+        {
+            "kodeEvent": "1",
+            "tanggalEvent": "2020-01-15",
+            "judulEvent": "Bangun Kembali 200 Masjid dan Mushalla Anti Gempa",
+            "lokasiEvent": "Lombok",
+            "isiEvent": "Gempa Bumi dahsyat bertubi-tubi guncang lombok, kini Pulau seribu Masjid lemah tak berdaya, Lebih dari 500 Masjid dan Mushalla rata dengan tanah, kini ibadah saudara kita harus bertebaran dimana-mana , masih banyak warga yang tak bisa melaksanakan shalat dengan nyaman. Lokasi masjid dan mushalla sudah tak dapat dipake kembali , semua rusak parah dan bahkan sudh rata dengan tanah.<br /><br />Terpaksa mereka shalat di luar, tempat terbuka , bahkan di atas reruntuhan bangunan rumah sekalipun. Kini tak kurang dari 300 Masjid dan Mushalla yang dilaporkan rusak, dan lebih dari 70 masjid yang hancur rata dengan tanah karena gempa. semua masjid ini tersebar di 3 kabupaten (lombok utara, lombok barat dan lombok timur).",
+            "fotoEvent": "event_5e4b8cd198530_202002181405.jpg",
+            "waktuEvent": "09:00 s.d Selesai",
+            "statusEvent": "t",
+            "createBy": "0",
+            "createTime": "2020-01-29 16:37:26",
+            "updateBy": "",
+            "updateTime": "2020-02-18 14:05:53"
+        },
+        {
+            "kodeEvent": "2",
+            "tanggalEvent": "2020-03-31",
+            "judulEvent": "Bangun Kembali 100 Masjid dan Mushalla Anti Gempa",
+            "lokasiEvent": "Jakarta",
+            "isiEvent": "Gempa Bumi dahsyat bertubi-tubi guncang lombok, kini Pulau seribu Masjid lemah tak berdaya, Lebih dari 500 Masjid dan Mushalla rata dengan tanah, kini ibadah saudara kita harus bertebaran dimana-mana , masih banyak warga yang tak bisa melaksanakan shalat dengan nyaman. Lokasi masjid dan mushalla sudah tak dapat dipake kembali , semua rusak parah dan bahkan sudh rata dengan tanah.<br /><br />Terpaksa mereka shalat di luar, tempat terbuka , bahkan di atas reruntuhan bangunan rumah sekalipun. Kini tak kurang dari 300 Masjid dan Mushalla yang dilaporkan rusak, dan lebih dari 70 masjid yang hancur rata dengan tanah karena gempa. semua masjid ini tersebar di 3 kabupaten (lombok utara, lombok barat dan lombok timur).",
+            "fotoEvent": "event_5e4b8d3d74b44_202002181407.jpg",
+            "waktuEvent": "09:00 s.d Selesai",
+            "statusEvent": "t",
+            "createBy": "",
+            "createTime": "2020-02-18 14:07:41",
+            "updateBy": "",
+            "updateTime": "0000-00-00 00:00:00"
+        },
+        {
+            "kodeEvent": "3",
+            "tanggalEvent": "2020-01-31",
+            "judulEvent": "Bangun Kembali 200 Masjid dan Mushalla Anti Gempa",
+            "lokasiEvent": "Bandung",
+            "isiEvent": "Gempa Bumi dahsyat bertubi-tubi guncang lombok, kini Pulau seribu Masjid lemah tak berdaya, Lebih dari 500 Masjid dan Mushalla rata dengan tanah, kini ibadah saudara kita harus bertebaran dimana-mana , masih banyak warga yang tak bisa melaksanakan shalat dengan nyaman. Lokasi masjid dan mushalla sudah tak dapat dipake kembali , semua rusak parah dan bahkan sudh rata dengan tanah.<br /><br />Terpaksa mereka shalat di luar, tempat terbuka , bahkan di atas reruntuhan bangunan rumah sekalipun. Kini tak kurang dari 300 Masjid dan Mushalla yang dilaporkan rusak, dan lebih dari 70 masjid yang hancur rata dengan tanah karena gempa. semua masjid ini tersebar di 3 kabupaten (lombok utara, lombok barat dan lombok timur).",
+            "fotoEvent": "event_5e4b8d72e2d37_202002181408.jpg",
+            "waktuEvent": "09:00 s.d Selesai",
+            "statusEvent": "t",
+            "createBy": "",
+            "createTime": "2020-02-18 14:08:34",
+            "updateBy": "",
+            "updateTime": "0000-00-00 00:00:00"
+        }      
+    ]
+}
+    ''';
 
-    if (response.statusCode == 200) {
-      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+    Event event = eventFromJson(responseString);
 
-      return parsed.map<Visit>((json) => Visit.fromJson(json)).toList();
-    }
-
-    VisitResponse visitResponse = visitResponseFromJson(_visit);
-
-    for (int i = 0; i < visitResponse.result.length; i++) {
-      var createTime = DateTime(visitResponse.result[i].time_start.year,
-          visitResponse.result[i].time_start.month, visitResponse.result[i].time_start.day);
+    for (int i = 0; i < event.data.length; i++) {
+      var createTime = DateTime(event.data[i].createTime.year,
+          event.data[i].createTime.month, event.data[i].createTime.day);
       var original = mapFetch[createTime];
       if (original == null) {
         print("null");
-        mapFetch[createTime] = [visitResponse.result[i].time_start];
+        mapFetch[createTime] = [event.data[i].tanggalEvent];
       } else {
-        print(visitResponse.result[i].time_start);
+        print(event.data[i].tanggalEvent);
         mapFetch[createTime] = List.from(original)
-          ..addAll([visitResponse.result[i].time_start]);
+          ..addAll([event.data[i].tanggalEvent]);
       }
     }
 
@@ -179,10 +694,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
 
   @override
   void initState() {
-    super.initState();
-    _selectedDay = _focusedDay;
+    final _selectedDay = DateTime.now();
     _selectedEvents = [];
-    BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
     _calendarController = CalendarController();
     _animationController = AnimationController(
       vsync: this,
@@ -190,16 +703,139 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
     );
 
     _animationController.forward();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getTask1().then((val) => setState(() {
         _events = val;
       }));
       //print( ' ${_events.toString()} ');
     });
+    super.initState();
   }
 
-  void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-        print('CALLBACK: _onVisibleDaysChanged');
+  @override
+  void dispose() {
+    _calendarController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _buildTableCalendarWithBuilders(),
+            const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
+            Expanded(child: _buildEventList()),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildTableCalendarWithBuilders() {
+    return TableCalendar(
+      //locale: 'pl_PL',
+      calendarController: _calendarController,
+      events: _events,
+      //holidays: _holidays,
+      initialCalendarFormat: CalendarFormat.month,
+      formatAnimation: FormatAnimation.slide,
+      startingDayOfWeek: StartingDayOfWeek.sunday,
+      availableGestures: AvailableGestures.all,
+      availableCalendarFormats: const {
+        CalendarFormat.month: '',
+        CalendarFormat.week: '',
+      },
+      calendarStyle: CalendarStyle(
+        outsideDaysVisible: false,
+        weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
+        holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
+      ),
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
+      ),
+      headerStyle: HeaderStyle(
+        centerHeaderTitle: true,
+        formatButtonVisible: false,
+      ),
+      builders: CalendarBuilders(
+        selectedDayBuilder: (context, date, _) {
+          return FadeTransition(
+            opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
+            child: Container(
+              margin: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+              color: Colors.deepOrange[300],
+              width: 100,
+              height: 100,
+              child: Text(
+                '${date.day}',
+                style: TextStyle().copyWith(fontSize: 16.0),
+              ),
+            ),
+          );
+        },
+        todayDayBuilder: (context, date, _) {
+          return Container(
+            margin: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+            color: Colors.amber[400],
+            width: 100,
+            height: 100,
+            child: Text(
+              '${date.day}',
+              style: TextStyle().copyWith(fontSize: 16.0),
+            ),
+          );
+        },
+        markersBuilder: (context, date, events, holidays) {
+          final children = <Widget>[];
+
+          if (events.isNotEmpty) {
+            children.add(
+              Positioned(
+                right: 1,
+                bottom: 1,
+                child: _buildEventsMarker(date, events),
+              ),
+            );
+          }
+
+          if (holidays.isNotEmpty) {
+            children.add(
+              Positioned(
+                right: -2,
+                top: -2,
+                child: _buildHolidaysMarker(),
+              ),
+            );
+          }
+
+          return children;
+        },
+      ),
+      onDaySelected: (date, events, _) {
+        _onDaySelected(date, events);
+        _animationController.forward(from: 0.0);
+      },
+      onVisibleDaysChanged: _onVisibleDaysChanged,
+    );
+  }
+
+  void _onVisibleDaysChanged(
+      DateTime first, DateTime last, CalendarFormat format) {
+    print('CALLBACK: _onVisibleDaysChanged');
   }
 
   Widget _buildEventsMarker(DateTime date, List events) {
@@ -237,7 +873,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
 
   Widget _buildEventList() {
     return ListView(
-      shrinkWrap: true,
       children: _selectedEvents
           .map((event) => Container(
         decoration: BoxDecoration(
@@ -254,288 +889,49 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin{
           .toList(),
     );
   }
-
-  @override
-  void dispose() {
-    _calendarController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: false,
-        leading: IconButton(
-            onPressed: Navigator.of(context).pop,
-            icon: ImageIcon(
-              AssetImage(Global.BACK_ICON),
-              color: Color(Global.BLUE),
-              size: 18,
-            )
-        ),
-        title: Text(
-            "Home",
-            style: Global.getCustomFont(Global.BLUE, 18, 'medium')
-        ),
-      ),
-      body: BlocBuilder<VisitBloc, VisitBlocState>(
-        builder: (context, state) {
-          if(state is VisitList) {
-
-            return SingleChildScrollView(
-              reverse: false,
-              child: Container(
-                padding: const EdgeInsets.only(left: 21, right: 21, bottom: 20),
-                color: Colors.white,
-                // height: MediaQuery.of(context).size.height,
-                child: Column(
-                  children: [
-                    // _buildTableCalendarWithBuilders(),
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 17),
-                      color: Colors.white,
-                      child: TableCalendar(
-                        //locale: 'pl_PL',
-                        calendarController: _calendarController,
-                        events:_visit,
-                        //holidays: _holidays,
-                        initialCalendarFormat: CalendarFormat.month,
-                        formatAnimation: FormatAnimation.slide,
-                        startingDayOfWeek: StartingDayOfWeek.sunday,
-                        availableGestures: AvailableGestures.all,
-                        availableCalendarFormats: const {
-                          CalendarFormat.month: '',
-                          CalendarFormat.week: '',
-                        },
-                        calendarStyle: CalendarStyle(
-                          outsideDaysVisible: false,
-                          weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-                          holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
-                        ),
-                        daysOfWeekStyle: DaysOfWeekStyle(
-                          weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
-                        ),
-                        headerStyle: HeaderStyle(
-                          centerHeaderTitle: true,
-                          formatButtonVisible: false,
-                        ),
-                        builders: CalendarBuilders(
-                          selectedDayBuilder: (context, date, _) {
-                            return FadeTransition(
-                              opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
-                              child: Container(
-                                margin: const EdgeInsets.all(4.0),
-                                padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-                                color: Colors.deepOrange[300],
-                                width: 100,
-                                height: 100,
-                                child: Text(
-                                  '${date.day}',
-                                  style: TextStyle().copyWith(fontSize: 16.0),
-                                ),
-                              ),
-                            );
-                          },
-                          todayDayBuilder: (context, date, _) {
-                            return Container(
-                              margin: const EdgeInsets.all(4.0),
-                              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-                              color: Colors.amber[400],
-                              width: 100,
-                              height: 100,
-                              child: Text(
-                                '${date.day}',
-                                style: TextStyle().copyWith(fontSize: 16.0),
-                              ),
-                            );
-                          },
-                          markersBuilder: (context, date, events, holidays) {
-                            final children = <Widget>[];
-
-                            if (events.isNotEmpty) {
-                              children.add(
-                                Positioned(
-                                  right: 1,
-                                  bottom: 1,
-                                  child: _buildEventsMarker(date, events),
-                                ),
-                              );
-                            }
-
-                            if (holidays.isNotEmpty) {
-                              children.add(
-                                Positioned(
-                                  right: -2,
-                                  top: -2,
-                                  child: _buildHolidaysMarker(),
-                                ),
-                              );
-                            }
-
-                            return children;
-                          },
-                        ),
-                        onDaySelected: (date, visits, _) {
-                          _onDaySelected(date, visits);
-                          _animationController.forward(from: 0.0);
-                        },
-                        onVisibleDaysChanged: _onVisibleDaysChanged,
-                      ),
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Stack(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                                  width: 153,
-                                  height: 56,
-                                  color: Colors.white,
-                                  child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(color: Color(Global.BLUE)),
-                                          borderRadius: BorderRadius.circular(20)
-                                      ),
-                                      color: Color(Global.BLUE),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => Plan(_focusedDay)
-                                        ));
-                                      },
-                                      child: const Text(
-                                        "Add plan",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'bold',
-                                            fontSize: 15
-                                        ),
-                                      )
-                                  ),
-                                ),
-                              ]
-                          ),
-                        )
-                    ),
-                    Divider(
-                      height: 8,
-                    ),
-                    Container(
-                      child: _buildEventList()
-                    )
-                    // Container(
-                    //   child: ValueListenableBuilder<List<Event>>(
-                    //     valueListenable: _selectedEvents,
-                    //     builder: (context, value, _) {
-                    //       return Container(
-                    //         // padding: const EdgeInsets.only(bottom: 17),
-                    //         child: ListView.builder(
-                    //           itemCount: value.length,
-                    //           shrinkWrap: true,
-                    //           physics: const NeverScrollableScrollPhysics(),
-                    //           itemBuilder: (context, index) {
-                    //             return Container(
-                    //               margin: const EdgeInsets.only(top: 17),
-                    //               height: 70,
-                    //               decoration: BoxDecoration(
-                    //                 border: Border.all(),
-                    //                 borderRadius: BorderRadius.circular(10),
-                    //               ),
-                    //               child: ListTile(
-                    //                 // onTap: () => print('${value[index]}'),
-                    //                   onTap: () {
-                    //                     Navigator.push(context, MaterialPageRoute(
-                    //                         builder: (context) => Realization()
-                    //                     ));
-                    //                   },
-                    //                   title: Container(
-                    //                       child: Column(
-                    //                           children: <Widget> [
-                    //                             Container(
-                    //                               margin: const EdgeInsets.only(top: 6),
-                    //                               child: Align(
-                    //                                 alignment: Alignment.topLeft,
-                    //                                 child: Text('${value[index]}', style: Global.getCustomFont(Global.BLACK, 16, 'bold')),
-                    //                               ),
-                    //                             ),
-                    //                             Container(
-                    //                                 margin: const EdgeInsets.only(top:8),
-                    //                                 child: Align(
-                    //                                   alignment: Alignment.topLeft,
-                    //                                   child: Text('${value[index]}', style: Global.getCustomFont(Global.BLACK, 16, 'book')),
-                    //                                 )
-                    //                             )
-                    //                           ]
-                    //                       )
-                    //                   )
-                    //               ),
-                    //             );
-                    //           },
-                    //         ),
-                    //       );
-                    //     },
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            );
-          } else {
-              return Container(
-                padding: const EdgeInsets.only(top: 30),
-                child: CircularProgressIndicator()
-              );
-          }
-        }
-      )
-    );
-  }
 }
 
-class VisitModel {
-  String visit_no;
-  String visit_cat;
-  String branch_id;
-  String cust_id;
-  DateTime time_start;
-  DateTime time_finish;
-  String user_id;
-  String description;
-  String pic_position;
-  String pic_name;
-  String status_visit;
+class EventModel {
+  String kodeEvent;
+  DateTime tanggalEvent;
+  String judulEvent;
+  String lokasiEvent;
+  String isiEvent;
+  String fotoEvent;
+  String waktuEvent;
+  String statusEvent;
+  String createBy;
+  DateTime createTime;
+  String updateBy;
+  String updateTime;
 
-  VisitModel({
-    required this.visit_no,
-    required this.visit_cat,
-    required this.branch_id,
-    required this.cust_id,
-    required this.time_start,
-    required this.time_finish,
-    required this.user_id,
-    required this.description,
-    required this.pic_position,
-    required this.pic_name,
-    required this.status_visit,
+  EventModel({
+    this.kodeEvent,
+    this.tanggalEvent,
+    this.judulEvent,
+    this.lokasiEvent,
+    this.isiEvent,
+    this.fotoEvent,
+    this.waktuEvent,
+    this.statusEvent,
+    this.createBy,
+    this.createTime,
+    this.updateBy,
+    this.updateTime,
   });
 
-  factory VisitModel.fromJson(Map<String, dynamic> json) =>
-      VisitModel(
-        visit_no: json['visit_no'] as String,
-        visit_cat: json['visit_cat'] as String,
-        branch_id: json['branch_id'] as String,
-        cust_id: json['cust_id'] as String,
-        time_start: DateTime.parse(json['time_start'] as String),
-        time_finish: DateTime.parse(json['time_finish'] as String),
-        user_id: json['user_id'] as String,
-        description: json['description'] as String,
-        pic_position: json['pic_position'] as String,
-        pic_name: json['pic_name'] as String,
-        status_visit: json['status_visit'] as String,
-      );
+  factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
+    kodeEvent: json["kodeEvent"],
+    tanggalEvent: DateTime.parse(json["tanggalEvent"]),
+    judulEvent: json["judulEvent"],
+    lokasiEvent: json["lokasiEvent"],
+    isiEvent: json["isiEvent"],
+    fotoEvent: json["fotoEvent"],
+    waktuEvent: json["waktuEvent"],
+    statusEvent: json["statusEvent"],
+    createBy: json["createBy"],
+    createTime: DateTime.parse(json["createTime"]),
+    updateBy: json["updateBy"],
+    updateTime: json["updateTime"],
+  );
 }

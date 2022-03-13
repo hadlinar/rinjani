@@ -11,10 +11,10 @@ class Branch{
   String address;
 
   Branch({
-    required this.branch_id,
-    required this.branch_name,
-    required this.nick_name,
-    required this.address,
+    this.branch_id,
+    this.branch_name,
+    this.nick_name,
+    this.address,
   });
 
   factory Branch.fromJson(Map<String,dynamic> json) => _$BranchFromJson(json);

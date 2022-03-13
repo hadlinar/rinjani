@@ -8,13 +8,13 @@ enum INPUT_TYPE {
 
 class CustomTextField extends FormField<String> {
   CustomTextField({
-    required String label,
-    FocusNode? focusNode,
-    String? hint,
-    Widget? suffixIcon,
-    bool? obsecureText,
-    TextEditingController? controller,
-    ValueChanged<String>? onChange,
+    String label,
+    FocusNode focusNode,
+    String hint,
+    Widget suffixIcon,
+    bool obsecureText,
+    TextEditingController controller,
+    ValueChanged<String> onChange,
     int maxLines = 1,
     int maxLength = 100,
     bool showCounterText = false,
@@ -47,7 +47,7 @@ class CustomTextField extends FormField<String> {
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(bottom: 5,left: 7,top: 5),
                 counterText: showCounterText
-                    ? "${controller?.text.length}/$maxLength"
+                    ? "${controller.text.length}/$maxLength"
                     : null,
                 labelText: label,
                 hintText: hint,
@@ -58,7 +58,7 @@ class CustomTextField extends FormField<String> {
                 suffixIcon: suffixIcon ?? null
             ),validator: (value) {
             if (inputType == INPUT_TYPE.PERSEN) {
-              if (int.parse(value!) < 0 || int.parse(value) > 100) {
+              if (int.parse(value) < 0 || int.parse(value) > 100) {
                 return "Masukkan input 0 hingga 100";
               }
               return null;

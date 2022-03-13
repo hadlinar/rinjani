@@ -32,60 +32,59 @@ class VisitRepository {
     return response;
   }
 
-  // Future<PostVisitResponse> postVisit({
-  //   required String visit_cat,
-  //   required String branch_id,
-  //   required String cust_id,
-  //   required DateTime time_start,
-  //   required DateTime time_finish,
-  //   required String user_id,
-  //   required String description,
-  //   required String pic_position,
-  //   required String pic_name,
-  //   required String status_visit,
-  // }) async {
-  //   final response = await visitService.addVisit({
-  //     "visit_cat": visit_cat,
-  //     "branch_id": branch_id,
-  //     "cust_id": cust_id,
-  //     "time_start": time_start,
-  //     "time_finish": time_finish,
-  //     "user_id": user_id,
-  //     "description": description,
-  //     "pic_position": pic_position,
-  //     "pic_name": pic_name,
-  //     "status_visit": status_visit
-  //   });
-  //   return response;
-  // }
+  Future<PostVisitResponse> postVisit({
+    String visit_cat,
+    String branch_id,
+    String cust_id,
+    String time_start,
+    String time_finish,
+    String description,
+    String pic_position,
+    String pic_name,
+    String status_visit,
+    String userId,
+  }) async {
+    final response = await visitService.addVisit({
+      "visit_cat": visit_cat,
+      "branch_id": branch_id,
+      "cust_id": cust_id,
+      "time_start": time_start,
+      "time_finish": time_finish,
+      "description": description,
+      "pic_position": pic_position,
+      "pic_name": pic_name,
+      "status_visit": status_visit
+    }, userId);
+    return response;
+  }
 
-  // Future<PostRealResponse> postRealization({
-  //   required String visit_no,
-  //   required String branch_id,
-  //   required String cust_id,
-  //   required DateTime time_start,
-  //   required DateTime time_finish,
-  //   required String user_id,
-  //   required String description,
-  //   required String pic_position,
-  //   required String pic_name,
-  //   required String status_visit,
-  //   required double latitude,
-  //   required double longitude
-  // }) async {
-  //   final response = await visitService.addRealization({
-  //     "visit_no": visit_no,
-  //     "branch_id": branch_id,
-  //     "cust_id": cust_id,
-  //     "time_start": time_start,
-  //     "time_finish": time_finish,
-  //     "user_id": user_id,
-  //     "description": description,
-  //     "pic_position": pic_position,
-  //     "pic_name": pic_name,
-  //     "latitude": latitude,
-  //     "longitude": longitude
-  //   });
-  //   return response;
-  // }
+  Future<PostRealResponse> postRealization({
+    String visit_no,
+    String branch_id,
+    String cust_id,
+    String time_start,
+    String time_finish,
+    String description,
+    String pic_position,
+    String pic_name,
+    String status_visit,
+    String latitude,
+    String longitude,
+    String userId
+  }) async {
+    final response = await visitService.addRealization({
+      "visit_no": visit_no,
+      "branch_id": branch_id,
+      "cust_id": cust_id,
+      "time_start": time_start,
+      "time_finish": time_finish,
+      "description": description,
+      "pic_position": pic_position,
+      "pic_name": pic_name,
+      "status_visit": status_visit,
+      "latitude": latitude,
+      "longitude": longitude
+    }, userId);
+    return response;
+  }
 }

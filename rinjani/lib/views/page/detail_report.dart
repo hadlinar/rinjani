@@ -60,6 +60,27 @@ class _DetailReport extends State<DetailReport> {
                   Container(
                     padding: const EdgeInsets.only(top: 17),
                     child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: <Widget> [
+                            Text(
+                              'Visit No.',
+                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(left: 38),
+                              child: Text(
+                                widget.visit.visit_no,
+                                style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 17),
+                    child: Align(
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: <Widget> [

@@ -6,6 +6,10 @@ import '../../utils/global.dart';
 import 'package:intl/intl.dart';
 
 class InOffice extends StatefulWidget {
+  String type;
+  DateTime focusedDate;
+
+  InOffice(this.type, this.focusedDate);
 
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +20,7 @@ class InOffice extends StatefulWidget {
 final GlobalState store = GlobalState.instance;
 
 class _InOffice extends State<InOffice> {
-  String? descriptionController;
+  TextEditingController descriptionController = TextEditingController();
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
 
@@ -93,9 +97,9 @@ class _InOffice extends State<InOffice> {
 
   @override
   Widget build(BuildContext context) {
-    store.set("desc", descriptionController);
-    store.set("timeStart", DateFormat("HH:mm").format(timeStart));
-    store.set("timeEnd", DateFormat("HH:mm").format(timeEnd));
+    store.set("desc", descriptionController.text);
+    store.set("timeStart", timeStart);
+    store.set("timeEnd", timeEnd);
     return GestureDetector (
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -164,13 +168,13 @@ class _InOffice extends State<InOffice> {
                 ),
                 TextFormField(
                   style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                  onChanged: (text) {
-                    setState(() {
-                      descriptionController = text;
-                    });
-                  },
+                  controller: descriptionController,
+                  autofocus: true,
                   maxLines: 5,
                   maxLength: 200,
+                  onChanged: ((text) {
+
+                  }),
                   decoration: InputDecoration(
                     labelText: "Description",
                     alignLabelWithHint: true,

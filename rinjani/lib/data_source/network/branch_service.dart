@@ -10,7 +10,7 @@ part 'branch_service.g.dart';
 @RestApi(baseUrl: Global.baseURL)
 
 abstract class BranchService{
-  static create(Dio dio, {required String baseUrl}) => _BranchService(dio, baseUrl: baseUrl);
+  static create(Dio dio, {String baseUrl}) => _BranchService(dio, baseUrl: baseUrl);
 
   @GET('/branch')
   Future<BranchResponse> getBranch();

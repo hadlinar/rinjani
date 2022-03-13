@@ -21,12 +21,12 @@ class User{
   String flg_used;
 
   User({
-    required this.user_id,
-    required this.nik,
-    required this.branch_id,
-    required this.email,
-    required this.role_id,
-    required this.flg_used
+    this.user_id,
+    this.nik,
+    this.branch_id,
+    this.email,
+    this.role_id,
+    this.flg_used
   });
 
   factory User.fromJson(Map<String,dynamic> json) => _$UserFromJson(json);

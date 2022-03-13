@@ -14,8 +14,8 @@ class Off extends StatefulWidget {
 final GlobalState store = GlobalState.instance;
 
 class _Off extends State<Off> {
-  String? offType;
-  String? descFilled;
+  String offType;
+  String descFilled;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _Off extends State<Off> {
                       child: Text(e),
                     );
                   }).toList(),
-                  onChanged: (String? value) {
+                  onChanged: (String value) {
                     setState(() {
                       offType = value;
                     });

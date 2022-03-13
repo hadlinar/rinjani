@@ -30,12 +30,12 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is GetVisitEvent) {
       yield* _mapVisitToState(event);
     }
-    // if(event is AddVisitEvent) {
-    //   yield* _mapAddVisitToState(event);
-    // }
-    // if(event is AddRealizationEvent) {
-    //   yield* _mapAddRealizationToState(event);
-    // }
+    if(event is AddVisitEvent) {
+      yield* _mapAddVisitToState(event);
+    }
+    if(event is AddRealizationEvent) {
+      yield* _mapAddRealizationToState(event);
+    }
     if(event is GetVisitRealizationByIdEvent) {
       yield* _mapVisitRealizationByIdToState(event);
     }
@@ -62,55 +62,58 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     yield VisitRealizationList(response.result);
   }
 
-  // Stream<VisitBlocState> _mapAddVisitToState(AddVisitEvent e) async* {
-  //   yield LoadingVisitState();
-  //   try {
-  //     final response = await _visitRepository.postVisit(
-  //         visit_cat: e.visit_cat,
-  //         branch_id: e.branch_id,
-  //         cust_id: e.cust_id,
-  //         time_start: e.time_start,
-  //         time_finish: e.time_finish,
-  //         user_id: e.user_id,
-  //         description: e.description,
-  //         pic_position: e.pic_position,
-  //         pic_name: e.pic_name,
-  //         status_visit:e.status_visit
-  //     );
-  //     if (response.message == "ok"){
-  //       yield SuccessAddVisitState();
-  //     }
-  //   }
-  //   catch(e) {
-  //     yield FailedVisitState();
-  //   }
-  // }
-  //
-  // Stream<VisitBlocState> _mapAddRealizationToState(AddRealizationEvent e) async* {
-  //   yield LoadingVisitState();
-  //   try {
-  //     final response = await _visitRepository.postRealization(
-  //         visit_no: e.visit_no,
-  //         branch_id: e.branch_id,
-  //         cust_id: e.cust_id,
-  //         time_start: e.time_start,
-  //         time_finish: e.time_finish,
-  //         user_id: e.user_id,
-  //         description: e.description,
-  //         pic_position: e.pic_position,
-  //         pic_name: e.pic_name,
-  //         status_visit: e.status_visit,
-  //         latitude: e.latitude,
-  //         longitude: e.longitude
-  //     );
-  //     if (response.message == "ok"){
-  //       yield SuccessAddRealizationState();
-  //     }
-  //   }
-  //   catch(e) {
-  //     yield FailedVisitState();
-  //   }
-  // }
+  Stream<VisitBlocState> _mapAddVisitToState(AddVisitEvent e) async* {
+    yield LoadingVisitState();
+    try {
+      final response = await _visitRepository.postVisit(
+          visit_cat: e.visit_cat,
+          branch_id: e.branch_id,
+          cust_id: e.cust_id,
+          time_start: e.time_start,
+          time_finish: e.time_finish,
+          userId: e.user_id,
+          description: e.description,
+          pic_position: e.pic_position,
+          pic_name: e.pic_name,
+          status_visit:e.status_visit
+      );
+      if (response.message == "posted"){
+        yield SuccessAddVisitState();
+      }
+    }
+    catch(e) {
+      print(e.toString());
+      yield FailedVisitState();
+    }
+  }
+
+  Stream<VisitBlocState> _mapAddRealizationToState(AddRealizationEvent e) async* {
+    yield LoadingVisitState();
+    try {
+      final response = await _visitRepository.postRealization(
+          visit_no: e.visit_no,
+          branch_id: e.branch_id,
+          cust_id: e.cust_id,
+          time_start: e.time_start,
+          time_finish: e.time_finish,
+          description: e.description,
+          pic_position: e.pic_position,
+          pic_name: e.pic_name,
+          status_visit: e.status_visit,
+          latitude: e.latitude,
+          longitude: e.longitude,
+          userId: e.user_id
+      );
+      if (response.message == "posted"){
+        print(response.message);
+        yield SuccessAddRealizationState();
+      }
+    }
+    catch(e) {
+      print(e.toString());
+      yield FailedVisitState();
+    }
+  }
 
   Stream<VisitBlocState> _mapVisitRealizationByIdToState(GetVisitRealizationByIdEvent event) async* {
     yield LoadingVisitState();

@@ -25,145 +25,219 @@ class Plan extends StatefulWidget {
 final GlobalState store = GlobalState.instance;
 
 class _Plan extends State<Plan> {
-  String? defaultType;
+  String defaultType;
+  List<String> visitName;
 
   @override
   void initState() {
     super.initState();
+    visitName  = [];
     BlocProvider.of<VisitBloc>(context).add(GetVisitCategoryEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<VisitBloc, VisitBlocState>(
-        builder: (context, state) {
-          if(state is VisitCategoryList) {
-            List<String> visitName = [];
+    return BlocListener<VisitBloc, VisitBlocState>(
+        listener: (context, state) {
+          print(state.toString());
+          if (state is InitialVisitBlocState || state is LoadingVisitState) {
+            const Center(
+              child: CircularProgressIndicator()
+            );
+          }
+          if(state is SuccessAddVisitState) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Global.defaultModal(() {
+                    // Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }, context, Global.CHECK_ICON, "Visit saved", "Ok", false);
+                }
+            );
 
+          } if(state is VisitCategoryList) {
             for(int i=0; i < 3; i++) {
               visitName.add(state.getVisitCategory[i].visit_name);
             }
-            print(visitName.length);
-
-            return GestureDetector(
-                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-                child: SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: Scaffold(
-                    appBar: AppBar(
-                      backgroundColor: Colors.white,
-                      centerTitle: false,
-                      leading: IconButton(
-                          onPressed: Navigator.of(context).pop,
-                          icon: ImageIcon(
-                            const AssetImage(Global.BACK_ICON),
-                            color: Color(Global.BLUE),
-                            size: 18,
-                          )
-                      ),
-                      title: Text(
-                          "Back",
-                          style: Global.getCustomFont(Global.BLUE, 18, 'medium')
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                    body: SingleChildScrollView(
-                        reverse: false,
-                        child: Column(
-                          children: <Widget> [
-                            Container(
-                                padding: const EdgeInsets.only(top: 22, right: 21, left: 21),
-                                child: DropdownButtonFormField<String>(
-                                  hint: const Text("Choose type of plan"),
-                                  dropdownColor: Colors.white,
-                                  style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                  value: defaultType,
-                                  items: visitName.map((e) {
-                                    return DropdownMenuItem<String>(
-                                      value: e,
-                                      child: Text(e),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      defaultType = value;
-                                    });
-                                  },
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
-                                    labelText: "Type",
-                                    labelStyle: const TextStyle(
-                                        color: Color(0xff757575),
-                                        fontSize: 15,
-                                        fontFamily: 'medium'),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10),
-                                        borderSide: BorderSide()
-                                    ),
-                                  ),
-                                )
-                            ),
-                            defaultType == "in-office" ? Container(
-                                child: InOffice()
-                            )
-                                : (defaultType == "out-office" ? Container(
-                                child: OutOffice()
-                            )
-                                : (defaultType == "off" ? Container(
-                                child: Off()
-                            ) : Container()))
-                          ],
-                        )
-                    ),
-                    bottomNavigationBar: Stack(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                            width: double.infinity,
-                            height: 56,
-                            color: Colors.white,
-                            child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide(color: Color(Global.BLUE)),
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                color: Color(Global.BLUE),
-                                onPressed: () {
-                                  print(defaultType);
-                                  print(DateFormat("dd/MM/yyyy").format(widget.focusedDay));
-                                  if(defaultType == "In-office") {
-                                    print(store.get("desc"));
-                                    print(store.get("timeStart"));
-                                    print(store.get("timeEnd"));
-                                  } else if(defaultType == "Off") {
-                                    print(store.get("descOff"));
-                                    print(store.get("offType"));
-                                  } else {
-                                    print(store.get("result"));
-                                  }
-                                },
-                                child: const Text(
-                                  "Submit",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'bold',
-                                      fontSize: 15
-                                  ),
-                                )
-                            ),
-                          ),
-                        ]
-                    ),
-                  ),
-                )
-            );
+            setState(() {
+              visitName;
+            });
           }
           else {
-            return Container();
+            Container();
           }
         },
+      child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                centerTitle: false,
+                leading: IconButton(
+                    onPressed: Navigator.of(context).pop,
+                    icon: ImageIcon(
+                      const AssetImage(Global.BACK_ICON),
+                      color: Color(Global.BLUE),
+                      size: 18,
+                    )
+                ),
+                title: Text(
+                    "Back",
+                    style: Global.getCustomFont(Global.BLUE, 18, 'medium')
+                ),
+              ),
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                  reverse: false,
+                  child: Column(
+                    children: <Widget> [
+                      Container(
+                          padding: const EdgeInsets.only(top: 22, right: 21, left: 21),
+                          child: DropdownButtonFormField<String>(
+                            hint: const Text("Choose type of plan"),
+                            dropdownColor: Colors.white,
+                            style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                            value: defaultType,
+                            items: visitName.map((e) {
+                              return DropdownMenuItem<String>(
+                                value: e,
+                                child: Text(e),
+                              );
+                            }).toList(),
+                            onChanged: (String value) {
+                              setState(() {
+                                defaultType = value;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                              labelText: "Type",
+                              labelStyle: const TextStyle(
+                                  color: Color(0xff757575),
+                                  fontSize: 15,
+                                  fontFamily: 'medium'),
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(10),
+                                  borderSide: BorderSide()
+                              ),
+                            ),
+                          )
+                      ),
+                      defaultType == "in-office" ? Container(
+                          child: InOffice(
+                              defaultType, widget.focusedDay
+                          )
+                      )
+                          : (defaultType == "out-office" ? Container(
+                          child: OutOffice()
+                      )
+                          : (defaultType == "off" ? Container(
+                          child: Off()
+                      ) : Container()))
+                    ],
+                  )
+              ),
+              bottomNavigationBar: Stack(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                      width: double.infinity,
+                      height: 56,
+                      color: Colors.white,
+                      child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Color(Global.BLUE)),
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          color: Color(Global.BLUE),
+                          onPressed: () {
+                            String timeStart = store.get("timeStart").toString();
+                            String timeEnd = store.get("timeEnd").toString();
+                            String desc = store.get("desc").toString();
+                            if(defaultType == "in-office") {
+                              // print("01");
+                              // print("11");
+                              // print("");
+                              // print(store.get("timeStart"));
+                              // print(store.get("timeEnd"));
+                              // print("2014457001");
+                              // print(store.get("desc"));
+                              // print("");
+                              // print("");
+                              // print("n");
+                              BlocProvider.of<VisitBloc>(context).add(
+                                  AddVisitEvent(
+                                    "01",
+                                    "11",
+                                    "",
+                                    timeStart,
+                                    timeEnd,
+                                    "2014457001",
+                                    desc,
+                                    "",
+                                    "",
+                                    "y",
+                                  )
+                              );
+
+                            }
+                            else if(defaultType == "off") {
+                              String type = store.get("offType");
+                              String desc = type != "Other" ? type : store.get("descOff");
+                              print(desc);
+                              // print(type);
+                              var hourPagi = 8;
+                              var hourSore = 17;
+                              var newMin = 0;
+                              var newSec = 0;
+                              var timeStart, timeFinish;
+                              timeStart = DateTime.now();
+                              timeFinish = DateTime.now();
+                              timeStart = new DateTime(timeStart.year, timeStart.month, timeStart.day, hourPagi, newMin, newSec).toString();
+                              timeFinish = new DateTime(timeFinish.year, timeFinish.month, timeFinish.day, hourSore, newMin, newSec).toString();
+                              print(timeStart);
+                              print(timeFinish);
+
+                              BlocProvider.of<VisitBloc>(context).add(
+                                  AddVisitEvent(
+                                    "03",
+                                    "11",
+                                    "",
+                                    timeStart,
+                                    timeFinish,
+                                    "2014457001",
+                                    desc,
+                                    "",
+                                    "",
+                                    "y",
+                                  )
+                              );
+                            }
+                            else {
+                              print(store.get("result"));
+                            }
+                          },
+                          child: const Text(
+                            "Submit",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'bold',
+                                fontSize: 15
+                            ),
+                          )
+                      ),
+                    ),
+                  ]
+              ),
+            ),
+          )
+      )
     );
   }
 }

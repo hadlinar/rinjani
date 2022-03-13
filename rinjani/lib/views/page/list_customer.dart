@@ -1,4 +1,4 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_search/dropdownSearch.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/visit.dart';
@@ -17,7 +17,7 @@ class ListCustomer extends StatefulWidget {
 
 class _ListCustomer extends State<ListCustomer> {
   var _filter = null;
-  String? defaultType;
+  String defaultType;
 
   List typeVal = [
     "Today",
@@ -90,7 +90,7 @@ class _ListCustomer extends State<ListCustomer> {
                               child: Text(e),
                             );
                           }).toList(),
-                          onChanged: (String? value) {
+                          onChanged: (String value) {
                             setState(() {
                               defaultType = value;
                             });

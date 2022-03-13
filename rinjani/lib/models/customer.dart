@@ -8,7 +8,7 @@ class CustomerCategory{
   String category_id;
   String category_name;
 
-  CustomerCategory({required this.category_id, required this.category_name});
+  CustomerCategory({this.category_id, this.category_name});
 
   factory CustomerCategory.fromJson(Map<String,dynamic> json) => _$CustomerCategoryFromJson(json);
 }
@@ -35,12 +35,12 @@ class Customer{
   String city;
 
   Customer({
-    required this.cust_id,
-    required this.branch_id,
-    required this.cust_name,
-    required this.category_id,
-    required this.address,
-    required this.city,
+    this.cust_id,
+    this.branch_id,
+    this.cust_name,
+    this.category_id,
+    this.address,
+    this.city,
   });
 
   factory Customer.fromJson(Map<String,dynamic> json) => _$CustomerFromJson(json);

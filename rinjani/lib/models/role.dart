@@ -11,7 +11,7 @@ class Role{
   String role_id;
   String role_name;
 
-  Role({required this.role_id, required this.role_name});
+  Role({this.role_id, this.role_name});
 
   factory Role.fromJson(Map<String,dynamic> json) => _$RoleFromJson(json);
 }

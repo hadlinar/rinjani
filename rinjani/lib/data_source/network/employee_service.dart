@@ -10,7 +10,7 @@ part 'employee_service.g.dart';
 @RestApi(baseUrl: Global.baseURL)
 
 abstract class EmployeeService{
-  static create(Dio dio, {required String baseUrl}) => _EmployeeService(dio, baseUrl: baseUrl);
+  static create(Dio dio, {String baseUrl}) => _EmployeeService(dio, baseUrl: baseUrl);
 
   @GET('/employee')
   Future<EmployeeResponse> getEmployee();

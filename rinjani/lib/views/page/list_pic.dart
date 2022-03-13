@@ -12,7 +12,7 @@ class ListPIC extends StatefulWidget {
 
 class _ListPIC extends State<ListPIC> {
 
-  String? defaultType;
+  String defaultType;
 
   List typeVal = [
     "Customer"
@@ -86,7 +86,7 @@ class _ListPIC extends State<ListPIC> {
                                     child: Text(e),
                                   );
                                 }).toList(),
-                                onChanged: (String? value) {
+                                onChanged: (String value) {
                                   setState(() {
                                     defaultType = value;
                                   });
