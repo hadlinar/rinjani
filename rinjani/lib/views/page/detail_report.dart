@@ -20,6 +20,8 @@ class _DetailReport extends State<DetailReport> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime time = DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.visit.time_finish);
+    String timeFixed = DateFormat('dd/MM/yyyy').format(time);
     return SafeArea(
         top: false,
         bottom: false,
@@ -133,7 +135,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 64),
                                     child: Text(
-                                      DateFormat("dd/MM/yyyy").format(widget.visit.time_finish),
+                                      timeFixed,
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )

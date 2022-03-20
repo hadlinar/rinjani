@@ -6,7 +6,7 @@ import '../../models/visit.dart';
 import '../../utils/global.dart';
 
 class ListCustomer extends StatefulWidget {
-  List<VisitRealById> visit;
+  List<String> visit;
 
   ListCustomer(this.visit);
 
@@ -133,7 +133,7 @@ class _ListCustomer extends State<ListCustomer> {
                                                   ),
                                                   Container(
                                                     padding: const EdgeInsets.only(left: 17),
-                                                    child: Text(widget.visit[i].cust_name, style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                    child: Text(widget.visit[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
                                                   ),
                                                 ]
                                             ),

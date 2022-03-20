@@ -121,9 +121,10 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     yield LoadingVisitState();
     final response = await _visitRepository.getVisitRealizationById(event.id);
     try {
-      final token = _sharedPreferences.getString("access_token");
+      // final token = _sharedPreferences.getString("access_token");
       final response = await _visitRepository.getVisitRealizationById(event.id);
       if(response.message == "ok") {
+        print("bloc");
         yield VisitRealizationByIdList(response.result);
       }
     }

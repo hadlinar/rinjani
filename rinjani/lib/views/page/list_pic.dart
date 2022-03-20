@@ -52,6 +52,7 @@ class _ListPIC extends State<ListPIC> {
                 child: Container(
                   padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
                   color: Colors.white,
+                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget>[
                       Container(

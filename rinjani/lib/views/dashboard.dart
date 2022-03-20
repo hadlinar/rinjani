@@ -36,7 +36,6 @@ class _Dashboard extends State<Dashboard> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserBlocState>(
       builder: (context, state) {
-        print(state.toString());
         if(state is UserList) {
           return Scaffold(
               extendBodyBehindAppBar: true,
