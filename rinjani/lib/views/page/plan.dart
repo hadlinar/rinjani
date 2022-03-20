@@ -204,22 +204,36 @@ class _Plan extends State<Plan> {
                                 );
                               }
                               else {
-                                print(store.get("result"));
+                                List<Map<String, dynamic>> res = store.get("result");
+                                List<String> pos = [];
+                                List<String> name = [];
 
-                                // BlocProvider.of<VisitBloc>(context).add(
-                                //     AddVisitEvent(
-                                //       "02",
-                                //       store.get("branch_id"),
-                                //       "",
-                                //       timeStart,
-                                //       timeFinish,
-                                //       store.get("user_id"),
-                                //       desc,
-                                //       "",
-                                //       "",
-                                //       "n",
-                                //     )
-                                // );
+                                for(int i=0; i<res.length; i++ ){
+                                  pos.add(res[i]['pic']['position']);
+                                  name.add(res[i]['pic']['name']);
+                                }
+
+                                String position = pos.join(", ");
+                                String name1 = name.join(", ");
+
+                                String timeStart = store.get("startTime").toString();
+                                String timeEnd = store.get("endTime").toString();
+                                String cust_id = store.get("cust_id").toString();
+
+                                BlocProvider.of<VisitBloc>(context).add(
+                                    AddVisitEvent(
+                                      "02",
+                                      store.get("branch_id"),
+                                      cust_id,
+                                      timeStart,
+                                      timeEnd,
+                                      store.get("nik"),
+                                      "",
+                                      position,
+                                      name1,
+                                      "n",
+                                    )
+                                );
                               }
                             },
                             child: const Text(
