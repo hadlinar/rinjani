@@ -27,6 +27,9 @@ abstract class VisitService{
   @GET('/visit/{userId}')
   Future<VisitByIdResponse> getVisitById(@Path('userId') String userId);
 
+  @GET('/visit/{filter}/{userId}')
+  Future<VisitRealByIdResponse> getVisitFilter(@Path('userId') String userId, @Path('filter') String filter);
+
   @POST('/realization/{userId}')
   Future<PostRealResponse> addRealization(@Body() Map<String,dynamic> body, @Path("userId") String userId);
 

@@ -133,9 +133,11 @@ class _ListPIC extends State<ListPIC> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  margin: const EdgeInsets.only(right: 17),
+                                                  margin: const EdgeInsets.only(right: 17, top: 8),
                                                   child: Align(
                                                     alignment: Alignment.topLeft,
                                                     child: Text('${i + 1}.',
@@ -143,28 +145,46 @@ class _ListPIC extends State<ListPIC> {
                                                     ),
                                                   ),
                                                 ),
-                                                Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Align(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: Text(
-                                                          "${widget.visit[i].pic_name} - ${widget.visit[i].pic_position}",
-                                                          style: Global.getCustomFont(Global.BLACK, 14, 'bold')
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: const EdgeInsets.only(top: 5),
-                                                      child: Align(
+                                                Container(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Align(
                                                         alignment: Alignment.centerLeft,
-                                                        child: Text(
-                                                            widget.visit[i].cust_name,
-                                                            style: Global.getCustomFont(Global.BLACK, 14, 'medium')
+                                                        child: widget.visit[i].pic_name.contains(",") ? Container(
+                                                            child: SizedBox(
+                                                              width: 300,
+                                                              child: ListView.builder(
+                                                                  itemCount: widget.visit[i].pic_name.split(", ").length,
+                                                                  scrollDirection: Axis.vertical,
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, j){
+                                                                    return Container(
+                                                                      padding: const EdgeInsets.only(top: 5),
+                                                                      child: Text("${widget.visit[i].pic_name.split(", ")[j]} - ${widget.visit[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                    );
+                                                                  }
+                                                              )
+                                                            )
+                                                        ) : Container(
+                                                          child: Text("${widget.visit[i].pic_name} - ${widget.visit[i].pic_position}",
+                                                              style: Global.getCustomFont(Global.BLACK, 14, 'bold')
+                                                          ),
+                                                        )
+                                                      ),
+                                                      Container(
+                                                        padding: const EdgeInsets.only(top: 5),
+                                                        child: Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Text(widget.visit[i].cust_name == null ? "null" : widget.visit[i].cust_name,
+                                                              style: Global.getCustomFont(Global.BLACK, 14, 'medium')
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),

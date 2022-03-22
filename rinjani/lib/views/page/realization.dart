@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
 import '../../models/customer.dart';
+import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 
@@ -31,7 +32,7 @@ class _Realization extends State<Realization> {
   var _selectedPIC = null;
 
   late List<String> cust = [];
-  late List<String> custId = [];
+  String custId = "";
   late List<String> position = [];
   String visitNo = "";
   String branchId = "";
@@ -86,6 +87,9 @@ class _Realization extends State<Realization> {
 
   }
 
+  List<VisitById> visit=[];
+  List<String> custName = [];
+  List<String> custPos = [];
 
   @override
   void initState() {
@@ -128,26 +132,14 @@ class _Realization extends State<Realization> {
                       );
                     }
                     else if (state is VisitByIdList) {
-                      for(int i=0; i<state.getVisit.length;i++) {
-                        visitNo = state.getVisit[i].visit_no;
-                        branchId = state.getVisit[i].branch_id;
-                        timeStart = state.getVisit[i].time_start;
-                        timeFinish = state.getVisit[i].time_finish;
-                        nameController.text = state.getVisit[i].pic_name;
-
+                      for(int i=0; i<state.getVisit.length; i++) {
                         cust.add(state.getVisit[i].cust_name);
-                        custId.add(state.getVisit[i].cust_id);
-                        position.add(state.getVisit[i].pic_position);
                       }
 
                       setState(() {
-                        visitNo;
-                        branchId;
-                        timeStart;
-                        timeFinish;
+                        visit = state.getVisit;
                         cust;
-                        custId;
-                        position;
+                        custName = cust.toSet().toList();
                       });
                     }
                     if(state is SuccessAddRealizationState){
@@ -178,13 +170,22 @@ class _Realization extends State<Realization> {
                                           mode: Mode.MENU,
                                           showClearButton: true,
                                           selectedItem: _selectedCust,
-                                          items: cust,
+                                          items: custName,
                                           // dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
                                           label: "Customer",
                                           showSearchBox: true,
                                           onChanged: (val) {
                                             print(val);
-                                            _selectedCust = val;
+                                            setState(() {
+                                              custPos = [];
+                                              _selectedCust = val;
+                                              for(int i=0; i<visit.length; i++) {
+                                                if(visit[i].cust_name == _selectedCust) {
+                                                  custPos.add(visit[i].pic_position);
+                                                  custId = visit[i].cust_id;
+                                                }
+                                              }
+                                            });
                                           },
                                           // selectedItem: _selectedCust,
                                           dropdownSearchDecoration: InputDecoration(
@@ -204,13 +205,25 @@ class _Realization extends State<Realization> {
                                           mode: Mode.MENU,
                                           showClearButton: true,
                                           selectedItem: _selectedPIC,
-                                          items: position,
+                                          items: custPos,
                                           // dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
                                           label: "Position",
                                           showSearchBox: true,
                                           onChanged: (val) {
                                             print(val);
-                                            _selectedPIC = val;
+                                            setState(() {
+                                              nameController.text = "";
+                                              _selectedPIC = val;
+                                              for(int i=0; i<visit.length; i++) {
+                                                if(visit[i].pic_position == _selectedPIC) {
+                                                  nameController.text = visit[i].pic_name;
+                                                  visitNo = visit[i].visit_no;
+                                                  branchId = visit[i].branch_id;
+                                                  timeStart = visit[i].time_start.toString();
+                                                  timeFinish = visit[i].time_finish.toString();
+                                                }
+                                              }
+                                            });
                                           },
                                           // selectedItem: _selectedPIC,
                                           dropdownSearchDecoration: InputDecoration(
@@ -343,7 +356,7 @@ class _Realization extends State<Realization> {
 
                             // print(visitNo);
                             // print(branchId);
-                            // print(custId[foundKey].toString());
+                            // print(_selectedCust);
                             // print(timeStart);
                             // print(timeFinish);
                             // print(store.get("nik"));
@@ -357,7 +370,7 @@ class _Realization extends State<Realization> {
                                 AddRealizationEvent(
                                   visitNo,
                                   branchId,
-                                  custId[foundKey].toString(),
+                                  custId,
                                   timeStart.toString(),
                                   timeFinish.toString(),
                                   store.get("nik"),

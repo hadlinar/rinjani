@@ -68,6 +68,13 @@ class GetVisitByIdEvent extends VisitBlocEvent{
   GetVisitByIdEvent(this.id);
 }
 
+class GetVisitFilterEvent extends VisitBlocEvent{
+  String id;
+  String filter;
+
+  GetVisitFilterEvent(this.id, this.filter);
+}
+
 class GetVisitCategoryEvent extends VisitBlocEvent{}
 
 class GetVisitRealizationEvent extends VisitBlocEvent{}

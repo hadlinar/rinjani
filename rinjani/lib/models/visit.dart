@@ -204,8 +204,8 @@ class VisitById{
   String branch_id;
   String cust_name;
   String cust_id;
-  String time_start;
-  String time_finish;
+  DateTime time_start;
+  DateTime time_finish;
   String description;
   String pic_position;
   String pic_name;
@@ -253,8 +253,8 @@ class VisitRealById{
   String pic_position;
   String pic_name;
   String status_visit;
-  String latitude;
-  String longitude;
+  double latitude;
+  double longitude;
 
   VisitRealById({
     required this.real_no,

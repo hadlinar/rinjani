@@ -32,6 +32,12 @@ class VisitRepository {
     return response;
   }
 
+
+  Future<VisitRealByIdResponse> getVisitFilter(String id, String filter) async {
+    final response = await visitService.getVisitFilter(id, filter);
+    return response;
+  }
+
   Future<PostVisitResponse> postVisit({
     required String visit_id,
     required String branch_id,

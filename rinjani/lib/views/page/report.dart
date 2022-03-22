@@ -60,8 +60,8 @@ class _Report extends State<Report> {
               ),
               body: BlocBuilder<VisitBloc, VisitBlocState> (
                 builder: (context, state) {
+                  print(state.toString());
                   if (state is InitialVisitBlocState || state is LoadingVisitState) {
-                    print(state.toString());
                     return const Center(
                         child: CircularProgressIndicator()
                     );
@@ -148,10 +148,10 @@ class _Report extends State<Report> {
                                         style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                       ),
                                     ),
-                                    Container(
+                                    realization.length != 0 ? Container(
                                         padding: const EdgeInsets.only(top: 7),
                                         child: ListView.builder(
-                                            itemCount: 3,
+                                            itemCount: realization.length < 3 ? realization.length : 3,
                                             scrollDirection: Axis.vertical,
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -168,7 +168,22 @@ class _Report extends State<Report> {
                                                             padding: const EdgeInsets.only(top: 5),
                                                             child: Align(
                                                               alignment: Alignment.centerLeft,
-                                                              child: Text(realization[i].pic_name.toString(), style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                              child: realization[i].pic_name.contains(",") ? Container (
+                                                                child: ListView.builder(
+                                                                    itemCount: realization[i].pic_name.split(", ").length,
+                                                                    scrollDirection: Axis.vertical,
+                                                                    shrinkWrap: true,
+                                                                    physics: NeverScrollableScrollPhysics(),
+                                                                    itemBuilder: (context, j){
+                                                                      return Container(
+                                                                            padding: const EdgeInsets.only(top: 5),
+                                                                            child: Text("${realization[i].pic_name.split(", ")[j]} - ${realization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.GREY, 14, 'medium')),
+                                                                      );
+                                                                    }
+                                                                )
+                                                              ) : Container(
+                                                                child: Text("${realization[i].pic_name} - ${realization[i].pic_position}", style: Global.getCustomFont(Global.GREY, 14, 'medium')),
+                                                              )
                                                             ),
                                                           ),
                                                           Divider()
@@ -178,8 +193,26 @@ class _Report extends State<Report> {
                                               );
                                             }
                                         )
+                                    ) :
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 17, left: 12),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: <Widget> [
+                                            Image.asset(
+                                              Global.EMPTY_ICON,
+                                              height: 60,
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.only(top: 17),
+                                              child: Global.getDefaultText("No visits done", Global.GREY)
+                                            )
+                                          ]
+                                        )
+                                      ),
                                     ),
-                                    InkWell(
+                                    realization.length != 0 ? InkWell(
                                         onTap: (){
                                           Navigator.push(context, MaterialPageRoute(
                                               builder: (context) => ListVisit(realization)
@@ -205,7 +238,7 @@ class _Report extends State<Report> {
 
                                           ],
                                         )
-                                    )
+                                    ) : Container()
                                   ],
                                 )
                             ),
@@ -224,10 +257,10 @@ class _Report extends State<Report> {
                                         style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                       ),
                                     ),
-                                    Container(
+                                    realization.length != 0 ? Container(
                                         padding: const EdgeInsets.only(top: 7),
                                         child: ListView.builder(
-                                            itemCount: 3,
+                                            itemCount: realization.length < 3 ? realization.length : 3,
                                             scrollDirection: Axis.vertical,
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -238,13 +271,28 @@ class _Report extends State<Report> {
                                                         children: <Widget>[
                                                           Align(
                                                             alignment: Alignment.centerLeft,
-                                                            child: Text(realization[i].pic_name.toString() + " - " + realization[i].pic_name.toString(), style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                            child: realization[i].pic_name.contains(",") ? Container (
+                                                                child: ListView.builder(
+                                                                    itemCount: realization[i].pic_name.split(", ").length,
+                                                                    scrollDirection: Axis.vertical,
+                                                                    shrinkWrap: true,
+                                                                    physics: NeverScrollableScrollPhysics(),
+                                                                    itemBuilder: (context, j){
+                                                                      return Container(
+                                                                        padding: const EdgeInsets.only(top: 5),
+                                                                        child: Text("${realization[i].pic_name.split(", ")[j]} - ${realization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                      );
+                                                                    }
+                                                                )
+                                                            ) : Container(
+                                                              child: Text("${realization[i].pic_name} - ${realization[i].pic_position}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                            )
                                                           ),
                                                           Container(
                                                             padding: const EdgeInsets.only(top: 5),
                                                             child: Align(
                                                               alignment: Alignment.centerLeft,
-                                                              child: Text(realization[i].cust_name.toString(), style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                              child: Text(realization[i].cust_name.toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                             ),
                                                           ),
                                                           Divider()
@@ -254,8 +302,26 @@ class _Report extends State<Report> {
                                               );
                                             }
                                         )
+                                    ) :
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 17, left: 12),
+                                      child: Align(
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                              children: <Widget> [
+                                                Image.asset(
+                                                  Global.EMPTY_ICON,
+                                                  height: 60,
+                                                ),
+                                                Container(
+                                                    padding: const EdgeInsets.only(top: 17),
+                                                    child: Global.getDefaultText("No PIC yet", Global.GREY)
+                                                )
+                                              ]
+                                          )
+                                      ),
                                     ),
-                                    InkWell(
+                                    realization.length != 0 ? InkWell(
                                         onTap: (){
                                           Navigator.push(context, MaterialPageRoute(
                                               builder: (context) => ListPIC(realization)
@@ -281,7 +347,7 @@ class _Report extends State<Report> {
 
                                           ],
                                         )
-                                    )
+                                    ) : Container()
                                   ],
                                 )
                             ),
@@ -300,7 +366,7 @@ class _Report extends State<Report> {
                                         style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'medium'),
                                       ),
                                     ),
-                                    Container(
+                                    finalCustName.length != 0 ? Container(
                                         padding: const EdgeInsets.only(top: 7),
                                         child: ListView.builder(
                                             itemCount: finalCustName.length < 3 ? finalCustName.length : 3,
@@ -326,34 +392,24 @@ class _Report extends State<Report> {
                                               );
                                             }
                                         )
+                                    ) : Container(
+                                      padding: const EdgeInsets.only(top: 17, left: 12),
+                                      child: Align(
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                              children: <Widget> [
+                                                Image.asset(
+                                                  Global.EMPTY_ICON,
+                                                  height: 60,
+                                                ),
+                                                Container(
+                                                    padding: const EdgeInsets.only(top: 17),
+                                                    child: Global.getDefaultText("No customer yet", Global.GREY)
+                                                )
+                                              ]
+                                          )
+                                      ),
                                     ),
-                                    InkWell(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(
-                                              builder: (context) => ListCustomer(finalCustName)
-                                          ));
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: <Widget> [
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                'More',
-                                                style: TextStyle(color: Color(Global.BLUE), fontSize: 15, fontFamily: 'book'),
-                                              ),
-                                            ),
-                                            const Padding(
-                                              padding: EdgeInsets.only(top: 4, left: 10),
-                                              child: ImageIcon(
-                                                AssetImage(Global.ARROW_ICON),
-                                                size: 18,
-                                              ),
-                                            )
-
-                                          ],
-                                        )
-                                    )
                                   ],
                                 )
                             ),

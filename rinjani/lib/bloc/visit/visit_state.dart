@@ -37,6 +37,12 @@ class VisitByIdList extends VisitBlocState{
   VisitByIdList(this.getVisit);
 }
 
+// class RefreshList extends VisitBlocState{
+//   List<VisitRealById> getVisit;
+//
+//   RefreshList(this.getVisit);
+// }
+
 class VisitRealizationByIdList extends VisitBlocState{
   List<VisitRealById> getVisitRealization;
 

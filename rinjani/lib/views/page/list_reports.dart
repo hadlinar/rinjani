@@ -73,6 +73,7 @@ class _ListReport extends State<ListReport> {
                 children: <Widget> [
                   Container(
                     color: Colors.white,
+                    height: MediaQuery.of(context).size.height,
                     padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
                     child: Column(
                       children: [
@@ -209,13 +210,33 @@ class _ListReport extends State<ListReport> {
                                                           children: [
                                                             Align(
                                                               alignment: Alignment.centerLeft,
-                                                              child: Text("${widget.visitRealById[i].pic_name} - ${widget.visitRealById[i].pic_position}", style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                              child: widget.visitRealById[i].pic_name.contains(",") ? Container(
+                                                                  child: SizedBox(
+                                                                      width: 300,
+                                                                      child: ListView.builder(
+                                                                          itemCount: widget.visitRealById[i].pic_name.split(", ").length,
+                                                                          scrollDirection: Axis.vertical,
+                                                                          shrinkWrap: true,
+                                                                          physics: NeverScrollableScrollPhysics(),
+                                                                          itemBuilder: (context, j){
+                                                                            return Container(
+                                                                              padding: const EdgeInsets.only(top: 5),
+                                                                              child: Text("${widget.visitRealById[i].pic_name.split(", ")[j]} - ${widget.visitRealById[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                            );
+                                                                          }
+                                                                      )
+                                                                  )
+                                                              ) : Container(
+                                                                child: Text("${widget.visitRealById[i].pic_name} - ${widget.visitRealById[i].pic_position}",
+                                                                    style: Global.getCustomFont(Global.BLACK, 14, 'bold')
+                                                                ),
+                                                              )
                                                             ),
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 5),
                                                               child: Align(
                                                                 alignment: Alignment.centerLeft,
-                                                                child: Text(widget.visitRealById[i].cust_name, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                child: Text(widget.visitRealById[i].cust_name == null ? "null": widget.visitRealById[i].cust_name, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                               ),
                                                             ),
                                                           ],

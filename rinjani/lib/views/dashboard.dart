@@ -131,7 +131,6 @@ class _Dashboard extends State<Dashboard> {
                                 children: <Widget>[
                                   GestureDetector(
                                       onTap: (){
-                                        print("test");
                                         Navigator.push(context, MaterialPageRoute(
                                             builder: (context) => Report()
                                         ));

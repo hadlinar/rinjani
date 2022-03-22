@@ -133,7 +133,7 @@ class _ListCustomer extends State<ListCustomer> {
                                                   ),
                                                   Container(
                                                     padding: const EdgeInsets.only(left: 17),
-                                                    child: Text(widget.visit[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                    child: Text(widget.visit[i] == null ? "null" : widget.visit[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
                                                   ),
                                                 ]
                                             ),

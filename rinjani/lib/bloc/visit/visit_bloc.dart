@@ -44,6 +44,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is GetVisitByIdEvent) {
       yield* _mapVisitByIdToState(event);
     }
+    if(event is GetVisitFilterEvent) {
+      yield* _mapVisitFilterToState(event, event);
+    }
   }
 
   Stream<VisitBlocState> _mapVisitCategoryToState(GetVisitCategoryEvent event) async* {
@@ -119,18 +122,23 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
 
   Stream<VisitBlocState> _mapVisitRealizationByIdToState(GetVisitRealizationByIdEvent event) async* {
     yield LoadingVisitState();
-    final response = await _visitRepository.getVisitRealizationById(event.id);
     try {
-      // final token = _sharedPreferences.getString("access_token");
       final response = await _visitRepository.getVisitRealizationById(event.id);
       if(response.message == "ok") {
-        print("bloc");
         yield VisitRealizationByIdList(response.result);
       }
     }
     catch (e) {
+      print(e.toString());
       yield FailedVisitState();
     }
+  }
+
+  Stream<VisitBlocState> _mapVisitFilterToState(GetVisitFilterEvent id, GetVisitFilterEvent filter) async* {
+    yield LoadingVisitState();
+    print(filter.filter);
+    final response = await _visitRepository.getVisitFilter(id.id, filter.filter);
+    yield VisitRealizationByIdList(response.result);
   }
 
   Stream<VisitBlocState> _mapVisitByIdToState(GetVisitByIdEvent event) async* {

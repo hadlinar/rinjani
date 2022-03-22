@@ -202,8 +202,8 @@ VisitById _$VisitByIdFromJson(Map<String, dynamic> json) => VisitById(
       branch_id: json['branch_id'] as String,
       cust_name: json['cust_name'] as String,
       cust_id: json['cust_id'] as String,
-      time_start: json['time_start'] as String,
-      time_finish: json['time_finish'] as String,
+      time_start: DateTime.parse(json['time_start'] as String),
+      time_finish: DateTime.parse(json['time_finish'] as String),
       description: json['description'] as String,
       pic_position: json['pic_position'] as String,
       pic_name: json['pic_name'] as String,
@@ -216,8 +216,8 @@ Map<String, dynamic> _$VisitByIdToJson(VisitById instance) => <String, dynamic>{
       'branch_id': instance.branch_id,
       'cust_name': instance.cust_name,
       'cust_id': instance.cust_id,
-      'time_start': instance.time_start,
-      'time_finish': instance.time_finish,
+      'time_start': instance.time_start.toIso8601String(),
+      'time_finish': instance.time_finish.toIso8601String(),
       'description': instance.description,
       'pic_position': instance.pic_position,
       'pic_name': instance.pic_name,
@@ -250,8 +250,8 @@ VisitRealById _$VisitRealByIdFromJson(Map<String, dynamic> json) =>
       pic_position: json['pic_position'] as String,
       pic_name: json['pic_name'] as String,
       status_visit: json['status_visit'] as String,
-      latitude: json['latitude'] as String,
-      longitude: json['longitude'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$VisitRealByIdToJson(VisitRealById instance) =>
