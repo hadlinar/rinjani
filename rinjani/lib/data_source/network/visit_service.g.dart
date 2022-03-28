@@ -10,7 +10,7 @@ part of 'visit_service.dart';
 
 class _VisitService implements VisitService {
   _VisitService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://10.0.2.2:4000';
+    baseUrl ??= 'http://170.1.70.67:4200';
   }
 
   final Dio _dio;
@@ -34,39 +34,7 @@ class _VisitService implements VisitService {
   }
 
   @override
-  Future<VisitRealResponse> getVisitRealization() async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<VisitRealResponse>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/realization',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = VisitRealResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<VisitRealByIdResponse> getVisitRealizationById(userId) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<VisitRealByIdResponse>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/realization/${userId}',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = VisitRealByIdResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<VisitResponse> getVisit() async {
+  Future<VisitResponse> getAllVisit() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -82,68 +50,89 @@ class _VisitService implements VisitService {
   }
 
   @override
-  Future<VisitByIdResponse> getVisitById(userId) async {
+  Future<VisitResponse> getVisit(authorization) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<VisitByIdResponse>(
+        _setStreamType<VisitResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/visit/${userId}',
+                .compose(_dio.options, '/visit',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = VisitByIdResponse.fromJson(_result.data!);
+    final value = VisitResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<VisitRealByIdResponse> getVisitFilter(userId, filter) async {
+  Future<RealizationResponse> getRealization(authorization, filter) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<VisitRealByIdResponse>(
+        _setStreamType<RealizationResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/visit/${filter}/${userId}',
+                .compose(_dio.options, '/realization/${filter}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = VisitRealByIdResponse.fromJson(_result.data!);
+    final value = RealizationResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostRealResponse> addRealization(body, userId) async {
+  Future<RealizationResponse> getRealizationOp(branchId, filter) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(body);
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PostRealResponse>(
-            Options(method: 'POST', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/realization/${userId}',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PostRealResponse.fromJson(_result.data!);
+        _setStreamType<RealizationResponse>(Options(
+                method: 'GET', headers: _headers, extra: _extra)
+            .compose(
+                _dio.options, '/realization_operasional/${branchId}/${filter}',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = RealizationResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PostVisitResponse> addVisit(body, userId) async {
+  Future<PostVisitResponse> addVisit(authorization, body) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PostVisitResponse>(
             Options(method: 'POST', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/visit/${userId}',
+                .compose(_dio.options, '/visit',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = PostVisitResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<PostRealResponse> addRealization(authorization, body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PostRealResponse>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/realization',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PostRealResponse.fromJson(_result.data!);
     return value;
   }
 

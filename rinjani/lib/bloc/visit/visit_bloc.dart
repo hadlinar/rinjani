@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 import '../../data_source/repository/visit_repository.dart';
 import 'visit_state.dart';
@@ -14,9 +15,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
   final VisitRepository _visitRepository;
   final SharedPreferences _sharedPreferences;
 
-  static create(SharedPreferences sharedPreferences, VisitRepository visitRepository) => VisitBloc._(sharedPreferences, visitRepository);
+  static create(VisitRepository visitRepository, SharedPreferences sharedPreferences) => VisitBloc._(visitRepository, sharedPreferences);
 
-  VisitBloc._(this._sharedPreferences, this._visitRepository);
+  VisitBloc._(this._visitRepository, this._sharedPreferences);
 
   @override
   VisitBlocState get initialState => InitialVisitBlocState();
@@ -26,8 +27,11 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is GetVisitCategoryEvent) {
       yield* _mapVisitCategoryToState(event);
     }
-    if(event is GetVisitRealizationEvent) {
-      yield* _mapVisitRealizationToState(event);
+    if(event is GetAllVisitEvent) {
+      yield* _mapAllVisitToState(event);
+    }
+    if(event is GetRealizationEvent) {
+      yield* _mapRealizationToState(event);
     }
     if(event is GetVisitEvent) {
       yield* _mapVisitToState(event);
@@ -38,14 +42,8 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is AddRealizationEvent) {
       yield* _mapAddRealizationToState(event);
     }
-    if(event is GetVisitRealizationByIdEvent) {
-      yield* _mapVisitRealizationByIdToState(event);
-    }
-    if(event is GetVisitByIdEvent) {
-      yield* _mapVisitByIdToState(event);
-    }
-    if(event is GetVisitFilterEvent) {
-      yield* _mapVisitFilterToState(event, event);
+    if(event is GetRealizationOpEvent) {
+      yield* _mapRealizationOpToState(event);
     }
   }
 
@@ -55,20 +53,52 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     yield VisitCategoryList(response.result);
   }
 
-  Stream<VisitBlocState> _mapVisitToState(GetVisitEvent event) async* {
+  Stream<VisitBlocState> _mapAllVisitToState(GetAllVisitEvent event) async* {
     yield LoadingVisitState();
-    final response = await _visitRepository.getVisit();
-    yield VisitList(response.result);
+    final response = await _visitRepository.getAllVisit();
+    yield GetVisitState(response.result);
   }
 
-  Stream<VisitBlocState> _mapVisitRealizationToState(GetVisitRealizationEvent event) async* {
+  Stream<VisitBlocState> _mapVisitToState(GetVisitEvent event) async* {
     yield LoadingVisitState();
-    final response = await _visitRepository.getVisitRealization();
-    yield VisitRealizationList(response.result);
+    final token = _sharedPreferences.getString("access_token");
+    try{
+      final response = await _visitRepository.getVisit("Bearer $token");
+      if (response.message == "ok") {
+        yield GetVisitState(response.result);
+      }
+
+    } on DioError catch(e) {
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+        yield FailedVisitState();
+      }
+    }
+  }
+
+  Stream<VisitBlocState> _mapRealizationToState(GetRealizationEvent e) async* {
+    yield LoadingVisitState();
+    final token = _sharedPreferences.getString("access_token");
+    try{
+      final response = await _visitRepository.getRealization("Bearer $token", e.filter);
+      if (response.message == "ok") {
+        yield GetRealizationState(response.result);
+      }
+    } on DioError catch(e) {
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+        yield FailedVisitState();
+      }
+    }
   }
 
   Stream<VisitBlocState> _mapAddVisitToState(AddVisitEvent e) async* {
     yield LoadingVisitState();
+    final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _visitRepository.postVisit(
           visit_id: e.visit_id,
@@ -76,24 +106,28 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
           cust_id: e.cust_id,
           time_start: e.time_start,
           time_finish: e.time_finish,
-          userId: e.user_id,
           description: e.description,
           pic_position: e.pic_position,
           pic_name: e.pic_name,
-          status_visit:e.status_visit
+          status_visit:e.status_visit,
+          token: "Bearer $token"
       );
       if (response.message == "posted"){
         yield SuccessAddVisitState();
       }
-    }
-    catch(e) {
-      print(e.toString());
-      yield FailedVisitState();
+    } on DioError catch(e) {
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+        yield FailedVisitState();
+      }
     }
   }
 
   Stream<VisitBlocState> _mapAddRealizationToState(AddRealizationEvent e) async* {
     yield LoadingVisitState();
+    final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _visitRepository.postRealization(
           visit_no: e.visit_no,
@@ -107,43 +141,26 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
           status_visit: e.status_visit,
           latitude: e.latitude,
           longitude: e.longitude,
-          userId: e.user_id
+          token: "Bearer $token"
       );
       if (response.message == "posted"){
         print(response.message);
         yield SuccessAddRealizationState();
       }
-    }
-    catch(e) {
-      print(e.toString());
-      yield FailedVisitState();
-    }
-  }
-
-  Stream<VisitBlocState> _mapVisitRealizationByIdToState(GetVisitRealizationByIdEvent event) async* {
-    yield LoadingVisitState();
-    try {
-      final response = await _visitRepository.getVisitRealizationById(event.id);
-      if(response.message == "ok") {
-        yield VisitRealizationByIdList(response.result);
+    } on DioError catch(e) {
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+        yield FailedVisitState();
       }
     }
-    catch (e) {
-      print(e.toString());
-      yield FailedVisitState();
-    }
   }
 
-  Stream<VisitBlocState> _mapVisitFilterToState(GetVisitFilterEvent id, GetVisitFilterEvent filter) async* {
+  Stream<VisitBlocState> _mapRealizationOpToState(GetRealizationOpEvent e) async* {
+    print("id: ${e.id}, filter: ${e.filter}");
     yield LoadingVisitState();
-    print(filter.filter);
-    final response = await _visitRepository.getVisitFilter(id.id, filter.filter);
-    yield VisitRealizationByIdList(response.result);
-  }
-
-  Stream<VisitBlocState> _mapVisitByIdToState(GetVisitByIdEvent event) async* {
-    yield LoadingVisitState();
-    final response = await _visitRepository.getVisitById(event.id);
-    yield VisitByIdList(response.result);
+    final response = await _visitRepository.getRealizationOp(e.id, e.filter);
+    yield GetRealizationOpState(response.result);
   }
 }

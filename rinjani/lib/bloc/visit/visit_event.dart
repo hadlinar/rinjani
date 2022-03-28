@@ -60,27 +60,21 @@ class AddRealizationEvent extends VisitBlocEvent{
       );
 }
 
+class GetVisitCategoryEvent extends VisitBlocEvent{}
+
+class GetAllVisitEvent extends VisitBlocEvent{}
+
 class GetVisitEvent extends VisitBlocEvent{}
 
-class GetVisitByIdEvent extends VisitBlocEvent{
-  String id;
+class GetRealizationEvent extends VisitBlocEvent{
+  String filter;
 
-  GetVisitByIdEvent(this.id);
+  GetRealizationEvent(this.filter);
 }
 
-class GetVisitFilterEvent extends VisitBlocEvent{
+class GetRealizationOpEvent extends VisitBlocEvent{
   String id;
   String filter;
 
-  GetVisitFilterEvent(this.id, this.filter);
-}
-
-class GetVisitCategoryEvent extends VisitBlocEvent{}
-
-class GetVisitRealizationEvent extends VisitBlocEvent{}
-
-class GetVisitRealizationByIdEvent extends VisitBlocEvent{
-  String id;
-
-  GetVisitRealizationByIdEvent(this.id);
+  GetRealizationOpEvent(this.id, this.filter);
 }

@@ -6,9 +6,9 @@ import '../../models/visit.dart';
 import '../../utils/global.dart';
 
 class DetailReport extends StatefulWidget {
-  VisitRealById visit;
+  Realization realization;
 
-  DetailReport(this.visit);
+  DetailReport(this.realization);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,9 +20,8 @@ class _DetailReport extends State<DetailReport> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime time = DateFormat("yyyy-MM-dd").parse(widget.visit.time_finish);
-    // DateTime time = DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.visit.time_finish);
-    String timeFixed = DateFormat('dd/MM/yyyy').format(time);
+    String date = DateFormat("EEEE, dd MMM yyyy").format(widget.realization.time_finish);
+    String time = DateFormat("HH:mm").format(widget.realization.time_finish);
     return SafeArea(
         top: false,
         bottom: false,
@@ -75,7 +74,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 38),
                                     child: Text(
-                                      widget.visit.visit_no,
+                                      widget.realization.visit_no,
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )
@@ -96,7 +95,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 30),
                                     child: Text(
-                                      widget.visit.cust_name == null ? "null" : widget.visit.cust_name,
+                                      widget.realization.customer == null ? "null" : widget.realization.customer,
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )
@@ -118,24 +117,24 @@ class _DetailReport extends State<DetailReport> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(left: 74),
-                                    child: widget.visit.pic_name.contains(",") ? Container(
+                                    child: widget.realization.pic_name.contains(",") ? Container(
                                         child: SizedBox(
                                             width: 200,
                                             child: ListView.builder(
-                                                itemCount: widget.visit.pic_name.split(", ").length,
+                                                itemCount: widget.realization.pic_name.split(", ").length,
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
                                                 physics: NeverScrollableScrollPhysics(),
                                                 itemBuilder: (context, j){
                                                   return Container(
                                                     padding: const EdgeInsets.only(top: 5),
-                                                    child: Text("${widget.visit.pic_name.split(", ")[j]} - ${widget.visit.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                    child: Text("${widget.realization.pic_name.split(", ")[j]} - ${widget.realization.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
                                                   );
                                                 }
                                             )
                                         )
                                     ) : Container(
-                                      child: Text("${widget.visit.pic_name} - ${widget.visit.pic_position}",
+                                      child: Text("${widget.realization.pic_name} - ${widget.realization.pic_position}",
                                           style: Global.getCustomFont(Global.BLACK, 15, 'bold')
                                       ),
                                     )
@@ -157,7 +156,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 64),
                                     child: Text(
-                                      timeFixed,
+                                      "$time on $date",
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )
@@ -180,7 +179,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 24, top: 17, bottom: 17),
                                     child: Text(
-                                      widget.visit.description,
+                                      widget.realization.description,
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
                                     ),
                                   )

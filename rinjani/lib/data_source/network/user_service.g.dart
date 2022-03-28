@@ -10,7 +10,7 @@ part of 'user_service.dart';
 
 class _UserService implements UserService {
   _UserService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://10.0.2.2:4000';
+    baseUrl ??= 'http://170.1.70.67:4200';
   }
 
   final Dio _dio;
@@ -18,15 +18,16 @@ class _UserService implements UserService {
   String? baseUrl;
 
   @override
-  Future<UserResponse> getUser(userId) async {
+  Future<UserResponse> getUser(authorization) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<UserResponse>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/user/${userId}',
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/user',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = UserResponse.fromJson(_result.data!);
@@ -34,51 +35,18 @@ class _UserService implements UserService {
   }
 
   @override
-  Future<UserTokenResponse> getUserToken() async {
+  Future<AllUserResponse> getAllUser() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UserTokenResponse>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/user',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UserTokenResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<UserResponse> getAllUser() async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UserResponse>(
+        _setStreamType<AllUserResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/users',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<UserTokenResponse> login(body) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UserTokenResponse>(
-            Options(method: 'POST', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/login',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UserTokenResponse.fromJson(_result.data!);
+    final value = AllUserResponse.fromJson(_result.data!);
     return value;
   }
 

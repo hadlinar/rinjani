@@ -12,16 +12,10 @@ part 'user_service.g.dart';
 abstract class UserService{
   static create(Dio dio) => _UserService(dio);
 
-  @GET('/user/{userId}')
-  Future<UserResponse> getUser(@Path("userId") String userId);
-
-  @GET('/user')
-  Future<UserTokenResponse> getUserToken();
+  @POST('/user')
+  Future<UserResponse> getUser(@Header("Authorization") String authorization);
 
   @GET('/users')
-  Future<UserResponse> getAllUser();
-
-  @POST('/login')
-  Future<UserTokenResponse> login(@Body() Map<String,dynamic> body);
+  Future<AllUserResponse> getAllUser();
 
 }

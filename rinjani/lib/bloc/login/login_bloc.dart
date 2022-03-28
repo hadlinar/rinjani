@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:rinjani/data_source/repository/login_user_repository.dart';
+import 'package:rinjani/data_source/repository/login_repository.dart';
 import 'package:rinjani/data_source/repository/user_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_state.dart';
 import 'login_event.dart';
@@ -13,45 +14,41 @@ export 'login_event.dart';
 export 'login_bloc.dart';
 
 class LoginBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
-  final UserRepository _userRepository;
+  final LoginRepository _loginRepository;
 
-  static create(UserRepository userRepository) => LoginBloc._(userRepository);
+  static create(LoginRepository loginRepository) => LoginBloc._(loginRepository);
 
-  LoginBloc._(this._userRepository);
+  LoginBloc._(this._loginRepository);
 
   @override
   LoginBlocState get initialState => InitialLoginBlocState();
 
   @override
   Stream<LoginBlocState> mapEventToState(LoginBlocEvent event) async* {
-
-    if(event is LoginUserEvent) {
+    if(event is LoginEvent) {
       yield* _loginToState(event);
     }
 
   }
 
-  Stream<LoginBlocState> _loginToState(LoginUserEvent e) async* {
+  Stream<LoginBlocState> _loginToState(LoginEvent e) async* {
     yield LoadingLoginState();
-    print("cek event ${e.nik} ${e.password}");
     try {
-      final response = await _userRepository.login(
-        userId: e.nik,
+      final response = await _loginRepository.login(
+        nik: e.nik,
         password: e.password
       );
       if(response.message == "ok") {
-        final storage = new FlutterSecureStorage();
-        await storage.write(key: "access_token", value: response.token);
-        print(response.token);
-        yield LoginSuccessState(response.result);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("access_token", response.token);
+        yield SuccesssLoginState();
       }
     } on DioError catch (e) {
+      print(e.message);
       if(e.response?.statusCode == 400){
         yield NotLoggedinState();
       }
-        print("aaa ${e}");
         yield FailedLoginState();
       }
     }
-
 }

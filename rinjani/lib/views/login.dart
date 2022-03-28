@@ -28,26 +28,46 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UserBloc, UserBlocState>(
+    return BlocListener<LoginBloc, LoginBlocState>(
         listener: (context, state) {
           print(state.toString());
-          if (state is SuccessProfileState) {
-
-            store.set("nik", state.user.nik);
-            store.set("branch_id", state.user.branch_id);
-            store.set("login", state.user);
+          if (state is SuccesssLoginState) {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) => Dashboard()
             ));
           }
-          if(state is LoadingUserState) {
-            Container(
-              child: const Center(
-                child: CircularProgressIndicator(),
-              )
-            );
+          if(state is LoadingLoginState){
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    title: Container(
+                      height: 50,
+                      width: 50,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 12),
+                          child: Center(
+                            child: Text("Please wait",
+                                style: Global.getCustomFont(Global.GREY, 14, 'normal'),
+                                textAlign: TextAlign.center)
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              );
           }
-          if (state is FailedUserState) {
+          if (state is FailedLoginState) {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -130,7 +150,7 @@ class _LoginPage extends State<LoginPage> {
                                         ),
                                         color: Color(Global.BLUE),
                                         onPressed: () {
-                                          BlocProvider.of<UserBloc>(context).add(
+                                          BlocProvider.of<LoginBloc>(context).add(
                                               LoginEvent(
                                                 nik,
                                                 pass

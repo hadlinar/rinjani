@@ -9,12 +9,11 @@ import 'package:rinjani/bloc/login/login_bloc.dart';
 import 'package:rinjani/bloc/role/role_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/data_source/network/customer_service.dart';
-import 'package:rinjani/data_source/network/login_user_service.dart';
+import 'package:rinjani/data_source/network/login_service.dart';
 import 'package:rinjani/data_source/network/role_service.dart';
 import 'package:rinjani/data_source/network/visit_service.dart';
 import 'package:rinjani/data_source/repository/customer_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:rinjani/data_source/repository/login_user_repository.dart';
 import 'package:rinjani/data_source/repository/visit_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +24,7 @@ import 'data_source/network/employee_service.dart';
 import 'data_source/network/user_service.dart';
 import 'data_source/repository/branch_repository.dart';
 import 'data_source/repository/employee_repository.dart';
+import 'data_source/repository/login_repository.dart';
 import 'data_source/repository/role_repository.dart';
 import 'data_source/repository/user_repository.dart';
 
@@ -37,8 +37,8 @@ class AppModule {
   }
 
   static void configureService() {
-    injector.registerSingleton<LoginUserService>(
-        LoginUserService.create(injector.get())
+    injector.registerSingleton<LoginService>(
+        LoginService.create(injector.get())
     );
     injector.registerSingleton<CustomerService>(
         CustomerService.create(injector.get())
@@ -66,7 +66,7 @@ class AppModule {
     injector.registerSingleton(BranchRepository(injector.get()));
     injector.registerSingleton(UserRepository(injector.get()));
     injector.registerSingleton(EmployeeRepository(injector.get()));
-    injector.registerSingleton(LoginUserRepository(injector.get()));
+    injector.registerSingleton(LoginRepository(injector.get()));
     injector.registerSingleton(RoleRepository(injector.get()));
   }
 
@@ -88,7 +88,7 @@ class AppModule {
         create: (_) => EmployeeBloc.create(injector.get()),
       ),
       BlocProvider<UserBloc>(
-        create: (_) => UserBloc.create(injector.get()),
+        create: (_) => UserBloc.create(injector.get(), injector.get(), injector.get()),
       ),
       BlocProvider<LoginBloc>(
         create: (_) => LoginBloc.create(injector.get()),

@@ -19,36 +19,26 @@ class VisitCategoryList extends VisitBlocState{
   VisitCategoryList(this.getVisitCategory);
 }
 
-class VisitList extends VisitBlocState{
+class GetVisitState extends VisitBlocState{
   List<Visit> getVisit;
 
-  VisitList(this.getVisit);
+  GetVisitState(this.getVisit);
 }
 
-class VisitRealizationList extends VisitBlocState{
-  List<VisitReal> getVisitRealization;
+class GetRealizationState extends VisitBlocState{
+  List<Realization> getRealization;
 
-  VisitRealizationList(this.getVisitRealization);
+  GetRealizationState(this.getRealization);
 }
 
-class VisitByIdList extends VisitBlocState{
-  List<VisitById> getVisit;
+class GetRealizationOpState extends VisitBlocState{
+  List<Realization> getRealizationOp;
 
-  VisitByIdList(this.getVisit);
-}
-
-// class RefreshList extends VisitBlocState{
-//   List<VisitRealById> getVisit;
-//
-//   RefreshList(this.getVisit);
-// }
-
-class VisitRealizationByIdList extends VisitBlocState{
-  List<VisitRealById> getVisitRealization;
-
-  VisitRealizationByIdList(this.getVisitRealization);
+  GetRealizationOpState(this.getRealizationOp);
 }
 
 class SuccessAddVisitState extends VisitBlocState{}
 
 class SuccessAddRealizationState extends VisitBlocState{}
+
+class NotLogginInState extends VisitBlocState{}

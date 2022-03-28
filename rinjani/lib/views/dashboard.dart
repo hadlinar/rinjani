@@ -4,14 +4,9 @@ import 'package:rinjani/bloc/user/user_bloc.dart';
 import 'package:rinjani/utils/global.dart';
 import 'package:rinjani/views/page/realization.dart';
 import 'package:rinjani/views/page/report.dart';
-import 'package:rinjani/views/page/report.dart';
-
-import '../models/user.dart';
 import '../utils/global_state.dart';
 import '../widget/calendar.dart';
-// import 'package:rinjani/widget/calendar_1.dart';
-
-// import '../widget/calendar_2.dart';
+import 'login.dart';
 
 class Dashboard extends StatefulWidget{
 
@@ -24,23 +19,33 @@ class Dashboard extends StatefulWidget{
 final GlobalState store = GlobalState.instance;
 
 class _Dashboard extends State<Dashboard> {
-  late UserToken user;
+
   @override
   void initState() {
-    user = store.get("login");
     super.initState();
-    BlocProvider.of<UserBloc>(context).add(GetUserEvent(store.get("nik")));
+    BlocProvider.of<UserBloc>(context).add(GetUserEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserBlocState>(
       builder: (context, state) {
-        if(state is UserList) {
+        if(state is LoadingUserState || state is InitialUserBlocState) {
+          return Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator()
+            )
+          );
+        }
+        if(state is GetUserState) {
+          store.set("role_id", state.getUser.role_id);
+          store.set("branch_id", state.getUser.branch_id);
           return Scaffold(
               extendBodyBehindAppBar: true,
               appBar: AppBar(
                 elevation: 0,
+                automaticallyImplyLeading: false,
                 backgroundColor: Colors.transparent,
               ),
               body: Container(
@@ -57,12 +62,42 @@ class _Dashboard extends State<Dashboard> {
                 child: ListView(
                   physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget> [
+                        Container(
+                          padding: const EdgeInsets.only(right: 22),
+                          child: InkWell(
+                            child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Global.defaultModal(() {
+                                          Navigator.pop(context);
+                                          BlocProvider.of<UserBloc>(
+                                              context)
+                                              .add(LogoutEvent());
+                                        }, context, Global.WARNING_ICON, "Are you sure you want to log out?", "Yes", true);
+                                      }
+                                  );
+                                },
+                                icon: ImageIcon(
+                                  AssetImage(Global.LOGOUT_ICON),
+                                  color: Color(Global.BLACK),
+                                  size: 28,
+                                )
+                            ),
+                          )
+                        )
+                      ]
+                    ),
                     Padding(
-                        padding: EdgeInsets.only(top: 52, left: 22, right: 22),
+                        padding: EdgeInsets.only(top: 21, left: 22, right: 22),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                              user.name,
+                              state.getUser.name,
                               style: Global.getCustomFont(Global.BLACK, 22, 'bold')
                           ),
                         )
@@ -72,7 +107,7 @@ class _Dashboard extends State<Dashboard> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                              user.nik,
+                              state.getUser.nik,
                               style: Global.getCustomFont(Global.BLACK, 22, 'book')
                           ),
                         )
@@ -94,13 +129,34 @@ class _Dashboard extends State<Dashboard> {
                                 topRight: Radius.circular(30)
                             )
                         ),
-                        child: Container(
+                        child: state.getUser.role_id == "2" ? Container(
+                          padding: EdgeInsets.only(top: 32, left: 42),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (context) => Report()
+                                        ));
+                                      },
+                                      child: Global.getMenuCard("report.png", 0xffF2EFA7)
+                                  ),
+                                  Global.getMenuText("Report")
+                                ],
+                              )
+                            ],
+                          ),
+                        ) :
+                        Container(
                           padding: EdgeInsets.only(top: 32),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              store.get("role_id") != "3" ?
                               Column(
                                 children: <Widget>[
                                   GestureDetector(
@@ -113,8 +169,8 @@ class _Dashboard extends State<Dashboard> {
                                   ),
                                   Global.getMenuText("Planning")
                                 ],
-                              ) : Container(),
-                              store.get("role_id") != "3" ? Column(
+                              ),
+                              Column(
                                 children: <Widget>[
                                   GestureDetector(
                                       onTap: (){
@@ -126,7 +182,7 @@ class _Dashboard extends State<Dashboard> {
                                   ),
                                   Global.getMenuText("Realization")
                                 ],
-                              ) : Container(),
+                              ),
                               Column(
                                 children: <Widget>[
                                   GestureDetector(
@@ -148,6 +204,9 @@ class _Dashboard extends State<Dashboard> {
                 ),
               )
           );
+        }
+        if(state is FailedUserState || state is NotLoggedinState) {
+          return LoginPage();
         } else {
           return Container();
         }

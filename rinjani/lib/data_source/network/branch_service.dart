@@ -14,4 +14,7 @@ abstract class BranchService{
 
   @GET('/branch')
   Future<BranchResponse> getBranch();
+
+  @GET('/branch_operasional')
+  Future<BranchOpResponse> getBranchOp();
 }

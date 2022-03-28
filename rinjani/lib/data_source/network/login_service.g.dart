@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_user_service.dart';
+part of 'login_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,9 +8,9 @@ part of 'login_user_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-class _LoginUserService implements LoginUserService {
-  _LoginUserService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://10.0.2.2:4000';
+class _LoginService implements LoginService {
+  _LoginService(this._dio, {this.baseUrl}) {
+    baseUrl ??= 'http://170.1.70.67:4200';
   }
 
   final Dio _dio;
@@ -31,6 +31,23 @@ class _LoginUserService implements LoginUserService {
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = LoginResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<LogoutResponse> logout(authorization) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<LogoutResponse>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/logout',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LogoutResponse.fromJson(_result.data!);
     return value;
   }
 

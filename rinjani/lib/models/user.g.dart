@@ -28,9 +28,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 
 UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
       json['message'] as String,
-      (json['result'] as List<dynamic>)
-          .map((e) => User.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      User.fromJson(json['result'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
@@ -39,36 +37,16 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
       'result': instance.result,
     };
 
-UserToken _$UserTokenFromJson(Map<String, dynamic> json) => UserToken(
-      user_id: json['user_id'] as String,
-      name: json['name'] as String,
-      nik: json['nik'] as String,
-      branch_id: json['branch_id'] as String,
-      email: json['email'] as String,
-      role_id: json['role_id'] as String,
-      flg_used: json['flg_used'] as String,
-    );
-
-Map<String, dynamic> _$UserTokenToJson(UserToken instance) => <String, dynamic>{
-      'user_id': instance.user_id,
-      'name': instance.name,
-      'nik': instance.nik,
-      'branch_id': instance.branch_id,
-      'email': instance.email,
-      'role_id': instance.role_id,
-      'flg_used': instance.flg_used,
-    };
-
-UserTokenResponse _$UserTokenResponseFromJson(Map<String, dynamic> json) =>
-    UserTokenResponse(
+AllUserResponse _$AllUserResponseFromJson(Map<String, dynamic> json) =>
+    AllUserResponse(
       json['message'] as String,
-      json['token'] as String,
-      UserToken.fromJson(json['result'] as Map<String, dynamic>),
+      (json['result'] as List<dynamic>)
+          .map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$UserTokenResponseToJson(UserTokenResponse instance) =>
+Map<String, dynamic> _$AllUserResponseToJson(AllUserResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'token': instance.token,
       'result': instance.result,
     };

@@ -123,6 +123,11 @@ class _AddPlan extends State<AddPlan> {
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
 
+  DateTime initialDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day+1);
+
+  DateTime start = DateTime.now();
+  DateTime end = DateTime.now();
+
   int indexCard = 0;
   int indexPIC = 0;
 
@@ -215,8 +220,11 @@ class _AddPlan extends State<AddPlan> {
     store.set("result", _values);
 
     setState(() {
-      store.set("startTime", DateFormat('yyyy-MM-dd HH:mm:sss').format(timeStart).toString());
-      store.set("endTime", DateFormat('yyyy-MM-dd HH:mm:sss').format(timeEnd).toString());
+      start = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
+      end = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
+
+      store.set("startTime", start);
+      store.set("endTime", end);
       store.set("customer", _selectedCust);
       store.set("result", _values);
     });
@@ -244,6 +252,19 @@ class _AddPlan extends State<AddPlan> {
     cards.add(createCard(indexPIC));
     _values = [];
     result = '';
+  }
+
+  void datePicker(ctx) {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime(initialDate.year, initialDate.month, initialDate.day+1),
+        firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
+        lastDate: DateTime(2050)
+    ).then((date) {
+      setState((){
+        initialDate = date!;
+      });
+    });
   }
 
   void startTime(ctx) {
@@ -324,6 +345,7 @@ class _AddPlan extends State<AddPlan> {
 
     return BlocBuilder<CustomerBloc, CustomerBlocState>(
       builder: (context, state){
+        print(state.toString());
         if(state is CustomerList) {
           customer = state.getCustomer;
           for(int i=0; i < customer.length; i++) {
@@ -333,17 +355,44 @@ class _AddPlan extends State<AddPlan> {
           return Column(
               children: <Widget> [
                 Container(
-                    padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17, top: 17),
-                    child: Column(
+                    padding: const EdgeInsets.only(right: 21, left: 42, bottom: 17, top: 17),
+                    child:
+                    Column(
                       children: <Widget> [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("Date",
+                            style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
                         Container(
-                          padding: const EdgeInsets.only(right: 21, left: 21),
                           child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Time",
-                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                              textAlign: TextAlign.left,
-                            ),
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                // width: 130,
+                                  margin: const EdgeInsets.only(bottom: 30, top: 17),
+                                  child: InkWell(
+                                      onTap: () => datePicker(context),
+                                      child: Container(
+                                          padding: const EdgeInsets.only(left: 17),
+                                          child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDate).toString(),
+                                              style: const TextStyle(
+                                                color: Color(0xff4F4F4F),
+                                                fontFamily: 'book',
+                                                fontSize: 15,
+                                              )
+                                          )
+                                      )
+                                  )
+                              )
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("Time",
+                            style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                            textAlign: TextAlign.left,
                           ),
                         ),
                         Row(

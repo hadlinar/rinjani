@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:rinjani/models/user.dart';
-part 'login_user.g.dart';
+part 'login.g.dart';
 
 @JsonSerializable()
 class Login{
@@ -20,9 +20,8 @@ class Login{
 class LoginResponse{
   String message;
   String token;
-  UserToken user;
 
-  LoginResponse(this.message, this.token, this.user);
+  LoginResponse(this.message, this.token);
 
   factory LoginResponse.fromJson(Map<String,dynamic> json) => _$LoginResponseFromJson(json);
 }

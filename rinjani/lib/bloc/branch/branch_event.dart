@@ -5,3 +5,5 @@ import 'package:meta/meta.dart';
 abstract class BranchBlocEvent{}
 
 class GetBranchEvent extends BranchBlocEvent{}
+
+class GetBranchOpEvent extends BranchBlocEvent{}

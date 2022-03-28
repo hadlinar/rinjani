@@ -1,14 +1,20 @@
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rinjani/views/page/report.dart';
 
+import '../../bloc/visit/visit_bloc.dart';
+import '../../models/user.dart';
 import '../../models/visit.dart';
 import '../../utils/global.dart';
+import '../../utils/global_state.dart';
 
 class ListCustomer extends StatefulWidget {
-  List<String> visit;
+  String id;
+  BackReportOp? backReportOp;
 
-  ListCustomer(this.visit);
+  ListCustomer(this.id, {this.backReportOp});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,17 +22,29 @@ class ListCustomer extends StatefulWidget {
   }
 }
 
+final GlobalState store = GlobalState.instance;
+
+typedef BackReportOp = void Function(int resultMessage, BuildContext context, String id);
+
 class _ListCustomer extends State<ListCustomer> {
-  var _filter = null;
   String? defaultType;
 
   List typeVal = [
     "Today",
     "All time",
-    "Yesterday",
     "Last 7 days",
     "Last 30 days"
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if(store.get("role_id") == "2") {
+      BlocProvider.of<VisitBloc>(context).add(GetRealizationOpEvent(widget.id, "day"));
+    } else {
+      BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("day"));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +56,14 @@ class _ListCustomer extends State<ListCustomer> {
               backgroundColor: Colors.white,
               centerTitle: false,
               leading: IconButton(
-                  onPressed: Navigator.of(context).pop,
-                  icon: ImageIcon(
-                    const AssetImage(Global.BACK_ICON),
-                    color: Color(Global.BLUE),
-                    size: 18,
-                  )
+                onPressed: () {
+                  return widget.backReportOp!(1, context, widget.id);
+                },
+                icon: ImageIcon(
+                  const AssetImage(Global.BACK_ICON),
+                  color: Color(Global.BLUE),
+                  size: 18,
+                )
               ),
               title: Text(
                   "Report",
@@ -84,7 +104,7 @@ class _ListCustomer extends State<ListCustomer> {
                               child: DropdownButtonFormField<String>(
                                 dropdownColor: Colors.white,
                                 style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                value: defaultType,
+                                value: "Today",
                                 items: typeVal.map((e) {
                                   return DropdownMenuItem<String>(
                                     value: e,
@@ -94,11 +114,32 @@ class _ListCustomer extends State<ListCustomer> {
                                 onChanged: (String? value) {
                                   setState(() {
                                     defaultType = value;
+                                    if(store.get("role_id") == "2") {
+                                      if(defaultType == "Today") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationOpEvent(widget.id, "day"));
+                                      } else if (defaultType == "Last 7 days") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationOpEvent(widget.id, "week"));
+                                      } else if(defaultType == "Last 30 days") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationOpEvent(widget.id, "month"));
+                                      } else if(defaultType == "All time") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationOpEvent(widget.id, "year"));
+                                      }
+                                    } else {
+                                      if(defaultType == "Today") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("day"));
+                                      } else if (defaultType == "Last 7 days") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("week"));
+                                      } else if(defaultType == "Last 30 days") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("month"));
+                                      } else if(defaultType == "All time") {
+                                        BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("year"));
+                                      }
+                                    }
                                   });
                                 },
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
-                                  labelText: "Show only",
+                                  labelText: "Sort by",
                                   labelStyle: const TextStyle(
                                       color: Color(0xff757575),
                                       fontSize: 15,
@@ -113,37 +154,138 @@ class _ListCustomer extends State<ListCustomer> {
                           ),
                         ],
                       ),
-                      Container(
-                          padding: const EdgeInsets.only(top: 17),
-                          child: ListView.builder(
-                              itemCount: widget.visit.length,
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, i){
-                                return ListTile(
-                                    title: Container(
+                      BlocBuilder<VisitBloc, VisitBlocState> (
+                        builder: (context, state) {
+                          print(state.toString());
+                          if(state is LoadingVisitState) {
+                            return Container(
+                                padding: const EdgeInsets.only(top: 100),
+                                child: const Center(
+                                    child: CircularProgressIndicator()
+                                )
+                            );
+                          } else if(state is GetRealizationState) {
+                            late List<String> custName = [];
+                            late List<String> finalCustName = [];
+
+                            for (int i=0; i<state.getRealization.length; i++) {
+                              custName.add(state.getRealization[i].customer);
+                            }
+                            finalCustName = custName.toSet().toList();
+                            return Container(
+                                padding: const EdgeInsets.only(top: 17),
+                                child: state.getRealization.length != 0 ? Container(
+                                    child: ListView.builder(
+                                        itemCount: finalCustName.length,
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, i){
+                                          return ListTile(
+                                              title: Container(
+                                                child: Column(
+                                                    children: <Widget> [
+                                                      Row(
+                                                          children: <Widget>[
+                                                            Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                            ),
+                                                            Container(
+                                                              padding: const EdgeInsets.only(left: 17),
+                                                              child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                            ),
+                                                          ]
+                                                      ),
+                                                      Divider()
+                                                    ]
+                                                ),
+                                              )
+                                          );
+                                        }
+                                    )
+                                ) : Container(
+                                  padding: const EdgeInsets.only(top: 17),
+                                  child: Align(
+                                      alignment: Alignment.center,
                                       child: Column(
                                           children: <Widget> [
-                                            Row(
-                                                children: <Widget>[
-                                                  Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets.only(left: 17),
-                                                    child: Text(widget.visit[i] == null ? "null" : widget.visit[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
-                                                  ),
-                                                ]
+                                            Image.asset(
+                                              Global.EMPTY_ICON,
+                                              height: 60,
                                             ),
-                                            Divider()
+                                            Container(
+                                                padding: const EdgeInsets.only(top: 35),
+                                                child: Global.getDefaultText("No customer yet", Global.GREY)
+                                            )
                                           ]
-                                      ),
+                                      )
+                                  ),
+                                )
+                            );
+                          } else if(state is GetRealizationOpState) {
+                            late List<String> custName = [];
+                            late List<String> finalCustName = [];
+
+                            for (int i=0; i<state.getRealizationOp.length; i++) {
+                              custName.add(state.getRealizationOp[i].customer);
+                            }
+                            finalCustName = custName.toSet().toList();
+                            return Container(
+                                padding: const EdgeInsets.only(top: 17),
+                                child: state.getRealizationOp.length != 0 ? Container(
+                                    child: ListView.builder(
+                                        itemCount: finalCustName.length,
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, i){
+                                          return ListTile(
+                                              title: Container(
+                                                child: Column(
+                                                    children: <Widget> [
+                                                      Row(
+                                                          children: <Widget>[
+                                                            Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                            ),
+                                                            Container(
+                                                              padding: const EdgeInsets.only(left: 17),
+                                                              child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                            ),
+                                                          ]
+                                                      ),
+                                                      Divider()
+                                                    ]
+                                                ),
+                                              )
+                                          );
+                                        }
                                     )
-                                );
-                              }
-                          )
+                                ) : Container(
+                                  padding: const EdgeInsets.only(top: 17),
+                                  child: Align(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                          children: <Widget> [
+                                            Image.asset(
+                                              Global.EMPTY_ICON,
+                                              height: 60,
+                                            ),
+                                            Container(
+                                                padding: const EdgeInsets.only(top: 35),
+                                                child: Global.getDefaultText("No customer yet", Global.GREY)
+                                            )
+                                          ]
+                                      )
+                                  ),
+                                )
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }
                       )
                     ],
                   ),

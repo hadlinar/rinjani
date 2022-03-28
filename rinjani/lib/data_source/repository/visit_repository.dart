@@ -12,29 +12,23 @@ class VisitRepository {
     return response;
   }
 
-  Future<VisitRealResponse> getVisitRealization() async {
-    final response = await visitService.getVisitRealization();
+  Future<VisitResponse> getAllVisit() async {
+    final response = await visitService.getAllVisit();
     return response;
   }
 
-  Future<VisitRealByIdResponse> getVisitRealizationById(String id) async {
-    final response = await visitService.getVisitRealizationById(id);
+  Future<VisitResponse> getVisit(String token) async {
+    final response = await visitService.getVisit(token);
     return response;
   }
 
-  Future<VisitResponse> getVisit() async {
-    final response = await visitService.getVisit();
+  Future<RealizationResponse> getRealization(String token, String filter) async {
+    final response = await visitService.getRealization(token, filter);
     return response;
   }
 
-  Future<VisitByIdResponse> getVisitById(String id) async {
-    final response = await visitService.getVisitById(id);
-    return response;
-  }
-
-
-  Future<VisitRealByIdResponse> getVisitFilter(String id, String filter) async {
-    final response = await visitService.getVisitFilter(id, filter);
+  Future<RealizationResponse> getRealizationOp(String branchId, String filter) async {
+    final response = await visitService.getRealizationOp(branchId, filter);
     return response;
   }
 
@@ -48,9 +42,9 @@ class VisitRepository {
     required String pic_position,
     required String pic_name,
     required String status_visit,
-    required String userId,
+    required String token,
   }) async {
-    final response = await visitService.addVisit({
+    final response = await visitService.addVisit(token, {
       "visit_id": visit_id,
       "branch_id": branch_id,
       "cust_id": cust_id,
@@ -60,7 +54,7 @@ class VisitRepository {
       "pic_position": pic_position,
       "pic_name": pic_name,
       "status_visit": status_visit
-    }, userId);
+    });
     return response;
   }
 
@@ -76,9 +70,9 @@ class VisitRepository {
     required String status_visit,
     required String latitude,
     required String longitude,
-    required String userId
+    required String token,
   }) async {
-    final response = await visitService.addRealization({
+    final response = await visitService.addRealization(token, {
       "visit_no": visit_no,
       "branch_id": branch_id,
       "cust_id": cust_id,
@@ -90,7 +84,7 @@ class VisitRepository {
       "status_visit": status_visit,
       "latitude": latitude,
       "longitude": longitude
-    }, userId);
+    });
     return response;
   }
 }

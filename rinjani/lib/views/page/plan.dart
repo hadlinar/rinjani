@@ -5,19 +5,24 @@ import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/views/page/plan_in_office.dart';
 import 'package:rinjani/views/page/plan_off.dart';
 import 'package:rinjani/views/page/plan_out_office.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
-import 'package:intl/intl.dart';
 
 class Plan extends StatefulWidget {
+  SuccessAddVisit? successAddVisit;
+
+  Plan({this.successAddVisit});
 
   @override
   State<StatefulWidget> createState() {
     return _Plan();
   }
 }
+
+typedef SuccessAddVisit = void Function(int resultMessage, BuildContext context);
 
 final GlobalState store = GlobalState.instance;
 
@@ -47,8 +52,7 @@ class _Plan extends State<Plan> {
                 context: context,
                 builder: (BuildContext context) {
                   return Global.defaultModal(() {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    widget.successAddVisit!(200, context);
                   }, context, Global.CHECK_ICON, "Visit saved", "Ok", false);
                 }
             );
@@ -216,17 +220,20 @@ class _Plan extends State<Plan> {
                                 String position = pos.join(", ");
                                 String name1 = name.join(", ");
 
-                                String timeStart = store.get("startTime").toString();
-                                String timeEnd = store.get("endTime").toString();
+                                // String timeStart = store.get("startTime").toString();
+                                DateTime timeStart = store.get("startTime");
+                                DateTime timeEnd = store.get("endTime");
                                 String cust_id = store.get("cust_id").toString();
+                                print(timeStart.toLocal());
+                                print(timeEnd.toLocal());
 
                                 BlocProvider.of<VisitBloc>(context).add(
                                     AddVisitEvent(
                                       "02",
                                       store.get("branch_id"),
                                       cust_id,
-                                      timeStart,
-                                      timeEnd,
+                                      timeStart.toLocal().toString(),
+                                      timeEnd.toLocal().toString(),
                                       store.get("nik"),
                                       "",
                                       position,

@@ -14,25 +14,17 @@ class SuccesssUserState extends UserBlocState{}
 
 class FailedUserState extends UserBlocState{}
 
-class UserList extends UserBlocState{
+class GetAllUserState extends UserBlocState{
   List<User> getUser;
 
-  UserList(this.getUser);
+  GetAllUserState(this.getUser);
 }
 
-// class LoginSuccessState extends UserBlocState{
-//   LoginResult login;
-//
-//   LoginSuccessState(this.login);
-// }
+class GetUserState extends UserBlocState{
+  User getUser;
 
-class SuccessProfileState extends UserBlocState{
-  UserToken user;
-
-  SuccessProfileState(this.user);
+  GetUserState(this.getUser);
 }
-
-class FailedLoginState extends UserBlocState{}
 
 class NotLoggedinState extends UserBlocState{}
 

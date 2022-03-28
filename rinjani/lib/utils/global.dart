@@ -8,8 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
 
-  // static const String baseURL = "http://172.20.30.22:3000";
-  static const String baseURL = "http://10.0.2.2:4000";
+  static const String baseURL = "http://170.1.70.67:4200";
   static int BLACK = 0xff333333;
   static int BLUE = 0xff2F80ED;
   static int GREY = 0xff828282;
@@ -28,6 +27,7 @@ class Global {
   static const CHECK_ICON = "assets/icon/ic_check.png";
   static const WARNING_ICON = "assets/icon/ic_warning.png";
   static const EMPTY_ICON = "assets/icon/ic_empty.png";
+  static const LOGOUT_ICON = "assets/icon/ic_logout.png";
 
   static String ACCESS_TOKEN = "access_token";
 
@@ -166,9 +166,9 @@ class Global {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        "Ok",
+                        "Cancel",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Color(BLUE),
                             fontFamily: 'bold',
                             fontSize: 15
                         ),
@@ -199,12 +199,12 @@ class Global {
     );
   }
 
-  static Future<bool> isLoggedIn() async {
-
-      final storage = new FlutterSecureStorage();
-      final containsKey = await storage.containsKey(key: ACCESS_TOKEN);
-      return containsKey;
-  }
+  // static Future<bool> isLoggedIn() async {
+  //
+  //     final storage = new FlutterSecureStorage();
+  //     final containsKey = await storage.containsKey(key: ACCESS_TOKEN);
+  //     return containsKey;
+  // }
 
   static Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

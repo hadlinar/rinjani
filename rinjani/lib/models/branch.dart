@@ -3,8 +3,6 @@ part 'branch.g.dart';
 
 @JsonSerializable()
 class Branch{
-  static const SUCCESS_LOCATION = "ok";
-
   String branch_id;
   String branch_name;
   String nick_name;
@@ -29,4 +27,30 @@ class BranchResponse {
 
   factory BranchResponse.fromJson(Map<String, dynamic> json) =>
       _$BranchResponseFromJson(json);
+}
+
+// "branch_id": "0",
+// "branch_name": "ALL CABANG"
+
+@JsonSerializable()
+class BranchOp{
+  String branch_id;
+  String branch_name;
+
+  BranchOp({
+    required this.branch_id,
+    required this.branch_name,
+  });
+
+  factory BranchOp.fromJson(Map<String,dynamic> json) => _$BranchOpFromJson(json);
+}
+
+@JsonSerializable()
+class BranchOpResponse {
+  String message;
+  List<BranchOp> result;
+
+  BranchOpResponse(this.message, this.result);
+
+  factory BranchOpResponse.fromJson(Map<String, dynamic> json) => _$BranchOpResponseFromJson(json);
 }

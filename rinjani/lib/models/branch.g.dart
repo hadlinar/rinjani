@@ -33,3 +33,27 @@ Map<String, dynamic> _$BranchResponseToJson(BranchResponse instance) =>
       'message': instance.message,
       'result': instance.result,
     };
+
+BranchOp _$BranchOpFromJson(Map<String, dynamic> json) => BranchOp(
+      branch_id: json['branch_id'] as String,
+      branch_name: json['branch_name'] as String,
+    );
+
+Map<String, dynamic> _$BranchOpToJson(BranchOp instance) => <String, dynamic>{
+      'branch_id': instance.branch_id,
+      'branch_name': instance.branch_name,
+    };
+
+BranchOpResponse _$BranchOpResponseFromJson(Map<String, dynamic> json) =>
+    BranchOpResponse(
+      json['message'] as String,
+      (json['result'] as List<dynamic>)
+          .map((e) => BranchOp.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$BranchOpResponseToJson(BranchOpResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'result': instance.result,
+    };

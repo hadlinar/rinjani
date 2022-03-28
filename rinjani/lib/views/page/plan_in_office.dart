@@ -21,8 +21,25 @@ final GlobalState store = GlobalState.instance;
 
 class _InOffice extends State<InOffice> {
   TextEditingController descriptionController = TextEditingController();
+  DateTime initialDate = DateTime.now();
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
+
+  DateTime start = DateTime.now();
+  DateTime end = DateTime.now();
+
+  void datePicker(ctx) {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime(initialDate.year, initialDate.month, initialDate.day+1),
+        firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
+        lastDate: DateTime(2050)
+    ).then((date) {
+      setState((){
+        initialDate = date!;
+      });
+    });
+  }
 
   void startTime(ctx) {
     showCupertinoModalPopup(
@@ -97,9 +114,12 @@ class _InOffice extends State<InOffice> {
 
   @override
   Widget build(BuildContext context) {
+    start = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
+    end = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
+
     store.set("desc", descriptionController.text);
-    store.set("timeStart", timeStart);
-    store.set("timeEnd", timeEnd);
+    store.set("timeStart", start);
+    store.set("timeEnd", end);
     return GestureDetector (
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -113,6 +133,35 @@ class _InOffice extends State<InOffice> {
                       child:
                       Column(
                         children: <Widget> [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Date",
+                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Container(
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                    // width: 130,
+                                    margin: const EdgeInsets.only(bottom: 30, top: 17),
+                                    child: InkWell(
+                                        onTap: () => datePicker(context),
+                                        child: Container(
+                                            padding: const EdgeInsets.only(left: 17),
+                                            child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDate).toString(),
+                                                style: const TextStyle(
+                                                  color: Color(0xff4F4F4F),
+                                                  fontFamily: 'book',
+                                                  fontSize: 15,
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                          ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text("Time",

@@ -10,7 +10,7 @@ part of 'branch_service.dart';
 
 class _BranchService implements BranchService {
   _BranchService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://10.0.2.2:4000';
+    baseUrl ??= 'http://170.1.70.67:4200';
   }
 
   final Dio _dio;
@@ -30,6 +30,22 @@ class _BranchService implements BranchService {
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = BranchResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BranchOpResponse> getBranchOp() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<BranchOpResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/branch_operasional',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = BranchOpResponse.fromJson(_result.data!);
     return value;
   }
 

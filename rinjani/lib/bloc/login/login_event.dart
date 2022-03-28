@@ -4,18 +4,11 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class LoginBlocEvent{}
 
-class LoginTokenEvent extends LoginBlocEvent{
-  final String? keyword;
-
-  LoginTokenEvent({this.keyword});
-}
-
-
-class LoginUserEvent extends LoginBlocEvent{
+class LoginEvent extends LoginBlocEvent{
   final String nik;
   final String password;
 
-  LoginUserEvent(
+  LoginEvent(
       this.nik,
       this.password
     );

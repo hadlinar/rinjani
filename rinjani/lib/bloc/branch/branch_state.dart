@@ -18,3 +18,9 @@ class BranchList extends BranchBlocState{
 
   BranchList(this.getBranch);
 }
+
+class BranchOpList extends BranchBlocState{
+  List<BranchOp> getBranchOp;
+
+  BranchOpList(this.getBranchOp);
+}

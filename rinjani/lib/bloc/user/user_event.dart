@@ -4,27 +4,8 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class UserBlocEvent{}
 
-class GetUserEvent extends UserBlocEvent{
-  String id;
+class GetUserEvent extends UserBlocEvent{}
 
-  GetUserEvent(this.id);
-}
+class GetAllUserEvent extends UserBlocEvent{}
 
-class LoginTokenEvent extends UserBlocEvent{
-  final String? keyword;
-
-  LoginTokenEvent({this.keyword});
-}
-
-
-class LoginUserEvent extends UserBlocEvent{}
-
-class LoginEvent extends UserBlocEvent{
-  final String nik;
-  final String password;
-
-  LoginEvent(
-    this.nik,
-    this.password
-  );
-}
+class LogoutEvent extends UserBlocEvent{}

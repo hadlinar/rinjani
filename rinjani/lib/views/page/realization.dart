@@ -1,6 +1,5 @@
 
 import 'package:dropdown_search/dropdown_search.dart';
-// import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +7,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:rinjani/widget/custom_text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import '../../models/customer.dart';
+import 'package:intl/intl.dart';
 import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
@@ -41,6 +39,7 @@ class _Realization extends State<Realization> {
 
   final descriptionController = TextEditingController();
   final nameController = TextEditingController();
+  late List<TextEditingController> listNameController = [];
 
   String Address = '';
   Position? _position;
@@ -50,18 +49,18 @@ class _Realization extends State<Realization> {
 
     setState(() {
       _position = position;
-      // GetAddressFromLatLong(_position);
+      GetAddressFromLatLong(position);
     });
   }
 
-  // Future<void> GetAddressFromLatLong(Position? position)async {
-  //   List<Placemark> placemarks = await placemarkFromCoordinates(position!.latitude, position!.longitude);
-  //   print(placemarks);
-  //   Placemark place = placemarks[0];
-  //   Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-  //   setState(()  {
-  //   });
-  // }
+  Future<void> GetAddressFromLatLong(Position position)async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    setState(()  {
+      Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    });
+  }
 
   Future<Position> _determinePosition() async {
     LocationPermission permission;
@@ -76,18 +75,18 @@ class _Realization extends State<Realization> {
     return await Geolocator.getCurrentPosition();
   }
 
-  void googleMap() async {
-    String googleUrl = "https://www.google.com/maps/search/?api=1&query=${_position!.latitude.toString()},${_position!.longitude.toString()}";
+  // void googleMap() async {
+  //   String googleUrl = "https://www.google.com/maps/search/?api=1&query=${_position.latitude.toString()},${_position.longitude.toString()}";
+  //
+  //   if(await canLaunch(googleUrl)) {
+  //     await launch(googleUrl);
+  //   } else {
+  //     throw "Couldn't open Google Maps";
+  //   }
+  //
+  // }
 
-    if(await canLaunch(googleUrl)) {
-      await launch(googleUrl);
-    } else {
-      throw "Couldn't open Google Maps";
-    }
-
-  }
-
-  List<VisitById> visit=[];
+  List<Visit> visit=[];
   List<String> custName = [];
   List<String> custPos = [];
 
@@ -96,7 +95,7 @@ class _Realization extends State<Realization> {
     super.initState();
     cust = [];
     position = [];
-    BlocProvider.of<VisitBloc>(context).add(GetVisitByIdEvent(store.get("nik")));
+    BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
   }
 
   @override
@@ -131,7 +130,7 @@ class _Realization extends State<Realization> {
                           child: CircularProgressIndicator()
                       );
                     }
-                    else if (state is VisitByIdList) {
+                    else if (state is GetVisitState) {
                       for(int i=0; i<state.getVisit.length; i++) {
                         cust.add(state.getVisit[i].cust_name);
                       }
@@ -171,14 +170,15 @@ class _Realization extends State<Realization> {
                                           showClearButton: true,
                                           selectedItem: _selectedCust,
                                           items: custName,
-                                          // dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
                                           label: "Customer",
                                           showSearchBox: true,
                                           onChanged: (val) {
-                                            print(val);
                                             setState(() {
                                               custPos = [];
+                                              _selectedPIC = null;
+                                              listNameController = [];
                                               _selectedCust = val;
+                                              nameController.text = "";
                                               for(int i=0; i<visit.length; i++) {
                                                 if(visit[i].cust_name == _selectedCust) {
                                                   custPos.add(visit[i].pic_position);
@@ -187,7 +187,6 @@ class _Realization extends State<Realization> {
                                               }
                                             });
                                           },
-                                          // selectedItem: _selectedCust,
                                           dropdownSearchDecoration: InputDecoration(
                                             labelText: "Select a customer",
                                             labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
@@ -200,49 +199,115 @@ class _Realization extends State<Realization> {
                                         )
                                     ),
                                     Container(
-                                        padding: const EdgeInsets.only(top: 22),
-                                        child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showClearButton: true,
-                                          selectedItem: _selectedPIC,
-                                          items: custPos,
-                                          // dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                          label: "Position",
-                                          showSearchBox: true,
-                                          onChanged: (val) {
-                                            print(val);
-                                            setState(() {
-                                              nameController.text = "";
-                                              _selectedPIC = val;
-                                              for(int i=0; i<visit.length; i++) {
-                                                if(visit[i].pic_position == _selectedPIC) {
-                                                  nameController.text = visit[i].pic_name;
-                                                  visitNo = visit[i].visit_no;
-                                                  branchId = visit[i].branch_id;
-                                                  timeStart = visit[i].time_start.toString();
-                                                  timeFinish = visit[i].time_finish.toString();
-                                                }
-                                              }
-                                            });
-                                          },
-                                          // selectedItem: _selectedPIC,
-                                          dropdownSearchDecoration: InputDecoration(
-                                            labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                            alignLabelWithHint: true,
-                                            contentPadding: EdgeInsets.only(left: 12),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius .circular(10),
-                                                borderSide: BorderSide()),
-                                          ),
+                                      child: Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                              padding: const EdgeInsets.only(top: 22, bottom: 17),
+                                              child: DropdownSearch<String>(
+                                                mode: Mode.MENU,
+                                                showClearButton: true,
+                                                selectedItem: _selectedPIC,
+                                                items: custPos,
+                                                label: "PIC",
+                                                showSearchBox: true,
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    nameController.text = "";
+                                                    listNameController = [];
+                                                    _selectedPIC = val;
+                                                    for(int i=0; i<visit.length; i++) {
+                                                      if(visit[i].pic_position == _selectedPIC) {
+                                                        nameController.text = visit[i].pic_name;
+                                                        visitNo = visit[i].visit_no;
+                                                        branchId = visit[i].branch_id;
+                                                        timeStart = visit[i].time_start.toString();
+                                                        timeFinish = visit[i].time_finish.toString();
+                                                      }
+                                                    }
+
+                                                    listNameController = [
+                                                      for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                        TextEditingController()
+                                                    ];
+
+                                                    for(int i = 0; i < nameController.text.split(', ').length; i++){
+                                                      listNameController[i].text = nameController.text.split(', ')[i];
+                                                    }
+                                                  });
+                                                },
+                                                // selectedItem: _selectedPIC,
+                                                dropdownSearchDecoration: InputDecoration(
+                                                  labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                  alignLabelWithHint: true,
+                                                  contentPadding: const EdgeInsets.only(left: 12),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius: BorderRadius .circular(10),
+                                                      borderSide: const BorderSide()),
+                                                ),
+                                              )
+                                            ),
+                                            _selectedPIC != null ? Container(
+                                              // padding: const EdgeInsets.only(left: 74),
+                                                child: _selectedPIC.contains(",") ? Container(
+                                                    child: ListView.builder(
+                                                        itemCount:_selectedPIC.split(", ").length,
+                                                        scrollDirection: Axis.vertical,
+                                                        shrinkWrap: true,
+                                                        physics: const NeverScrollableScrollPhysics(),
+                                                        itemBuilder: (context, j){
+                                                          return Container(
+                                                            child: Column(
+                                                                children: <Widget> [
+                                                                  Align(
+                                                                    alignment: Alignment.centerLeft,
+                                                                    child: Text("PIC position ${j + 1}: ${_selectedPIC.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                                  ),
+                                                                  Container(
+                                                                    padding: const EdgeInsets.only(top: 17),
+                                                                    child: CustomTextField(label: 'Name', controller: listNameController[j]),
+                                                                  ),
+                                                                ]
+                                                            )
+
+                                                          );
+                                                        }
+                                                    )
+                                                ) : Container(
+                                                  padding: const EdgeInsets.only(top: 17),
+                                                  child: Column(
+                                                      children: <Widget> [
+                                                        Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Text("PIC position: ${_selectedPIC}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                        ),
+                                                        Container(
+                                                          padding: const EdgeInsets.only(top: 22),
+                                                          child: CustomTextField(label: 'Name', controller: listNameController[0]),
+                                                        ),
+                                                      ]
+                                                  )
+                                                )
+                                            ) : Container(
+                                              padding: const EdgeInsets.only(top: 17, left: 5),
+                                              child: Column(
+                                                children: <Widget> [
+                                                  Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text("PIC position: ",
+                                                        style: Global.getCustomFont(Global.BLACK, 15, 'bold')
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(top: 22),
+                                                    child: CustomTextField(label: 'Name', controller: nameController),
+                                                  ),
+                                                ]
+                                              )
+                                            )
+                                          ],
                                         )
-                                    ),
-                                    // Container(
-                                    //   padding: const EdgeInsets.only(top: 30),
-                                    //   child: CustomTextField(label: 'Position', controller: positionController),
-                                    // ),
-                                    Container(
-                                      padding: const EdgeInsets.only(top: 22),
-                                      child: CustomTextField(label: 'Name', controller: nameController),
+                                      )
                                     ),
                                     Container(
                                       child: TextFormField(
@@ -293,34 +358,34 @@ class _Realization extends State<Realization> {
                                                   ),
                                                 ),
                                                 Container(
-                                                  padding: EdgeInsets.only(left: 21, top: 9, bottom: 9),
-                                                  child: _position != null ? Global.getDefaultText("Current location: " + _position.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
+                                                  padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
+                                                  child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
                                                   // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
                                                 ),
-                                                Container(
-                                                  padding: EdgeInsets.only(top: 17, bottom: 9),
-                                                  width: 220,
-                                                  height: 65,
-                                                  color: Colors.white,
-                                                  child: RaisedButton(
-                                                      shape: RoundedRectangleBorder(
-                                                          side: BorderSide(color: Color(Global.BLUE)),
-                                                          borderRadius: BorderRadius.circular(20)
-                                                      ),
-                                                      color: Color(Global.BLUE),
-                                                      onPressed: () {
-                                                        googleMap();
-                                                      },
-                                                      child: const Text(
-                                                        "Open Google Maps",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily: 'bold',
-                                                            fontSize: 15
-                                                        ),
-                                                      )
-                                                  ),
-                                                ),
+                                                // Container(
+                                                //   padding: EdgeInsets.only(top: 17, bottom: 9),
+                                                //   width: 220,
+                                                //   height: 65,
+                                                //   color: Colors.white,
+                                                //   child: RaisedButton(
+                                                //       shape: RoundedRectangleBorder(
+                                                //           side: BorderSide(color: Color(Global.BLUE)),
+                                                //           borderRadius: BorderRadius.circular(20)
+                                                //       ),
+                                                //       color: Color(Global.BLUE),
+                                                //       onPressed: () {
+                                                //         googleMap();
+                                                //       },
+                                                //       child: const Text(
+                                                //         "Open Google Maps",
+                                                //         style: TextStyle(
+                                                //             color: Colors.white,
+                                                //             fontFamily: 'bold',
+                                                //             fontSize: 15
+                                                //         ),
+                                                //       )
+                                                //   ),
+                                                // ),
                                               ]
                                           ),
                                         )
@@ -346,19 +411,16 @@ class _Realization extends State<Realization> {
                           ),
                           color: Color(Global.BLUE),
                           onPressed: () {
-                            var foundKey = 0;
-                            for(int i=0; i<cust.length;i++) {
-                              if(cust[i] == _selectedCust) {
-                                foundKey = i;
-                                break;
-                              }
+                            List<String> name = [];
+                            for(int i=0; i<listNameController.length; i++) {
+                              name.add(listNameController[i].text);
                             }
-
+                            String picName = name.join(", ");
+                            // print(picName);
                             // print(visitNo);
                             // print(branchId);
                             // print(_selectedCust);
-                            // print(timeStart);
-                            // print(timeFinish);
+                            // print(_position!.longitude.toString(),);
                             // print(store.get("nik"));
                             // print(descriptionController.text);
                             // print(_selectedPIC);
@@ -371,12 +433,12 @@ class _Realization extends State<Realization> {
                                   visitNo,
                                   branchId,
                                   custId,
-                                  timeStart.toString(),
-                                  timeFinish.toString(),
+                                  DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
+                                  DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
                                   store.get("nik"),
                                   descriptionController.text,
                                   _selectedPIC,
-                                  nameController.text,
+                                  picName,
                                   "y",
                                   _position!.latitude.toString(),
                                   _position!.longitude.toString(),

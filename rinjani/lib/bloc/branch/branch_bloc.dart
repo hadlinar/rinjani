@@ -24,11 +24,20 @@ class BranchBloc extends Bloc<BranchBlocEvent, BranchBlocState> {
     if(event is GetBranchEvent) {
       yield* _mapBranchToState();
     }
+    if(event is GetBranchOpEvent) {
+      yield* _mapBranchOpToState();
+    }
   }
 
   Stream<BranchBlocState> _mapBranchToState() async* {
     yield LoadingBranchState();
     final response = await _branchRepository.getBranch();
     yield BranchList(response.result);
+  }
+
+  Stream<BranchBlocState> _mapBranchOpToState() async* {
+    yield LoadingBranchState();
+    final response = await _branchRepository.getBranchOp();
+    yield BranchOpList(response.result);
   }
 }

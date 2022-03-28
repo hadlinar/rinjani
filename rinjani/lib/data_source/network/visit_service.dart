@@ -15,25 +15,22 @@ abstract class VisitService{
   @GET('/visit/category')
   Future<VisitCategoryResponse> getVisitCategory();
 
-  @GET('/realization')
-  Future<VisitRealResponse> getVisitRealization();
-
-  @GET('/realization/{userId}')
-  Future<VisitRealByIdResponse> getVisitRealizationById(@Path("userId") String userId);
-
   @GET('/visits')
-  Future<VisitResponse> getVisit();
+  Future<VisitResponse> getAllVisit();
 
-  @GET('/visit/{userId}')
-  Future<VisitByIdResponse> getVisitById(@Path('userId') String userId);
+  @GET('/visit')
+  Future<VisitResponse> getVisit(@Header("Authorization") String authorization);
 
-  @GET('/visit/{filter}/{userId}')
-  Future<VisitRealByIdResponse> getVisitFilter(@Path('userId') String userId, @Path('filter') String filter);
+  @GET('/realization/{filter}')
+  Future<RealizationResponse> getRealization(@Header("Authorization") String authorization, @Path('filter') String filter);
 
-  @POST('/realization/{userId}')
-  Future<PostRealResponse> addRealization(@Body() Map<String,dynamic> body, @Path("userId") String userId);
+  @GET('/realization_operasional/{branchId}/{filter}')
+  Future<RealizationResponse> getRealizationOp(@Path('branchId') String branchId, @Path('filter') String filter);
 
-  @POST('/visit/{userId}')
-  Future<PostVisitResponse> addVisit(@Body() Map<String,dynamic> body, @Path("userId") String userId);
+  @POST('/visit')
+  Future<PostVisitResponse> addVisit(@Header("Authorization") String authorization, @Body() Map<String,dynamic> body);
+
+  @POST('/realization')
+  Future<PostRealResponse> addRealization(@Header("Authorization") String authorization, @Body() Map<String,dynamic> body);
 
 }

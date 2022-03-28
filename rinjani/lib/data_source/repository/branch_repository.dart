@@ -11,4 +11,9 @@ class BranchRepository {
     return response;
   }
 
+  Future<BranchOpResponse> getBranchOp() async {
+    final response = await branchService.getBranchOp();
+    return response;
+  }
+
 }

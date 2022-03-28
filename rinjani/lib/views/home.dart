@@ -26,13 +26,13 @@ class _Home extends State<Home> {
     return Scaffold(
         body: BlocListener<LauncherBloc, LauncherBlocState>(
           listener: (context, state) {
-            print(state.toString());
+            print(state.toString() + " launcher");
             if (state is LoggedInState) {
               Navigator.push(context, MaterialPageRoute(
                   builder: (context) => Dashboard()
               ));
             }
-            else if (state is NotLoggedInState) {
+            else if (state is NotLoggedinState) {
               Navigator.push(context, MaterialPageRoute(
                   builder: (context) => LoginPage()
               ));

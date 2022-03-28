@@ -35,7 +35,7 @@ class LauncherBloc extends Bloc<LauncherBlocEvent, LauncherBlocState> {
     final token =  _sharedPreferences.getString("access_token");
 
     if(token == null) {
-      yield NotLoggedInState();
+      yield NotLoggedinState();
     }
     else {
       try {
@@ -44,7 +44,7 @@ class LauncherBloc extends Bloc<LauncherBlocEvent, LauncherBlocState> {
       on DioError catch(e) {
         print(e.response);
         _sharedPreferences.clear();
-        yield NotLoggedInState();
+        yield NotLoggedinState();
       }
     }
 

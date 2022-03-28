@@ -226,6 +226,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rinjani/widget/event_provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../bloc/visit/visit_bloc.dart';
@@ -240,12 +241,12 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  List<VisitById> visit = [];
+  List<Visit> visit = [];
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<VisitBloc>(context).add(GetVisitByIdEvent(store.get("nik")));
+    BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
   }
 
   @override
@@ -268,7 +269,7 @@ class _CalendarState extends State<Calendar> {
             style: Global.getCustomFont(Global.BLUE, 18, 'medium')
         ),
       ),
-        body: BlocListener<VisitBloc, VisitBlocState>(
+      body: BlocListener<VisitBloc, VisitBlocState>(
           listener: (context, state) {
             if (state is InitialVisitBlocState || state is LoadingVisitState) {
               Container(
@@ -276,7 +277,7 @@ class _CalendarState extends State<Calendar> {
                     child: CircularProgressIndicator()
                 ),
               );
-            } if (state is VisitByIdList) {
+            } if (state is GetVisitState) {
               setState(() {
                 visit = state.getVisit;
               });
@@ -284,61 +285,90 @@ class _CalendarState extends State<Calendar> {
               Container();
             }
           },
-          child:  SingleChildScrollView(
-              reverse: false,
-              child: Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  children: [
-                    SfCalendar(
-                      view: CalendarView.month,
-                      dataSource: EventDataSource(visit),
-                      initialSelectedDate: DateTime.now(),
-                      cellBorderColor: Colors.transparent,
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Stack(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                                  width: 153,
-                                  height: 56,
-                                  color: Colors.white,
-                                  child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(color: Color(Global.BLUE)),
-                                          borderRadius: BorderRadius.circular(20)
-                                      ),
-                                      color: Color(Global.BLUE),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => Plan()
-                                        ));
-                                      },
-                                      child: const Text(
-                                        "Add plan",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'bold',
-                                            fontSize: 15
-                                        ),
-                                      )
-                                  ),
-                                ),
-                              ]
-                          ),
-                        )
-                    ),
-                  ],
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(left: 21, right: 21, top: 21),
+            child: SfCalendar(
+              view: CalendarView.month,
+              dataSource: EventDataSource(
+                visit
+              ),
+              initialSelectedDate: DateTime.now(),
+              cellBorderColor: Colors.transparent,
+              monthViewSettings: const MonthViewSettings(
+                showAgenda: true,
+                agendaItemHeight: 70,
+                monthCellStyle: MonthCellStyle(
+                  textStyle: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'medium'),
+                  todayTextStyle: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'medium'),
+                  trailingDatesTextStyle: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'medium'),
+                  leadingDatesTextStyle: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'medium'),
                 ),
-              )
+                agendaStyle: AgendaStyle(
+                  appointmentTextStyle: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'medium',
+                      color: Colors.white),
+                  dateTextStyle: TextStyle(
+                      fontFamily: 'medium',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.black),
+                  dayTextStyle: TextStyle(
+                      fontFamily: 'bold',
+                      fontSize: 17,
+                      color: Colors.black),
+                )
+              ),
+            ),
           )
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Color(Global.BLUE),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => Plan(
+                successAddVisit: (int resMessage, BuildContext ctx) {
+                  if (resMessage == 200) {
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pop();
+                    BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
+                  }
+                },
+              ))
+          );
+
+        },
+      ),
     );
   }
+
+  // _DataSource getCalendarDataSource() {
+  //   final List<Visit> appointments = <Visit>[];
+  //
+  //   appointments.add(Visit(
+  //       visit_no: event.visit_no,
+  //       visit_id: event.visit_id,
+  //       branch_id: event.branch_id,
+  //       cust_name: event.cust_name,
+  //       cust_id: event.cust_id,
+  //       time_start: event.time_start,
+  //       time_finish: event.time_finish,
+  //       user_id: event.user_id,
+  //       description: event.description,
+  //       pic_position: event.pic_position,
+  //       pic_name: event.pic_name,
+  //       status_visit: event.status_visit
+  //   ));
+  //
+  //   return _DataSource(appointments);
+
+  // }
 }
+
+// class _DataSource extends CalendarDataSource {
+//   _DataSource(List<Appointment> source) {
+//     appointments = source;
+//   }
+// }

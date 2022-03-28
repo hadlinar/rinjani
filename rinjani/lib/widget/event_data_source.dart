@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 import '../models/visit.dart';
 
 class EventDataSource extends CalendarDataSource{
-  EventDataSource(List<VisitById> appointments) {
+  EventDataSource(List<Visit> appointments) {
     this.appointments = appointments;
   }
 
-  VisitById getEvent(int index) => appointments![index] as VisitById;
+  Visit getEvent(int index) => appointments![index] as Visit;
 
   @override
   DateTime getStartTime(int index) => getEvent(index).time_start;

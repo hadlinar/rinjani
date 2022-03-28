@@ -9,4 +9,4 @@ class InitialLauncherState extends LauncherBlocState {}
 
 class LoggedInState extends LauncherBlocState {}
 
-class NotLoggedInState extends LauncherBlocState {}
+class NotLoggedinState extends LauncherBlocState {}
