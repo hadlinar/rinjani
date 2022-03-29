@@ -116,28 +116,28 @@ class _DetailReport extends State<DetailReport> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 74),
-                                    child: widget.realization.pic_name.contains(",") ? Container(
-                                        child: SizedBox(
-                                            width: 200,
-                                            child: ListView.builder(
-                                                itemCount: widget.realization.pic_name.split(", ").length,
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
-                                                itemBuilder: (context, j){
-                                                  return Container(
-                                                    padding: const EdgeInsets.only(top: 5),
-                                                    child: Text("${widget.realization.pic_name.split(", ")[j]} - ${widget.realization.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                  );
-                                                }
-                                            )
-                                        )
-                                    ) : Container(
-                                      child: Text("${widget.realization.pic_name} - ${widget.realization.pic_position}",
-                                          style: Global.getCustomFont(Global.BLACK, 15, 'bold')
-                                      ),
-                                    )
+                                      padding: const EdgeInsets.only(left: 74),
+                                      child: widget.realization.pic_name.contains(",") ? Container(
+                                          child: SizedBox(
+                                              width: 200,
+                                              child: ListView.builder(
+                                                  itemCount: widget.realization.pic_name.split(", ").length,
+                                                  scrollDirection: Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  itemBuilder: (context, j){
+                                                    return Container(
+                                                      padding: const EdgeInsets.only(top: 5),
+                                                      child: Text("${widget.realization.pic_name.split(", ")[j]} - ${widget.realization.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                    );
+                                                  }
+                                              )
+                                          )
+                                      ) : Container(
+                                        child: Text("${widget.realization.pic_name} - ${widget.realization.pic_position}",
+                                            style: Global.getCustomFont(Global.BLACK, 15, 'bold')
+                                        ),
+                                      )
                                   )
                                 ],
                               )

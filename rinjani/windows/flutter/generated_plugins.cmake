@@ -3,8 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+<<<<<<< HEAD
   flutter_secure_storage_windows
   url_launcher_windows
+=======
+>>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

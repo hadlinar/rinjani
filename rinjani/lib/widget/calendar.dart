@@ -64,40 +64,40 @@ class _CalendarState extends State<Calendar> {
             color: Colors.white,
             padding: const EdgeInsets.only(left: 21, right: 21, top: 21),
             child: SfCalendar(
-              view: CalendarView.month,
-              dataSource: EventDataSource(visit),
-              initialSelectedDate: DateTime.now(),
-              cellBorderColor: Colors.transparent,
-              monthViewSettings: const MonthViewSettings(
-                showAgenda: true,
-                agendaItemHeight: 70,
-                monthCellStyle: MonthCellStyle(
-                  textStyle: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'medium'),
-                  todayTextStyle: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'medium'),
-                  trailingDatesTextStyle: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'medium'),
-                  leadingDatesTextStyle: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'medium'),
+                view: CalendarView.month,
+                dataSource: EventDataSource(visit),
+                initialSelectedDate: DateTime.now(),
+                cellBorderColor: Colors.transparent,
+                monthViewSettings: const MonthViewSettings(
+                  showAgenda: true,
+                  agendaItemHeight: 70,
+                  monthCellStyle: MonthCellStyle(
+                    textStyle: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'medium'),
+                    todayTextStyle: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'medium'),
+                    trailingDatesTextStyle: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'medium'),
+                    leadingDatesTextStyle: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'medium'),
+                  ),
+                  agendaStyle: AgendaStyle(
+                    appointmentTextStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'bold',
+                        color: Colors.white),
+                    dateTextStyle: TextStyle(
+                        fontFamily: 'medium',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black),
+                    dayTextStyle: TextStyle(
+                        fontFamily: 'bold',
+                        fontSize: 17,
+                        color: Colors.black),
+                  ),
                 ),
-                agendaStyle: AgendaStyle(
-                  appointmentTextStyle: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'bold',
-                      color: Colors.white),
-                  dateTextStyle: TextStyle(
-                      fontFamily: 'medium',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black),
-                  dayTextStyle: TextStyle(
-                      fontFamily: 'bold',
-                      fontSize: 17,
-                      color: Colors.black),
-                ),
-              ),
-              onTap: calendarTapped
+                onTap: calendarTapped
             ),
           )
-        ),
-        floatingActionButton: FloatingActionButton(
+      ),
+      floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(Global.BLUE),
         onPressed: () {
@@ -126,6 +126,6 @@ class _CalendarState extends State<Calendar> {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => real.Realization(visit: _visit, fromCal: true)
       ));
-      }
     }
   }
+}

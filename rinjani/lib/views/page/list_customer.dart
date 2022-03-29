@@ -56,14 +56,14 @@ class _ListCustomer extends State<ListCustomer> {
               backgroundColor: Colors.white,
               centerTitle: false,
               leading: IconButton(
-                onPressed: () {
-                  return widget.backReportOp!(1, context, widget.id);
-                },
-                icon: ImageIcon(
-                  const AssetImage(Global.BACK_ICON),
-                  color: Color(Global.BLUE),
-                  size: 18,
-                )
+                  onPressed: () {
+                    return widget.backReportOp!(1, context, widget.id);
+                  },
+                  icon: ImageIcon(
+                    const AssetImage(Global.BACK_ICON),
+                    color: Color(Global.BLUE),
+                    size: 18,
+                  )
               ),
               title: Text(
                   "Report",
@@ -155,137 +155,137 @@ class _ListCustomer extends State<ListCustomer> {
                         ],
                       ),
                       BlocBuilder<VisitBloc, VisitBlocState> (
-                        builder: (context, state) {
-                          print(state.toString());
-                          if(state is LoadingVisitState) {
-                            return Container(
-                                padding: const EdgeInsets.only(top: 100),
-                                child: const Center(
-                                    child: CircularProgressIndicator()
-                                )
-                            );
-                          } else if(state is GetRealizationState) {
-                            late List<String> custName = [];
-                            late List<String> finalCustName = [];
+                          builder: (context, state) {
+                            print(state.toString());
+                            if(state is LoadingVisitState) {
+                              return Container(
+                                  padding: const EdgeInsets.only(top: 100),
+                                  child: const Center(
+                                      child: CircularProgressIndicator()
+                                  )
+                              );
+                            } else if(state is GetRealizationState) {
+                              late List<String> custName = [];
+                              late List<String> finalCustName = [];
 
-                            for (int i=0; i<state.getRealization.length; i++) {
-                              custName.add(state.getRealization[i].customer);
-                            }
-                            finalCustName = custName.toSet().toList();
-                            return Container(
-                                padding: const EdgeInsets.only(top: 17),
-                                child: state.getRealization.length != 0 ? Container(
-                                    child: ListView.builder(
-                                        itemCount: finalCustName.length,
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, i){
-                                          return ListTile(
-                                              title: Container(
-                                                child: Column(
-                                                    children: <Widget> [
-                                                      Row(
-                                                          children: <Widget>[
-                                                            Align(
-                                                              alignment: Alignment.centerLeft,
-                                                              child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(left: 17),
-                                                              child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                      Divider()
-                                                    ]
-                                                ),
-                                              )
-                                          );
-                                        }
-                                    )
-                                ) : Container(
+                              for (int i=0; i<state.getRealization.length; i++) {
+                                custName.add(state.getRealization[i].customer);
+                              }
+                              finalCustName = custName.toSet().toList();
+                              return Container(
                                   padding: const EdgeInsets.only(top: 17),
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                          children: <Widget> [
-                                            Image.asset(
-                                              Global.EMPTY_ICON,
-                                              height: 60,
-                                            ),
-                                            Container(
-                                                padding: const EdgeInsets.only(top: 35),
-                                                child: Global.getDefaultText("No customer yet", Global.GREY)
-                                            )
-                                          ]
+                                  child: state.getRealization.length != 0 ? Container(
+                                      child: ListView.builder(
+                                          itemCount: finalCustName.length,
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, i){
+                                            return ListTile(
+                                                title: Container(
+                                                  child: Column(
+                                                      children: <Widget> [
+                                                        Row(
+                                                            children: <Widget>[
+                                                              Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                              ),
+                                                              Container(
+                                                                padding: const EdgeInsets.only(left: 17),
+                                                                child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                        Divider()
+                                                      ]
+                                                  ),
+                                                )
+                                            );
+                                          }
                                       )
-                                  ),
-                                )
-                            );
-                          } else if(state is GetRealizationOpState) {
-                            late List<String> custName = [];
-                            late List<String> finalCustName = [];
+                                  ) : Container(
+                                    padding: const EdgeInsets.only(top: 17),
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                            children: <Widget> [
+                                              Image.asset(
+                                                Global.EMPTY_ICON,
+                                                height: 60,
+                                              ),
+                                              Container(
+                                                  padding: const EdgeInsets.only(top: 35),
+                                                  child: Global.getDefaultText("No customer yet", Global.GREY)
+                                              )
+                                            ]
+                                        )
+                                    ),
+                                  )
+                              );
+                            } else if(state is GetRealizationOpState) {
+                              late List<String> custName = [];
+                              late List<String> finalCustName = [];
 
-                            for (int i=0; i<state.getRealizationOp.length; i++) {
-                              custName.add(state.getRealizationOp[i].customer);
-                            }
-                            finalCustName = custName.toSet().toList();
-                            return Container(
-                                padding: const EdgeInsets.only(top: 17),
-                                child: state.getRealizationOp.length != 0 ? Container(
-                                    child: ListView.builder(
-                                        itemCount: finalCustName.length,
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, i){
-                                          return ListTile(
-                                              title: Container(
-                                                child: Column(
-                                                    children: <Widget> [
-                                                      Row(
-                                                          children: <Widget>[
-                                                            Align(
-                                                              alignment: Alignment.centerLeft,
-                                                              child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(left: 17),
-                                                              child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                      Divider()
-                                                    ]
-                                                ),
-                                              )
-                                          );
-                                        }
-                                    )
-                                ) : Container(
+                              for (int i=0; i<state.getRealizationOp.length; i++) {
+                                custName.add(state.getRealizationOp[i].customer);
+                              }
+                              finalCustName = custName.toSet().toList();
+                              return Container(
                                   padding: const EdgeInsets.only(top: 17),
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                          children: <Widget> [
-                                            Image.asset(
-                                              Global.EMPTY_ICON,
-                                              height: 60,
-                                            ),
-                                            Container(
-                                                padding: const EdgeInsets.only(top: 35),
-                                                child: Global.getDefaultText("No customer yet", Global.GREY)
-                                            )
-                                          ]
+                                  child: state.getRealizationOp.length != 0 ? Container(
+                                      child: ListView.builder(
+                                          itemCount: finalCustName.length,
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, i){
+                                            return ListTile(
+                                                title: Container(
+                                                  child: Column(
+                                                      children: <Widget> [
+                                                        Row(
+                                                            children: <Widget>[
+                                                              Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                              ),
+                                                              Container(
+                                                                padding: const EdgeInsets.only(left: 17),
+                                                                child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                        Divider()
+                                                      ]
+                                                  ),
+                                                )
+                                            );
+                                          }
                                       )
-                                  ),
-                                )
-                            );
-                          } else {
-                            return Container();
+                                  ) : Container(
+                                    padding: const EdgeInsets.only(top: 17),
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                            children: <Widget> [
+                                              Image.asset(
+                                                Global.EMPTY_ICON,
+                                                height: 60,
+                                              ),
+                                              Container(
+                                                  padding: const EdgeInsets.only(top: 35),
+                                                  child: Global.getDefaultText("No customer yet", Global.GREY)
+                                              )
+                                            ]
+                                        )
+                                    ),
+                                  )
+                              );
+                            } else {
+                              return Container();
+                            }
                           }
-                        }
                       )
                     ],
                   ),

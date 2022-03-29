@@ -163,16 +163,16 @@ class _Plan extends State<Plan> {
                               if(defaultType == "in-office") {
                                 BlocProvider.of<VisitBloc>(context).add(
                                     AddVisitEvent(
-                                      "01",
-                                      store.get("branch_id"),
-                                      "",
-                                      timeStart,
-                                      timeEnd,
-                                      store.get("nik"),
-                                      desc,
-                                      "",
-                                      "",
-                                      "y"
+                                        "01",
+                                        store.get("branch_id"),
+                                        "",
+                                        timeStart,
+                                        timeEnd,
+                                        store.get("nik"),
+                                        desc,
+                                        "",
+                                        "",
+                                        "y"
                                     )
                                 );
 

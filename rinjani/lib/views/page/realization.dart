@@ -105,151 +105,151 @@ class _Realization extends State<Realization> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector (
-            onTap: () {
+        onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Scaffold(
-              appBar:AppBar(
-                backgroundColor: Colors.white,
-                centerTitle: false,
-                leading: IconButton(
-                    onPressed: Navigator.of(context).pop,
-                    icon: ImageIcon(
-                      AssetImage(Global.BACK_ICON),
-                      color: Color(Global.BLUE),
-                      size: 18,
-                    )
-                ),
-                title: Text(
-                    "Home",
-                    style: Global.getCustomFont(Global.BLUE, 18, 'medium')
-                ),
-              ),
-              backgroundColor: Colors.white,
-              body: BlocListener<VisitBloc, VisitBlocState>(
-                  listener: (context, state) {
-                    print(state.toString());
-                    if (state is InitialVisitBlocState || state is LoadingVisitState) {
-                      const Center(
-                          child: CircularProgressIndicator()
-                      );
-                    }
-                    else if (state is GetVisitState) {
-                      for(int i=0; i<state.getVisit.length; i++) {
-                        cust.add(state.getVisit[i].cust_name);
-                      }
+          appBar:AppBar(
+            backgroundColor: Colors.white,
+            centerTitle: false,
+            leading: IconButton(
+                onPressed: Navigator.of(context).pop,
+                icon: ImageIcon(
+                  AssetImage(Global.BACK_ICON),
+                  color: Color(Global.BLUE),
+                  size: 18,
+                )
+            ),
+            title: Text(
+                "Home",
+                style: Global.getCustomFont(Global.BLUE, 18, 'medium')
+            ),
+          ),
+          backgroundColor: Colors.white,
+          body: BlocListener<VisitBloc, VisitBlocState>(
+            listener: (context, state) {
+              print(state.toString());
+              if (state is InitialVisitBlocState || state is LoadingVisitState) {
+                const Center(
+                    child: CircularProgressIndicator()
+                );
+              }
+              else if (state is GetVisitState) {
+                for(int i=0; i<state.getVisit.length; i++) {
+                  cust.add(state.getVisit[i].cust_name);
+                }
 
-                      setState(() {
-                        visit = state.getVisit;
-                        cust;
-                        custName = cust.toSet().toList();
-                      });
+                setState(() {
+                  visit = state.getVisit;
+                  cust;
+                  custName = cust.toSet().toList();
+                });
+              }
+              if(state is SuccessAddRealizationState){
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Global.defaultModal(() {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }, context, Global.CHECK_ICON, "Saved", "Ok", false);
                     }
-                    if(state is SuccessAddRealizationState){
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Global.defaultModal(() {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            }, context, Global.CHECK_ICON, "Saved", "Ok", false);
-                          }
-                      );
-                    }
-                    else {
-                      Container();
-                    }
-                  },
-                child: SingleChildScrollView(
-                    child: Column(
-                        children: <Widget> [
-                          Container(
-                              padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
-                              child: Column(
-                                  children: <Widget> [
-                                    Container(
-                                        padding: const EdgeInsets.only(top: 22),
-                                        child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showClearButton: true,
-                                          selectedItem: widget.fromCal == true? visit[0].cust_name: _selectedCust,
-                                          items: custName,
-                                          label: "Customer",
-                                          showSearchBox: true,
-                                          onChanged: (val) {
-                                            setState(() {
-                                              custPos = [];
-                                              _selectedPIC = null;
-                                              listNameController = [];
-                                              _selectedCust = val;
-                                              nameController.text = "";
-                                              for(int i=0; i<visit.length; i++) {
-                                                if(visit[i].cust_name == _selectedCust) {
-                                                  custPos.add(visit[i].pic_position);
-                                                  custId = visit[i].cust_id;
-                                                }
-                                              }
-                                            });
-                                          },
-                                          dropdownSearchDecoration: InputDecoration(
-                                            labelText: "Select a customer",
-                                            labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                            alignLabelWithHint: true,
-                                            contentPadding: EdgeInsets.only(left: 12),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius .circular(10),
-                                                borderSide: BorderSide()),
-                                          ),
-                                        )
-                                    ),
-                                    Container(
-                                      child: Container(
+                );
+              }
+              else {
+                Container();
+              }
+            },
+            child: SingleChildScrollView(
+                child: Column(
+                    children: <Widget> [
+                      Container(
+                          padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
+                          child: Column(
+                              children: <Widget> [
+                                Container(
+                                    padding: const EdgeInsets.only(top: 22),
+                                    child: DropdownSearch<String>(
+                                      mode: Mode.MENU,
+                                      showClearButton: true,
+                                      selectedItem: widget.fromCal == true? visit[0].cust_name: _selectedCust,
+                                      items: custName,
+                                      label: "Customer",
+                                      showSearchBox: true,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          custPos = [];
+                                          _selectedPIC = null;
+                                          listNameController = [];
+                                          _selectedCust = val;
+                                          nameController.text = "";
+                                          for(int i=0; i<visit.length; i++) {
+                                            if(visit[i].cust_name == _selectedCust) {
+                                              custPos.add(visit[i].pic_position);
+                                              custId = visit[i].cust_id;
+                                            }
+                                          }
+                                        });
+                                      },
+                                      dropdownSearchDecoration: InputDecoration(
+                                        labelText: "Select a customer",
+                                        labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                        alignLabelWithHint: true,
+                                        contentPadding: EdgeInsets.only(left: 12),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius .circular(10),
+                                            borderSide: BorderSide()),
+                                      ),
+                                    )
+                                ),
+                                Container(
+                                    child: Container(
                                         child: Column(
                                           children: <Widget>[
                                             Container(
-                                              padding: const EdgeInsets.only(top: 22, bottom: 17),
-                                              child: DropdownSearch<String>(
-                                                mode: Mode.MENU,
-                                                showClearButton: true,
-                                                selectedItem: widget.fromCal == true? visit[0].pic_position : _selectedPIC,
-                                                items: custPos,
-                                                label: "PIC",
-                                                showSearchBox: true,
-                                                onChanged: (val) {
-                                                  setState(() {
-                                                    nameController.text = "";
-                                                    listNameController = [];
-                                                    _selectedPIC = val;
-                                                    for(int i=0; i<visit.length; i++) {
-                                                      if(visit[i].pic_position == _selectedPIC) {
-                                                        nameController.text = visit[i].pic_name;
-                                                        visitNo = visit[i].visit_no;
-                                                        branchId = visit[i].branch_id;
-                                                        timeStart = visit[i].time_start.toString();
-                                                        timeFinish = visit[i].time_finish.toString();
+                                                padding: const EdgeInsets.only(top: 22, bottom: 17),
+                                                child: DropdownSearch<String>(
+                                                  mode: Mode.MENU,
+                                                  showClearButton: true,
+                                                  selectedItem: widget.fromCal == true? visit[0].pic_position : _selectedPIC,
+                                                  items: custPos,
+                                                  label: "PIC",
+                                                  showSearchBox: true,
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      nameController.text = "";
+                                                      listNameController = [];
+                                                      _selectedPIC = val;
+                                                      for(int i=0; i<visit.length; i++) {
+                                                        if(visit[i].pic_position == _selectedPIC) {
+                                                          nameController.text = visit[i].pic_name;
+                                                          visitNo = visit[i].visit_no;
+                                                          branchId = visit[i].branch_id;
+                                                          timeStart = visit[i].time_start.toString();
+                                                          timeFinish = visit[i].time_finish.toString();
+                                                        }
                                                       }
-                                                    }
 
-                                                    listNameController = [
-                                                      for (int i = 0; i < nameController.text.split(', ').length; i++)
-                                                        TextEditingController()
-                                                    ];
+                                                      listNameController = [
+                                                        for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                          TextEditingController()
+                                                      ];
 
-                                                    for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                      listNameController[i].text = nameController.text.split(', ')[i];
-                                                    }
-                                                  });
-                                                },
-                                                // selectedItem: _selectedPIC,
-                                                dropdownSearchDecoration: InputDecoration(
-                                                  labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                                  alignLabelWithHint: true,
-                                                  contentPadding: const EdgeInsets.only(left: 12),
-                                                  border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius .circular(10),
-                                                      borderSide: const BorderSide()),
-                                                ),
-                                              )
+                                                      for(int i = 0; i < nameController.text.split(', ').length; i++){
+                                                        listNameController[i].text = nameController.text.split(', ')[i];
+                                                      }
+                                                    });
+                                                  },
+                                                  // selectedItem: _selectedPIC,
+                                                  dropdownSearchDecoration: InputDecoration(
+                                                    labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                    alignLabelWithHint: true,
+                                                    contentPadding: const EdgeInsets.only(left: 12),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius .circular(10),
+                                                        borderSide: const BorderSide()),
+                                                  ),
+                                                )
                                             ),
                                             widget.fromCal == true ? (visit[0].pic_position != null ? Container(
                                                 child: visit[0].pic_position.contains(",") ? Container(
@@ -367,135 +367,135 @@ class _Realization extends State<Realization> {
                                             ))
                                           ],
                                         )
-                                      )
+                                    )
+                                ),
+                                Container(
+                                  child: TextFormField(
+                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                    controller: descriptionController,
+                                    maxLines: 5,
+                                    maxLength: 200,
+                                    decoration: InputDecoration(
+                                      labelText: "Description",
+                                      alignLabelWithHint: true,
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius .circular(10),
+                                          borderSide: BorderSide()),
                                     ),
-                                    Container(
-                                      child: TextFormField(
-                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                        controller: descriptionController,
-                                        maxLines: 5,
-                                        maxLength: 200,
-                                        decoration: InputDecoration(
-                                          labelText: "Description",
-                                          alignLabelWithHint: true,
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius .circular(10),
-                                              borderSide: BorderSide()),
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Container(
-                                          // width: double.infinity,
-                                          color: Colors.white,
-                                          child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                  padding: EdgeInsets.only(top: 9, bottom: 9),
-                                                  width: 163,
-                                                  height: 56,
-                                                  color: Colors.white,
-                                                  child: RaisedButton(
-                                                      shape: RoundedRectangleBorder(
-                                                          side: BorderSide(color: Color(Global.BLUE)),
-                                                          borderRadius: BorderRadius.circular(20)
-                                                      ),
-                                                      color: Color(Global.BLUE),
-                                                      onPressed: () {
-                                                        getCurrentLocation();
-                                                      },
-                                                      child: const Text(
-                                                        "Set location",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily: 'bold',
-                                                            fontSize: 15
-                                                        ),
-                                                      )
+                                  ),
+                                ),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      // width: double.infinity,
+                                      color: Colors.white,
+                                      child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Container(
+                                              padding: EdgeInsets.only(top: 9, bottom: 9),
+                                              width: 163,
+                                              height: 56,
+                                              color: Colors.white,
+                                              child: RaisedButton(
+                                                  shape: RoundedRectangleBorder(
+                                                      side: BorderSide(color: Color(Global.BLUE)),
+                                                      borderRadius: BorderRadius.circular(20)
                                                   ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
-                                                  child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
-                                                  // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
-                                                ),
-                                              ]
-                                          ),
-                                        )
-                                    ),
-                                  ]
-                              )
-                          ),
-                        ]
-                    )
-                ),
-              ),
-              bottomNavigationBar: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                      width: double.infinity,
-                      height: 56,
-                      color: Colors.white,
-                      child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Color(Global.BLUE)),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          color: Color(Global.BLUE),
-                          onPressed: () {
-                            List<String> name = [];
-                            for(int i=0; i<listNameController.length; i++) {
-                              name.add(listNameController[i].text);
-                            }
-                            String picName = name.join(", ");
-                            print(picName);
-                            print(visitNo);
-                            print(branchId);
-                            print(_selectedCust); //
-                            print(_position!.longitude.toString(),);
-                            print(store.get("nik")); //
-                            print(descriptionController.text);
-                            print(_selectedPIC); //
-                            print(nameController.text);
-                            print('y');
-                            print("0.7893");
-                            print("113.9213");
-
-                            // BlocProvider.of<VisitBloc>(context).add(
-                            //     AddRealizationEvent(
-                            //       visitNo,
-                            //       branchId,
-                            //       custId,
-                            //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
-                            //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
-                            //       store.get("nik"),
-                            //       descriptionController.text,
-                            //       _selectedPIC,
-                            //       picName,
-                            //       "y",
-                            //       _position!.latitude.toString(),
-                            //       _position!.longitude.toString(),
-                            //     )
-                            // );
-
-                          },
-                          child: const Text(
-                            "Save",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'bold',
-                                fontSize: 15
-                            ),
+                                                  color: Color(Global.BLUE),
+                                                  onPressed: () {
+                                                    getCurrentLocation();
+                                                  },
+                                                  child: const Text(
+                                                    "Set location",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: 'bold',
+                                                        fontSize: 15
+                                                    ),
+                                                  )
+                                              ),
+                                            ),
+                                            Container(
+                                                padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
+                                                child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
+                                              // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
+                                            ),
+                                          ]
+                                      ),
+                                    )
+                                ),
+                              ]
                           )
                       ),
-                    ),
-                  ]
-              ),
-            )
+                    ]
+                )
+            ),
+          ),
+          bottomNavigationBar: Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                  width: double.infinity,
+                  height: 56,
+                  color: Colors.white,
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Color(Global.BLUE)),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      color: Color(Global.BLUE),
+                      onPressed: () {
+                        List<String> name = [];
+                        for(int i=0; i<listNameController.length; i++) {
+                          name.add(listNameController[i].text);
+                        }
+                        String picName = name.join(", ");
+                        print(picName);
+                        print(visitNo);
+                        print(branchId);
+                        print(_selectedCust); //
+                        print(_position!.longitude.toString(),);
+                        print(store.get("nik")); //
+                        print(descriptionController.text);
+                        print(_selectedPIC); //
+                        print(nameController.text);
+                        print('y');
+                        print("0.7893");
+                        print("113.9213");
+
+                        // BlocProvider.of<VisitBloc>(context).add(
+                        //     AddRealizationEvent(
+                        //       visitNo,
+                        //       branchId,
+                        //       custId,
+                        //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
+                        //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
+                        //       store.get("nik"),
+                        //       descriptionController.text,
+                        //       _selectedPIC,
+                        //       picName,
+                        //       "y",
+                        //       _position!.latitude.toString(),
+                        //       _position!.longitude.toString(),
+                        //     )
+                        // );
+
+                      },
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'bold',
+                            fontSize: 15
+                        ),
+                      )
+                  ),
+                ),
+              ]
+          ),
+        )
     );
   }
 }
