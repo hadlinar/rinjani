@@ -27,6 +27,7 @@ class RinjaniApp extends StatelessWidget {
               button: TextStyle(
                   fontSize: 14, color: Theme.of(context).accentColor))),
       onGenerateRoute: r.Router.generateRouter,
+      initialRoute: r.Router.home,
     );
   }
 }

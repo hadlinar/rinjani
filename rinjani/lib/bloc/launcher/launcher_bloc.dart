@@ -31,7 +31,6 @@ class LauncherBloc extends Bloc<LauncherBlocEvent, LauncherBlocState> {
   }
 
   Stream<LauncherBlocState> _mapEventToState() async* {
-    print("masuk bloc");
     final token =  _sharedPreferences.getString("access_token");
 
     if(token == null) {

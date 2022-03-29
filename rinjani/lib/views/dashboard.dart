@@ -30,6 +30,7 @@ class _Dashboard extends State<Dashboard> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserBlocState>(
       builder: (context, state) {
+        print(state.toString() + " dashboard");
         if(state is LoadingUserState || state is InitialUserBlocState) {
           return Container(
             color: Colors.white,
