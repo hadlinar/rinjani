@@ -44,14 +44,25 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.rinjani"
-<<<<<<< HEAD
         minSdkVersion 18
-=======
-        minSdkVersion flutter.minSdkVersion
->>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    flavorDimensions "rinjani"
+    productFlavors {
+
+        development {
+            dimension "rinjani"
+            versionCode 1
+            versionName "1.0"
+        }
+        production {
+            dimension "rinjani"
+            versionCode 1
+            versionName "1.0"
+        }
     }
 
     buildTypes {

@@ -34,8 +34,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-<<<<<<< HEAD
-  table_calendar: ^3.0.0
   substring_highlight: ^1.0.33
   dropdown_search: ^2.0.1
   dropdownfield: ^1.0.3
@@ -54,19 +52,8 @@ dependencies:
   geocoding: ^2.0.0
   syncfusion_flutter_calendar: ^19.4.56
   date_time_picker: ^2.1.0
-#  trust_fall: ^1.0.4
 
 dev_dependencies:
-=======
-  table_calendar: ^3.0.3
-  substring_highlight: ^1.0.33
-  dropdown_search: ^2.0.1
-#  flutter_osm_plugin: ^0.31.0
-
-dev_dependencies:
-  dropdownfield: 1.0.0
-
->>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
   flutter_test:
     sdk: flutter
 
@@ -94,10 +81,7 @@ flutter:
     - assets/images/planning.png
     - assets/images/realization.png
     - assets/images/report.png
-<<<<<<< HEAD
     - assets/images/logo.png
-=======
->>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
 
     #icons
     - assets/icon/ic_back.png
@@ -110,13 +94,10 @@ flutter:
     - assets/icon/ic_visit.png
     - assets/icon/ic_arrow.png
     - assets/icon/ic_cancel.png
-<<<<<<< HEAD
     - assets/icon/ic_check.png
     - assets/icon/ic_warning.png
     - assets/icon/ic_empty.png
     - assets/icon/ic_logout.png
-=======
->>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
 
 
     #background
@@ -125,7 +106,6 @@ flutter:
     - assets/images/bg_visit.png
     - assets/images/bg_result.png
 
-<<<<<<< HEAD
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -137,23 +117,6 @@ flutter:
     # "family" key with the font family name, and a "fonts" key with a
     # list giving the asset and other descriptors for the font. For
     # example:
-=======
-    #dummy
-    - assets/dummy.json
-    - assets/dummyData.json
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
->>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
   fonts:
     - family: book
       fonts:
@@ -164,14 +127,6 @@ flutter:
     - family: medium
       fonts:
         - asset: fonts/CircularStd-Medium.ttf
-<<<<<<< HEAD
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
-=======
-
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
->>>>>>> d687317c1fc7d5316356a18e5eb4791748743c7d
