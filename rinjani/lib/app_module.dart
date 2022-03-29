@@ -29,14 +29,19 @@ import 'data_source/repository/role_repository.dart';
 import 'data_source/repository/user_repository.dart';
 
 class AppModule {
+
+  final String base_url;
+
+  AppModule(this.base_url);
+
   static final GetIt injector = GetIt.instance;
-  static void configureOthers() async {
+  Future<void> configureOthers() async {
     final dio = Dio();
     injector.registerSingleton(dio);
     injector.registerSingleton(await SharedPreferences.getInstance());
   }
 
-  static void configureService() {
+  void configureService() {
     injector.registerSingleton<LoginService>(
         LoginService.create(injector.get())
     );
@@ -60,7 +65,7 @@ class AppModule {
     );
   }
 
-  static void configureRepository() {
+  void configureRepository() {
     injector.registerSingleton(CustomerRepository(injector.get()));
     injector.registerSingleton(VisitRepository(injector.get()));
     injector.registerSingleton(BranchRepository(injector.get()));
@@ -70,7 +75,7 @@ class AppModule {
     injector.registerSingleton(RoleRepository(injector.get()));
   }
 
-  static Widget configureBloc(Widget app) {
+  Widget configureBloc(Widget app) {
     return MultiBlocProvider(providers: [
       BlocProvider<LauncherBloc>(
         create: (_) => LauncherBloc.create(injector.get()),
@@ -99,7 +104,7 @@ class AppModule {
     ], child: app);
   }
 
-  static void setup() async {
+  Future<void> setup() async {
     await configureOthers();
     configureService();
     configureRepository();
