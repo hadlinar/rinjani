@@ -1,4 +1,4 @@
-//@dart=2.9
+import 'package:alice/alice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -30,15 +30,18 @@ import 'data_source/repository/user_repository.dart';
 
 class AppModule {
 
-  final String base_url;
+  final String? base_url;
 
   AppModule(this.base_url);
 
   static final GetIt injector = GetIt.instance;
+  static Alice alice = new Alice(showNotification: true);
+
   Future<void> configureOthers() async {
     final dio = Dio();
     injector.registerSingleton(dio);
     injector.registerSingleton(await SharedPreferences.getInstance());
+    dio.interceptors.add(alice.getDioInterceptor());
   }
 
   void configureService() {

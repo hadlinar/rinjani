@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_module.dart';
 import 'router.dart' as r;
 
 class RinjaniApp extends StatelessWidget {
@@ -7,6 +8,7 @@ class RinjaniApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: AppModule.alice.getNavigatorKey(),
       theme: ThemeData(
           backgroundColor: Color(0xFFffffff),
           primaryColor: Color(0xFF008ECC),

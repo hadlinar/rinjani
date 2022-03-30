@@ -205,3 +205,14 @@ Map<String, dynamic> _$PostRealResponseToJson(PostRealResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
     };
+
+DeleteVisitResponse _$DeleteVisitResponseFromJson(Map<String, dynamic> json) =>
+    DeleteVisitResponse(
+      json['message'] as String,
+    );
+
+Map<String, dynamic> _$DeleteVisitResponseToJson(
+        DeleteVisitResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+    };

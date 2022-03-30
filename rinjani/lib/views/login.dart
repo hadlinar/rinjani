@@ -73,6 +73,7 @@ class _LoginPage extends State<LoginPage> {
                 builder: (BuildContext context) {
                   return Global.defaultModal(() {
                     Navigator.pop(context);
+                    Navigator.pop(context);
                   }, context, Global.WARNING_ICON, "Wrong password", "Try again", false);
                 }
             );

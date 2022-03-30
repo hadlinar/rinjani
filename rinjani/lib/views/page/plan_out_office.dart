@@ -59,39 +59,6 @@ class _OutOffice extends State<OutOffice> {
                     margin: const EdgeInsets.only(bottom: 5),
                     child: const Divider(),
                   ),
-                  // Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Container(
-                  //       width: double.infinity,
-                  //       color: Colors.white,
-                  //       child: Stack(
-                  //           children: <Widget>[
-                  //             Container(
-                  //               padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                  //               width: 153,
-                  //               height: 56,
-                  //               color: Colors.white,
-                  //               child: RaisedButton(
-                  //                   shape: RoundedRectangleBorder(
-                  //                       side: BorderSide(color: Color(Global.BLUE)),
-                  //                       borderRadius: BorderRadius.circular(20)
-                  //                   ),
-                  //                   color: Color(Global.BLUE),
-                  //                   onPressed: _addCount,
-                  //                   child: const Text(
-                  //                     "Add visit",
-                  //                     style: TextStyle(
-                  //                         color: Colors.white,
-                  //                         fontFamily: 'bold',
-                  //                         fontSize: 15
-                  //                     ),
-                  //                   )
-                  //               ),
-                  //             ),
-                  //           ]
-                  //       ),
-                  //     )
-                  // ),
                 ]
             )
         )

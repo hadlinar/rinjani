@@ -1,5 +1,7 @@
 import 'dart:core';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +21,23 @@ class EventDataSource extends CalendarDataSource{
   DateTime getEndTime(int index) => getEvent(index).time_finish;
 
   @override
-  String getSubject(int index) => getEvent(index).cust_name;
+  String getSubject(int index) {
+    if(getEvent(index).visit_id != "02") {
+      getEvent(index).cust_name = getEvent(index).description;
+      return getEvent(index).cust_name;
+    }
+    return getEvent(index).cust_name;
+  }
+
+  @override
+  Color getColor(int index) {
+    if(getEvent(index).visit_id == "03") {
+      return Color(0xffffe57373);
+    } else if(getEvent(index).visit_id == "01") {
+      return Color(0xffff66bb6a);
+    }
+    return Colors.lightBlue;
+  }
 
   @override
   String getCustomerName(int index) => getEvent(index).cust_name;

@@ -479,3 +479,12 @@ class PostRealResponse{
 
   factory PostRealResponse.fromJson(Map<String,dynamic> json) => _$PostRealResponseFromJson(json);
 }
+
+@JsonSerializable()
+class DeleteVisitResponse{
+  String message;
+
+  DeleteVisitResponse(this.message);
+
+  factory DeleteVisitResponse.fromJson(Map<String,dynamic> json) => _$DeleteVisitResponseFromJson(json);
+}

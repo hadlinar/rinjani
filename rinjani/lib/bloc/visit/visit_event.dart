@@ -66,6 +66,8 @@ class GetAllVisitEvent extends VisitBlocEvent{}
 
 class GetVisitEvent extends VisitBlocEvent{}
 
+class GetVisitForRealizationEvent extends VisitBlocEvent{}
+
 class GetRealizationEvent extends VisitBlocEvent{
   String filter;
 
@@ -77,4 +79,10 @@ class GetRealizationOpEvent extends VisitBlocEvent{
   String filter;
 
   GetRealizationOpEvent(this.id, this.filter);
+}
+
+class DeleteVisitEvent extends VisitBlocEvent{
+  String visitNo;
+
+  DeleteVisitEvent(this.visitNo);
 }

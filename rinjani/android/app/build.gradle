@@ -48,6 +48,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     flavorDimensions "rinjani"
@@ -63,6 +64,10 @@ android {
             versionCode 1
             versionName "1.0"
         }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
     }
 
     buildTypes {

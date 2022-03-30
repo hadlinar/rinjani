@@ -36,6 +36,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is GetVisitEvent) {
       yield* _mapVisitToState(event);
     }
+    if(event is GetVisitForRealizationEvent) {
+      yield* _mapVisitForRealizationToState(event);
+    }
     if(event is AddVisitEvent) {
       yield* _mapAddVisitToState(event);
     }
@@ -44,6 +47,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     }
     if(event is GetRealizationOpEvent) {
       yield* _mapRealizationOpToState(event);
+    }
+    if(event is DeleteVisitEvent) {
+      yield* _mapDeleteVisitToState(event);
     }
   }
 
@@ -67,12 +73,31 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
       if (response.message == "ok") {
         yield GetVisitState(response.result);
       }
-
     } on DioError catch(e) {
       if(e.response?.statusCode == 500) {
         yield NotLogginInState();
       }
       else {
+        yield FailedVisitState();
+      }
+    }
+  }
+
+  Stream<VisitBlocState> _mapVisitForRealizationToState(GetVisitForRealizationEvent event) async* {
+    yield LoadingVisitState();
+    final token = _sharedPreferences.getString("access_token");
+    try{
+      final response = await _visitRepository.getVisitForRealization("Bearer $token");
+      if (response.message == "ok") {
+        yield GetVisitState(response.result);
+      }
+    } on DioError catch(e) {
+      print(e.message);
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+
         yield FailedVisitState();
       }
     }
@@ -162,5 +187,23 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     yield LoadingVisitState();
     final response = await _visitRepository.getRealizationOp(e.id, e.filter);
     yield GetRealizationOpState(response.result);
+  }
+
+  Stream<VisitBlocState> _mapDeleteVisitToState(DeleteVisitEvent e) async* {
+    yield LoadingVisitState();
+    final token = _sharedPreferences.getString("access_token");
+    try{
+      final response = await _visitRepository.deleteVisit("Bearer $token", e.visitNo);
+      if (response.message == "deleted") {
+        yield SuccessDeleteVisitState();
+      }
+    } on DioError catch(e) {
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+        yield FailedVisitState();
+      }
+    }
   }
 }

@@ -21,6 +21,9 @@ abstract class VisitService{
   @GET('/visit')
   Future<VisitResponse> getVisit(@Header("Authorization") String authorization);
 
+  @GET('/visit/all')
+  Future<VisitResponse> getVisitForRealization(@Header("Authorization") String authorization);
+
   @GET('/realization/{filter}')
   Future<RealizationResponse> getRealization(@Header("Authorization") String authorization, @Path('filter') String filter);
 
@@ -32,5 +35,8 @@ abstract class VisitService{
 
   @POST('/realization')
   Future<PostRealResponse> addRealization(@Header("Authorization") String authorization, @Body() Map<String,dynamic> body);
+
+  @DELETE('/visit/{visitNo}')
+  Future<DeleteVisitResponse> deleteVisit(@Header("Authorization") String authorization, @Path('visitNo') String visitNo);
 
 }

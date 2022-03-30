@@ -7,16 +7,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:rinjani/widget/custom_text_field.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
+import 'package:intl/intl.dart';
 
 class Realization extends StatefulWidget{
-  Visit? visit;
-  bool? fromCal;
-
-  Realization({this.visit, this.fromCal});
 
   @override
   State<StatefulWidget> createState() {
@@ -41,7 +37,16 @@ class _Realization extends State<Realization> {
 
   final descriptionController = TextEditingController();
   final nameController = TextEditingController();
+  final picController = TextEditingController();
   late List<TextEditingController> listNameController = [];
+  late List<TextEditingController> listPicController = [];
+
+  String? _selectedType;
+
+  List typeVal = [
+    "In-office",
+    "Out-office"
+  ];
 
   String Address = '';
   Position? _position;
@@ -84,21 +89,9 @@ class _Realization extends State<Realization> {
   @override
   void initState() {
     super.initState();
+    _selectedType = "In-office";
     cust = [];
     position = [];
-    print(widget.fromCal);
-    if(widget.fromCal == true) {
-      visit.add(widget.visit!);
-
-      nameController.text = visit[0].pic_name;
-      _selectedPIC = visit[0].pic_position;
-      _selectedCust = visit[0].cust_name;
-
-      visitNo = visit[0].visit_no;
-      branchId = visit[0].branch_id;
-      timeStart = visit[0].time_start.toString();
-      timeFinish = visit[0].time_finish.toString();
-    }
     BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
   }
 
@@ -134,11 +127,10 @@ class _Realization extends State<Realization> {
                     child: CircularProgressIndicator()
                 );
               }
-              else if (state is GetVisitState) {
+              if (state is GetVisitState) {
                 for(int i=0; i<state.getVisit.length; i++) {
                   cust.add(state.getVisit[i].cust_name);
                 }
-
                 setState(() {
                   visit = state.getVisit;
                   cust;
@@ -169,10 +161,44 @@ class _Realization extends State<Realization> {
                               children: <Widget> [
                                 Container(
                                     padding: const EdgeInsets.only(top: 22),
+                                    child: DropdownButtonFormField<String>(
+                                      hint: const Text("Choose type of plan"),
+                                      dropdownColor: Colors.white,
+                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                      value: _selectedType,
+                                      items: typeVal.map((e) {
+                                        return DropdownMenuItem<String>(
+                                          value: e,
+                                          child: Text(e),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          _selectedType = value;
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                        labelText: "Type",
+                                        labelStyle: const TextStyle(
+                                            color: Color(0xff757575),
+                                            fontSize: 15,
+                                            fontFamily: 'medium'),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                            borderSide: BorderSide()
+                                        ),
+                                      ),
+                                    )
+                                ),
+
+                                _selectedType == "In-office" ? Container() : Container(
+                                    padding: const EdgeInsets.only(top: 22),
                                     child: DropdownSearch<String>(
                                       mode: Mode.MENU,
                                       showClearButton: true,
-                                      selectedItem: widget.fromCal == true? visit[0].cust_name: _selectedCust,
+                                      selectedItem: _selectedCust,
                                       items: custName,
                                       label: "Customer",
                                       showSearchBox: true,
@@ -182,6 +208,7 @@ class _Realization extends State<Realization> {
                                           _selectedPIC = null;
                                           listNameController = [];
                                           _selectedCust = val;
+                                          picController.text = "";
                                           nameController.text = "";
                                           for(int i=0; i<visit.length; i++) {
                                             if(visit[i].cust_name == _selectedCust) {
@@ -202,7 +229,7 @@ class _Realization extends State<Realization> {
                                       ),
                                     )
                                 ),
-                                Container(
+                                _selectedType == "In-office" ? Container() : Container(
                                     child: Container(
                                         child: Column(
                                           children: <Widget>[
@@ -211,18 +238,20 @@ class _Realization extends State<Realization> {
                                                 child: DropdownSearch<String>(
                                                   mode: Mode.MENU,
                                                   showClearButton: true,
-                                                  selectedItem: widget.fromCal == true? visit[0].pic_position : _selectedPIC,
+                                                  selectedItem: _selectedPIC,
                                                   items: custPos,
                                                   label: "PIC",
-                                                  showSearchBox: true,
-                                                  onChanged: (val) {
+                                                  // showSearchBox: true,
+                                                  onChanged: (String? value) {
                                                     setState(() {
+                                                      _selectedPIC = value;
                                                       nameController.text = "";
                                                       listNameController = [];
-                                                      _selectedPIC = val;
+                                                      listPicController = [];
                                                       for(int i=0; i<visit.length; i++) {
                                                         if(visit[i].pic_position == _selectedPIC) {
                                                           nameController.text = visit[i].pic_name;
+                                                          picController.text = _selectedPIC;
                                                           visitNo = visit[i].visit_no;
                                                           branchId = visit[i].branch_id;
                                                           timeStart = visit[i].time_start.toString();
@@ -235,80 +264,36 @@ class _Realization extends State<Realization> {
                                                           TextEditingController()
                                                       ];
 
+                                                      listPicController = [
+                                                        for (int i = 0; i < _selectedPIC.split(', ').length; i++)
+                                                          TextEditingController()
+                                                      ];
+
                                                       for(int i = 0; i < nameController.text.split(', ').length; i++){
                                                         listNameController[i].text = nameController.text.split(', ')[i];
                                                       }
+
+                                                      for(int i = 0; i < _selectedPIC.split(', ').length; i++){
+                                                        listPicController[i].text = picController.text.split(', ')[i];
+                                                      }
                                                     });
                                                   },
-                                                  // selectedItem: _selectedPIC,
                                                   dropdownSearchDecoration: InputDecoration(
-                                                    labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                    labelText: "PIC",
+                                                    labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
                                                     alignLabelWithHint: true,
-                                                    contentPadding: const EdgeInsets.only(left: 12),
+                                                    contentPadding: EdgeInsets.only(left: 12),
                                                     border: OutlineInputBorder(
                                                         borderRadius: BorderRadius .circular(10),
-                                                        borderSide: const BorderSide()),
+                                                        borderSide: BorderSide()),
                                                   ),
                                                 )
                                             ),
-                                            widget.fromCal == true ? (visit[0].pic_position != null ? Container(
-                                                child: visit[0].pic_position.contains(",") ? Container(
-                                                    child: ListView.builder(
-                                                        itemCount: visit[0].pic_position.split(", ").length,
-                                                        scrollDirection: Axis.vertical,
-                                                        shrinkWrap: true,
-                                                        physics: const NeverScrollableScrollPhysics(),
-                                                        itemBuilder: (context, j){
-                                                          return Container(
-                                                              child: Column(
-                                                                  children: <Widget> [
-                                                                    Align(
-                                                                      alignment: Alignment.centerLeft,
-                                                                      child: Text("PIC position ${j + 1}: ${ visit[0].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                                    ),
-                                                                    Container(
-                                                                      padding: const EdgeInsets.only(top: 17),
-                                                                      child: CustomTextField(label: 'Name', controller: listNameController[j]),
-                                                                    ),
-                                                                  ]
-                                                              )
-
-                                                          );
-                                                        }
-                                                    )
-                                                ) : Container(
-                                                    padding: const EdgeInsets.only(top: 17),
-                                                    child: Column(
-                                                        children: <Widget> [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text("PIC position: ${ visit[0].pic_position}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                          ),
-                                                          Container(
-                                                            padding: const EdgeInsets.only(top: 22),
-                                                            child: CustomTextField(label: 'Name', controller: nameController),
-                                                          ),
-                                                        ]
-                                                    )
-                                                )
-                                            ) : Container(
-                                                padding: const EdgeInsets.only(top: 17, left: 5),
-                                                child: Column(
-                                                    children: <Widget> [
-                                                      Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text("PIC position: ",
-                                                            style: Global.getCustomFont(Global.BLACK, 15, 'bold')
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding: const EdgeInsets.only(top: 22),
-                                                        child: CustomTextField(label: 'Name', controller: nameController),
-                                                      ),
-                                                    ]
-                                                )
-                                            ))
-                                                : (_selectedPIC != null ? Container(
+                                            Container(
+                                              padding: const EdgeInsets.only(bottom: 17),
+                                              child: Divider()
+                                            ),
+                                            _selectedPIC != null ? Container(
                                                 child: _selectedPIC.contains(",") ? Container(
                                                     child: ListView.builder(
                                                         itemCount:_selectedPIC.split(", ").length,
@@ -319,12 +304,10 @@ class _Realization extends State<Realization> {
                                                           return Container(
                                                               child: Column(
                                                                   children: <Widget> [
-                                                                    Align(
-                                                                      alignment: Alignment.centerLeft,
-                                                                      child: Text("PIC position ${j + 1}: ${_selectedPIC.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                                    Container(
+                                                                      child: CustomTextField(label: 'PIC', controller: listPicController[j]),
                                                                     ),
                                                                     Container(
-                                                                      padding: const EdgeInsets.only(top: 17),
                                                                       child: CustomTextField(label: 'Name', controller: listNameController[j]),
                                                                     ),
                                                                   ]
@@ -334,42 +317,36 @@ class _Realization extends State<Realization> {
                                                         }
                                                     )
                                                 ) : Container(
-                                                    padding: const EdgeInsets.only(top: 17),
                                                     child: Column(
                                                         children: <Widget> [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text("PIC position: ${_selectedPIC}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                          Container(
+                                                            child: CustomTextField(label: 'PIC', controller: listPicController[0]),
                                                           ),
                                                           Container(
-                                                            padding: const EdgeInsets.only(top: 22),
                                                             child: CustomTextField(label: 'Name', controller: listNameController[0]),
                                                           ),
                                                         ]
                                                     )
                                                 )
-                                            ) : Container(
-                                                padding: const EdgeInsets.only(top: 17, left: 5),
+                                            ) :
+                                            Container(
                                                 child: Column(
                                                     children: <Widget> [
-                                                      Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text("PIC position: ",
-                                                            style: Global.getCustomFont(Global.BLACK, 15, 'bold')
-                                                        ),
+                                                      Container(
+                                                        child: CustomTextField(label: 'PIC', controller: picController),
                                                       ),
                                                       Container(
-                                                        padding: const EdgeInsets.only(top: 22),
                                                         child: CustomTextField(label: 'Name', controller: nameController),
                                                       ),
                                                     ]
                                                 )
-                                            ))
+                                            )
                                           ],
                                         )
                                     )
                                 ),
                                 Container(
+                                  padding: _selectedType == "In-office" ? const EdgeInsets.only(top: 17) : const EdgeInsets.all(0),
                                   child: TextFormField(
                                     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                                     controller: descriptionController,
@@ -452,35 +429,60 @@ class _Realization extends State<Realization> {
                           name.add(listNameController[i].text);
                         }
                         String picName = name.join(", ");
-                        print(picName);
+
+                        List<String> pos = [];
+                        for(int i=0; i<listPicController.length; i++) {
+                          pos.add(listPicController[i].text);
+                        }
+                        String picPos = pos.join(", ");
+
+                        _selectedType == "In-office" ? print("in office") : print(picName);
                         print(visitNo);
                         print(branchId);
-                        print(_selectedCust); //
-                        print(_position!.longitude.toString(),);
-                        print(store.get("nik")); //
+                        _selectedType == "In-office" ? print("") : print(_selectedCust);
+                        print(timeStart);
+                        print(DateTime.now());
+                        print(store.get("user_id")); //
                         print(descriptionController.text);
-                        print(_selectedPIC); //
-                        print(nameController.text);
+                        _selectedType == "In-office" ? print("") : print(picPos); //
                         print('y');
-                        print("0.7893");
-                        print("113.9213");
+                        print(_position!.latitude.toString());
+                        print(_position!.longitude.toString());
 
-                        // BlocProvider.of<VisitBloc>(context).add(
-                        //     AddRealizationEvent(
-                        //       visitNo,
-                        //       branchId,
-                        //       custId,
-                        //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
-                        //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
-                        //       store.get("nik"),
-                        //       descriptionController.text,
-                        //       _selectedPIC,
-                        //       picName,
-                        //       "y",
-                        //       _position!.latitude.toString(),
-                        //       _position!.longitude.toString(),
-                        //     )
-                        // );
+                        _selectedType == "In-office" ?
+                            Container()
+                            // BlocProvider.of<VisitBloc>(context).add(
+                            //     AddRealizationEvent(
+                            //       visitNo,
+                            //       branchId,
+                            //       custId,
+                            //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
+                            //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
+                            //       store.get("nik"),
+                            //       descriptionController.text,
+                            //       _selectedPIC,
+                            //       picName,
+                            //       "y",
+                            //       _position!.latitude.toString(),
+                            //       _position!.longitude.toString(),
+                            //     )
+                            // )
+                            : BlocProvider.of<VisitBloc>(context).add(
+                            AddRealizationEvent(
+                              visitNo,
+                              branchId,
+                              custId,
+                              DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
+                              DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
+                              store.get("nik"),
+                              descriptionController.text,
+                              picPos,
+                              picName,
+                              "y",
+                              _position!.latitude.toString(),
+                              _position!.longitude.toString(),
+                            )
+                        );
 
                       },
                       child: const Text(
