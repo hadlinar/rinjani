@@ -15,10 +15,19 @@ class EventDataSource extends CalendarDataSource{
   Visit getEvent(int index) => appointments![index] as Visit;
 
   @override
-  DateTime getStartTime(int index) => getEvent(index).time_start;
+  DateTime getStartTime(int index) {
+    String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_start);
+    DateTime time = DateFormat('yyyy-MM-dd HH:mm:ss').parse(startTime);
+    return time;
+  }
+
 
   @override
-  DateTime getEndTime(int index) => getEvent(index).time_finish;
+  DateTime getEndTime(int index) {
+    String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_finish);
+    DateTime time = DateFormat('yyyy-MM-dd HH:mm:ss').parse(endTime);
+    return time;
+  }
 
   @override
   String getSubject(int index) {

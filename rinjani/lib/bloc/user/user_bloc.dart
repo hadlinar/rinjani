@@ -71,8 +71,8 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
     yield LoadingUserState();
     final token = _sharedPreferences.getString("access_token");
     try {
-      final response = await _loginRepository.logout(token!);
-      if(response.message == "Logged out") {
+      final response = await _loginRepository.logout("Bearer $token");
+      if(response.message == "Log out") {
         yield NotLoggedinState();
       }
     } on DioError catch (e) {

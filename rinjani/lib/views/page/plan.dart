@@ -172,7 +172,7 @@ class _Plan extends State<Plan> {
                                         desc,
                                         "",
                                         "",
-                                        "y"
+                                        "n"
                                     )
                                 );
 
@@ -220,7 +220,6 @@ class _Plan extends State<Plan> {
                                 String position = pos.join(", ");
                                 String name1 = name.join(", ");
 
-                                // String timeStart = store.get("startTime").toString();
                                 DateTime timeStart = store.get("startTime");
                                 DateTime timeEnd = store.get("endTime");
                                 String cust_id = store.get("cust_id").toString();
@@ -232,8 +231,8 @@ class _Plan extends State<Plan> {
                                       "02",
                                       store.get("branch_id"),
                                       cust_id,
-                                      timeStart.toLocal().toString(),
-                                      timeEnd.toLocal().toString(),
+                                      timeStart.toString(),
+                                      timeEnd.toString(),
                                       store.get("nik"),
                                       "",
                                       position,

@@ -126,6 +126,7 @@ class _CalendarState extends State<Calendar> {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
       final Visit _visit = details.appointments![0];
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -194,7 +195,7 @@ class _CalendarState extends State<Calendar> {
                 Container(
                   height: 17,
                 ),
-                DateTime.now().isAfter(_visit.time_finish) ? Container(
+                DateTime.now().isAfter(_visit.time_start) ? Container(
                   child: Container(
                       child: RaisedButton(
                           shape: RoundedRectangleBorder(
