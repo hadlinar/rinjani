@@ -30,6 +30,10 @@ class _InOffice extends State<InOffice> {
 
   late String initDate;
 
+  bool clicked = false;
+  bool clickedStart = false;
+  bool clickedEnd = false;
+
   void datePicker(ctx) {
     showDatePicker(
         context: context,
@@ -38,6 +42,8 @@ class _InOffice extends State<InOffice> {
         lastDate: DateTime(2050)
     ).then((date) {
       setState((){
+        // clicked = true;
+        store.set("clicked", true);
         initialDate = date!;
         initDate = initialDate.toString();
       });
@@ -48,6 +54,7 @@ class _InOffice extends State<InOffice> {
   void initState() {
     super.initState();
     initDate = "";
+    store.set("clicked", false);
   }
 
   void startTime(ctx) {
@@ -77,7 +84,11 @@ class _InOffice extends State<InOffice> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    clickedStart = true;
+                    Navigator.of(ctx).pop();
+                    store.set("clickedStart", clickedStart);
+                  }
               )
             ],
           ),
@@ -113,7 +124,11 @@ class _InOffice extends State<InOffice> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    clickedEnd = true;
+                    Navigator.of(ctx).pop();
+                    store.set("clickedEnd", clickedEnd);
+                  }
               )
             ],
           ),
@@ -153,7 +168,9 @@ class _InOffice extends State<InOffice> {
                               ),
                               Container(
                                   child: InkWell(
-                                      onTap: () => datePicker(context),
+                                      onTap: () {
+                                        datePicker(context);
+                                      },
                                       child: Container(
                                           padding: const EdgeInsets.only(left: 17),
                                           child: ImageIcon(

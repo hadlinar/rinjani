@@ -35,6 +35,8 @@ class _Realization extends State<Realization> {
   String timeStart = "";
   String timeFinish = "";
 
+  bool locationClicked = false;
+
   final descriptionController = TextEditingController();
   final nameController = TextEditingController();
   final picController = TextEditingController();
@@ -66,6 +68,7 @@ class _Realization extends State<Realization> {
     // print(placemarks);
     Placemark place = placemarks[0];
     setState(()  {
+      locationClicked = true;
       Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
@@ -490,20 +493,8 @@ class _Realization extends State<Realization> {
                         }
                         String picPos = pos.join(", ");
 
-                        print(visitNo);
-                        print(branchId);
-                        _selectedType == "In-office" ? print("") : print(_selectedCust);
-                        print(_selectedTime);
-                        print(DateTime.now());
-                        print(store.get("user_id")); //
-                        print(descriptionController.text);
-                        _selectedType == "In-office" ? print("") : print(picPos); //
-                        print('y');
-                        print(_position!.latitude.toString());
-                        print(_position!.longitude.toString());
-
                         _selectedType == "In-office" ?
-                            BlocProvider.of<VisitBloc>(context).add(
+                            (descriptionController.text != "" && locationClicked == true ? BlocProvider.of<VisitBloc>(context).add(
                                 AddRealizationEvent(
                                   visitNo,
                                   branchId,
@@ -518,8 +509,15 @@ class _Realization extends State<Realization> {
                                   _position!.latitude.toString(),
                                   _position!.longitude.toString(),
                                 )
-                            )
-                            : BlocProvider.of<VisitBloc>(context).add(
+                            ) : showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Global.defaultModal(() {
+                                    Navigator.pop(context);
+                                  }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                }
+                            ))
+                            : (descriptionController.text != "" && locationClicked == true && picPos != "" && picName != "" && custId != ""? BlocProvider.of<VisitBloc>(context).add(
                             AddRealizationEvent(
                               visitNo,
                               branchId,
@@ -534,7 +532,15 @@ class _Realization extends State<Realization> {
                               _position!.latitude.toString(),
                               _position!.longitude.toString(),
                             )
-                        );
+                        ) : showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Global.defaultModal(() {
+                                Navigator.pop(context);
+                              }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                            }
+                        ));
+
 
                       },
                       child: const Text(

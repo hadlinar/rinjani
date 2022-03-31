@@ -98,6 +98,10 @@ class _AddPlan extends State<AddPlan> {
   int indexCard = 0;
   int indexPIC = 0;
 
+  bool clicked = false;
+  bool clickedStart = false;
+  bool clickedEnd = false;
+
   late String result;
   late String initDate;
 
@@ -265,7 +269,11 @@ class _AddPlan extends State<AddPlan> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                onPressed: () {
+                  clickedStart = true;
+                  Navigator.of(ctx).pop();
+                  store.set("clickedStart", clickedStart);
+                }
               )
             ],
           ),
@@ -301,7 +309,11 @@ class _AddPlan extends State<AddPlan> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    clickedEnd = true;
+                    Navigator.of(ctx).pop();
+                    store.set("clickedEnd", clickedEnd);
+                  }
               )
             ],
           ),
@@ -340,7 +352,11 @@ class _AddPlan extends State<AddPlan> {
                               ),
                               Container(
                                   child: InkWell(
-                                      onTap: () => datePicker(context),
+                                      onTap: () {
+                                        datePicker(context);
+                                        clicked = true;
+                                        store.set("clicked", clicked);
+                                      },
                                       child: Container(
                                           padding: const EdgeInsets.only(left: 17),
                                           child: ImageIcon(
