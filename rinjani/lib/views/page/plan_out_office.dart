@@ -235,6 +235,7 @@ class _AddPlan extends State<AddPlan> {
         lastDate: DateTime(2050)
     ).then((date) {
       setState((){
+        store.set("clicked", true);
         initialDate = date!;
         initDate = initialDate.toString();
       });
@@ -354,8 +355,6 @@ class _AddPlan extends State<AddPlan> {
                                   child: InkWell(
                                       onTap: () {
                                         datePicker(context);
-                                        clicked = true;
-                                        store.set("clicked", clicked);
                                       },
                                       child: Container(
                                           padding: const EdgeInsets.only(left: 17),

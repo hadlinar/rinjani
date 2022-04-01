@@ -204,26 +204,39 @@ class _Plan extends State<Plan> {
                                 var hourSore = 17;
                                 var newMin = 0;
                                 var newSec = 0;
+                                DateTime date = store.get("date");
+                                String clicked = store.get("clicked").toString();
                                 var timeStart, timeFinish;
                                 timeStart = DateTime.now();
                                 timeFinish = DateTime.now();
-                                timeStart = new DateTime(timeStart.year, timeStart.month, timeStart.day, hourPagi, newMin, newSec).toString();
-                                timeFinish = new DateTime(timeFinish.year, timeFinish.month, timeFinish.day, hourSore, newMin, newSec).toString();
+                                timeStart = new DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
+                                timeFinish = new DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
 
-                                BlocProvider.of<VisitBloc>(context).add(
-                                    AddVisitEvent(
-                                      "03",
-                                      store.get("branch_id"),
-                                      "",
-                                      timeStart,
-                                      timeFinish,
-                                      store.get("nik"),
-                                      desc,
-                                      "",
-                                      "",
-                                      "y",
-                                    )
-                                );
+                                if(clicked != "false" && desc != null && date != null) {
+                                  BlocProvider.of<VisitBloc>(context).add(
+                                      AddVisitEvent(
+                                        "03",
+                                        store.get("branch_id"),
+                                        "",
+                                        timeStart,
+                                        timeFinish,
+                                        store.get("nik"),
+                                        desc,
+                                        "",
+                                        "",
+                                        "y",
+                                      )
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Global.defaultModal(() {
+                                          Navigator.pop(context);
+                                        }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                      }
+                                  );
+                                }
                               }
                               else {
                                 List<Map<String, dynamic>> res = store.get("result");

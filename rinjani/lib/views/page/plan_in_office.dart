@@ -157,37 +157,40 @@ class _InOffice extends State<InOffice> {
                       child:
                       Column(
                         children: <Widget> [
-                          Row(
-                            children: <Widget> [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text("Pick a date: ",
-                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                  textAlign: TextAlign.left,
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 17, top: 5),
+                            child: Row(
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Pick a date: ",
+                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                  child: InkWell(
-                                      onTap: () {
-                                        datePicker(context);
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.only(left: 17),
-                                          child: ImageIcon(
-                                            AssetImage(Global.CALENDAR_ICON),
-                                            color: Color(Global.BLUE),
-                                            size: 18,
-                                          )
-                                      )
-                                  )
-                              )
-                            ]
+                                Container(
+                                    child: InkWell(
+                                        onTap: () {
+                                          datePicker(context);
+                                        },
+                                        child: Container(
+                                            padding: const EdgeInsets.only(left: 17),
+                                            child: ImageIcon(
+                                              AssetImage(Global.CALENDAR_ICON),
+                                              color: Color(Global.BLUE),
+                                              size: 18,
+                                            )
+                                        )
+                                    )
+                                )
+                              ]
+                            ),
                           ),
                           Container(
                             child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: initDate != "" ? Container(
-                                    margin: const EdgeInsets.only(bottom: 30, top: 17),
+                                    margin: const EdgeInsets.only(bottom: 30),
                                     child: InkWell(
                                         onTap: () => datePicker(context),
                                         child: Container(

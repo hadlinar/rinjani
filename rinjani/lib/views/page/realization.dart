@@ -261,7 +261,7 @@ class _Realization extends State<Realization> {
                                                 print(_selectedTime);
                                                 for(int i=0; i<visit.length; i++) {
                                                   if(visit[i].time_start.toString() == _selectedTime) {
-                                                    print(visit[i].time_finish);
+                                                    descriptionController.text = visit[i].description;
                                                     visitNo = visit[i].visit_no;
                                                     branchId = visit[i].branch_id;
                                                     timeFinish = visit[i].time_finish.toString();
