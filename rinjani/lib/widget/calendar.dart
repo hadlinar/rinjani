@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 
 import '../bloc/visit/visit_bloc.dart';
 import '../models/visit.dart';
 import '../utils/global.dart';
 import '../views/page/plan.dart';
-import '../views/page/realization.dart' as real;
 import 'event_data_source.dart';
 
 class Calendar extends StatefulWidget {
@@ -21,7 +21,7 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
+    BlocProvider.of<VisitBloc>(context).add(GetVisitForRealizationEvent());
   }
 
   @override
@@ -55,6 +55,10 @@ class _CalendarState extends State<Calendar> {
             } if (state is GetVisitState) {
               setState(() {
                 visit = state.getVisit;
+              });
+            } if (state is SuccessDeleteVisitState) {
+              setState(() {
+                BlocProvider.of<VisitBloc>(context).add(GetVisitForRealizationEvent());
               });
             } else {
               Container();
@@ -107,7 +111,7 @@ class _CalendarState extends State<Calendar> {
                   if (resMessage == 200) {
                     Navigator.of(ctx).pop();
                     Navigator.of(ctx).pop();
-                    BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
+                    BlocProvider.of<VisitBloc>(context).add(GetVisitForRealizationEvent());
                   }
                 },
               ))
@@ -123,9 +127,166 @@ class _CalendarState extends State<Calendar> {
         details.targetElement == CalendarElement.agenda) {
       final Visit _visit = details.appointments![0];
 
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => real.Realization(visit: _visit, fromCal: true)
-      ));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)
+                )
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    _visit.visit_id == "01" ? "In-Office" : (_visit.visit_id == "03" ? "Off" : _visit.cust_name),
+                    style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 17),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "${DateFormat("HH:mm").format(_visit.time_start)} - ${DateFormat("HH:mm").format(_visit.time_finish)}",
+                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                      textAlign: TextAlign.left,
+                    ),
+                  )
+                ),
+                _visit.visit_id == "02" ?
+                Container(
+                  padding: const EdgeInsets.only(top: 5),
+                  height: 50,
+                  width: MediaQuery.of(context).size.width*0.75,
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: _visit.pic_name.contains(",") ? Container (
+                          child: ListView.builder(
+                              itemCount: _visit.pic_name.split(", ").length,
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, j){
+                                return Container(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Text("${_visit.pic_name.split(", ")[j]} - ${_visit.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                );
+                              }
+                          )
+                      ) : Container(
+                        child: Text("${_visit.pic_name} - ${_visit.pic_position}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                      )
+                  ),
+                )
+                : Container(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _visit.description,
+                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 17,
+                ),
+                DateTime.now().isAfter(_visit.time_start) ? Container(
+                  child: Container(
+                      child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                  color: Theme
+                                      .of(context)
+                                      .accentColor,
+                                  width: 3
+                              )
+                          ),
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(
+                                color: Color(Global.BLUE),
+                                fontFamily: 'bold',
+                                fontSize: 15
+                            ),
+                          )
+                      )
+                  ),
+                ) : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                    color: Theme
+                                        .of(context)
+                                        .accentColor,
+                                    width: 3
+                                )
+                            ),
+                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Ok",
+                              style: TextStyle(
+                                  color: Color(Global.BLUE),
+                                  fontFamily: 'bold',
+                                  fontSize: 15
+                              ),
+                            )
+                        )
+                    ),
+                    Container(
+                      width: 20,
+                    ),
+                    Expanded(
+                        flex: 1,
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                side:
+                                BorderSide(color: Colors.redAccent),
+                                borderRadius: BorderRadius.circular(10)),
+                            color: Colors.redAccent,
+                            onPressed: () {
+                              Navigator.pop(context);
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Global.defaultModal(() {
+                                      Navigator.pop(context);
+                                      BlocProvider.of<VisitBloc>(context).add(DeleteVisitEvent(_visit.visit_no));
+                                    }, context, Global.WARNING_ICON, "Are you sure you want to delete this plan?", "Yes", true);
+                                  }
+                              );
+                            },
+                            child: Text(
+                              "Delete",
+                              style: Global.getCustomFont(Global.WHITE, 14,
+                                  'bold'),
+                            )
+                        )
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        }
+      );
     }
   }
 }

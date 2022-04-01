@@ -22,6 +22,11 @@ class VisitRepository {
     return response;
   }
 
+  Future<VisitResponse> getVisitForRealization(String token) async {
+    final response = await visitService.getVisitForRealization(token);
+    return response;
+  }
+
   Future<RealizationResponse> getRealization(String token, String filter) async {
     final response = await visitService.getRealization(token, filter);
     return response;
@@ -85,6 +90,11 @@ class VisitRepository {
       "latitude": latitude,
       "longitude": longitude
     });
+    return response;
+  }
+
+  Future<DeleteVisitResponse> deleteVisit(String token, String visitNo) async {
+    final response = await visitService.deleteVisit(token, visitNo);
     return response;
   }
 }

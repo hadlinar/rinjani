@@ -53,6 +53,9 @@ class _Plan extends State<Plan> {
                 builder: (BuildContext context) {
                   return Global.defaultModal(() {
                     widget.successAddVisit!(200, context);
+                    store.set("clicked", false);
+                    store.set("clickedStart", false);
+                    store.set("clickedEnd", false);
                   }, context, Global.CHECK_ICON, "Visit saved", "Ok", false);
                 }
             );
@@ -146,7 +149,8 @@ class _Plan extends State<Plan> {
                 bottomNavigationBar: Stack(
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                        padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                        margin: const EdgeInsets.only(bottom: 20),
                         width: double.infinity,
                         height: 56,
                         color: Colors.white,
@@ -157,55 +161,82 @@ class _Plan extends State<Plan> {
                             ),
                             color: Color(Global.BLUE),
                             onPressed: () {
-                              String timeStart = store.get("timeStart").toString();
-                              String timeEnd = store.get("timeEnd").toString();
-                              String desc = store.get("desc").toString();
                               if(defaultType == "in-office") {
-                                BlocProvider.of<VisitBloc>(context).add(
-                                    AddVisitEvent(
-                                        "01",
-                                        store.get("branch_id"),
-                                        "",
-                                        timeStart,
-                                        timeEnd,
-                                        store.get("nik"),
-                                        desc,
-                                        "",
-                                        "",
-                                        "y"
-                                    )
-                                );
+                                String timeStart = store.get("timeStart").toString();
+                                String timeEnd = store.get("timeEnd").toString();
+                                String desc = store.get("desc").toString();
+                                String clicked = store.get("clicked").toString();
+                                String clickedStart = store.get("clickedStart").toString();
+                                String clickedEnd = store.get("clickedEnd").toString();
+                                print(clicked);
+
+                                if(desc != "" && clicked != "false" && clickedStart == "true" && clickedEnd == "true") {
+                                  BlocProvider.of<VisitBloc>(context).add(
+                                      AddVisitEvent(
+                                          "01",
+                                          store.get("branch_id"),
+                                          "",
+                                          timeStart,
+                                          timeEnd,
+                                          store.get("nik"),
+                                          desc,
+                                          "",
+                                          "",
+                                          "n"
+                                      )
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Global.defaultModal(() {
+                                          Navigator.pop(context);
+                                        }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                      }
+                                  );
+                                }
 
                               }
                               else if(defaultType == "off") {
                                 String type = store.get("offType");
                                 String desc = type != "Other" ? type : store.get("descOff");
-                                print(desc);
-                                // print(type);
                                 var hourPagi = 8;
                                 var hourSore = 17;
                                 var newMin = 0;
                                 var newSec = 0;
+                                DateTime date = store.get("date");
+                                String clicked = store.get("clicked").toString();
                                 var timeStart, timeFinish;
                                 timeStart = DateTime.now();
                                 timeFinish = DateTime.now();
-                                timeStart = new DateTime(timeStart.year, timeStart.month, timeStart.day, hourPagi, newMin, newSec).toString();
-                                timeFinish = new DateTime(timeFinish.year, timeFinish.month, timeFinish.day, hourSore, newMin, newSec).toString();
+                                timeStart = new DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
+                                timeFinish = new DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
 
-                                BlocProvider.of<VisitBloc>(context).add(
-                                    AddVisitEvent(
-                                      "03",
-                                      store.get("branch_id"),
-                                      "",
-                                      timeStart,
-                                      timeFinish,
-                                      store.get("nik"),
-                                      desc,
-                                      "",
-                                      "",
-                                      "y",
-                                    )
-                                );
+                                if(clicked != "false" && desc != null && date != null) {
+                                  BlocProvider.of<VisitBloc>(context).add(
+                                      AddVisitEvent(
+                                        "03",
+                                        store.get("branch_id"),
+                                        "",
+                                        timeStart,
+                                        timeFinish,
+                                        store.get("nik"),
+                                        desc,
+                                        "",
+                                        "",
+                                        "y",
+                                      )
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Global.defaultModal(() {
+                                          Navigator.pop(context);
+                                        }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                      }
+                                  );
+                                }
                               }
                               else {
                                 List<Map<String, dynamic>> res = store.get("result");
@@ -220,27 +251,41 @@ class _Plan extends State<Plan> {
                                 String position = pos.join(", ");
                                 String name1 = name.join(", ");
 
-                                // String timeStart = store.get("startTime").toString();
                                 DateTime timeStart = store.get("startTime");
                                 DateTime timeEnd = store.get("endTime");
                                 String cust_id = store.get("cust_id").toString();
-                                print(timeStart.toLocal());
-                                print(timeEnd.toLocal());
 
-                                BlocProvider.of<VisitBloc>(context).add(
-                                    AddVisitEvent(
-                                      "02",
-                                      store.get("branch_id"),
-                                      cust_id,
-                                      timeStart.toLocal().toString(),
-                                      timeEnd.toLocal().toString(),
-                                      store.get("nik"),
-                                      "",
-                                      position,
-                                      name1,
-                                      "n",
-                                    )
-                                );
+
+                                String clicked = store.get("clicked").toString();
+                                String clickedStart = store.get("clickedStart").toString();
+                                String clickedEnd = store.get("clickedEnd").toString();
+
+                                if(position != "" && name1 != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
+                                  BlocProvider.of<VisitBloc>(context).add(
+                                      AddVisitEvent(
+                                        "02",
+                                        store.get("branch_id"),
+                                        cust_id,
+                                        timeStart.toString(),
+                                        timeEnd.toString(),
+                                        store.get("nik"),
+                                        "",
+                                        position,
+                                        name1,
+                                        "n",
+                                      )
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Global.defaultModal(() {
+                                          Navigator.pop(context);
+                                        }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                      }
+                                  );
+                                }
+
                               }
                             },
                             child: const Text(

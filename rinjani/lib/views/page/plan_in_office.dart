@@ -28,17 +28,33 @@ class _InOffice extends State<InOffice> {
   DateTime start = DateTime.now();
   DateTime end = DateTime.now();
 
+  late String initDate;
+
+  bool clicked = false;
+  bool clickedStart = false;
+  bool clickedEnd = false;
+
   void datePicker(ctx) {
     showDatePicker(
         context: context,
-        initialDate: DateTime(initialDate.year, initialDate.month, initialDate.day+1),
-        firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2050)
     ).then((date) {
       setState((){
+        // clicked = true;
+        store.set("clicked", true);
         initialDate = date!;
+        initDate = initialDate.toString();
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initDate = "";
+    store.set("clicked", false);
   }
 
   void startTime(ctx) {
@@ -68,7 +84,11 @@ class _InOffice extends State<InOffice> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    clickedStart = true;
+                    Navigator.of(ctx).pop();
+                    store.set("clickedStart", clickedStart);
+                  }
               )
             ],
           ),
@@ -104,7 +124,11 @@ class _InOffice extends State<InOffice> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    clickedEnd = true;
+                    Navigator.of(ctx).pop();
+                    store.set("clickedEnd", clickedEnd);
+                  }
               )
             ],
           ),
@@ -133,19 +157,40 @@ class _InOffice extends State<InOffice> {
                       child:
                       Column(
                         children: <Widget> [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Date",
-                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                              textAlign: TextAlign.left,
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 17, top: 5),
+                            child: Row(
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Pick a date: ",
+                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                Container(
+                                    child: InkWell(
+                                        onTap: () {
+                                          datePicker(context);
+                                        },
+                                        child: Container(
+                                            padding: const EdgeInsets.only(left: 17),
+                                            child: ImageIcon(
+                                              AssetImage(Global.CALENDAR_ICON),
+                                              color: Color(Global.BLUE),
+                                              size: 18,
+                                            )
+                                        )
+                                    )
+                                )
+                              ]
                             ),
                           ),
                           Container(
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Container(
-                                  // width: 130,
-                                    margin: const EdgeInsets.only(bottom: 30, top: 17),
+                                child: initDate != "" ? Container(
+                                    margin: const EdgeInsets.only(bottom: 30),
                                     child: InkWell(
                                         onTap: () => datePicker(context),
                                         child: Container(
@@ -159,7 +204,7 @@ class _InOffice extends State<InOffice> {
                                             )
                                         )
                                     )
-                                )
+                                ) : Container()
                             ),
                           ),
                           Align(

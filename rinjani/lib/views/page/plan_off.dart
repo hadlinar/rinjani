@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
+import 'package:intl/intl.dart';
 
 class Off extends StatefulWidget {
 
@@ -17,8 +19,42 @@ class _Off extends State<Off> {
   String? offType;
   String? descFilled;
 
+  late String initDate;
+  DateTime initialDate = DateTime.now();
+  DateTime timeStart = DateTime.now();
+  DateTime timeEnd = DateTime.now();
+
+  DateTime start = DateTime.now();
+  DateTime end = DateTime.now();
+
+  bool clicked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    store.set("clicked", false);
+    initDate = "";
+  }
+
+  void datePicker(ctx) {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2050)
+    ).then((date) {
+      setState((){
+        store.set("clicked", true);
+        store.set("date", date);
+        initialDate = date!;
+        initDate = initialDate.toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     store.set("descOff", descFilled);
     store.set("offType", offType);
     return GestureDetector(
@@ -27,6 +63,56 @@ class _Off extends State<Off> {
             padding: const EdgeInsets.only(top: 17, right: 21, left: 21, bottom: 17),
             child: Column(
                 children: <Widget> [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 30, top: 10),
+                    child: Row(
+                        children: <Widget> [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Pick a date: ",
+                              style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Container(
+                              child: InkWell(
+                                  onTap: () {
+                                    datePicker(context);
+                                  },
+                                  child: Container(
+                                      padding: const EdgeInsets.only(left: 17),
+                                      child: ImageIcon(
+                                        AssetImage(Global.CALENDAR_ICON),
+                                        color: Color(Global.BLUE),
+                                        size: 18,
+                                      )
+                                  )
+                              )
+                          )
+                        ]
+                    ),
+                  ),
+                  Container(
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: initDate != "" ? Container(
+                            margin: const EdgeInsets.only(bottom: 30),
+                            child: InkWell(
+                                onTap: () => datePicker(context),
+                                child: Container(
+                                    padding: const EdgeInsets.only(left: 17),
+                                    child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDate).toString(),
+                                        style: const TextStyle(
+                                          color: Color(0xff4F4F4F),
+                                          fontFamily: 'book',
+                                          fontSize: 15,
+                                        )
+                                    )
+                                )
+                            )
+                        ) : Container()
+                    ),
+                  ),
                   DropdownButtonFormField<String>(
                     hint: Text("Choose"),
                     dropdownColor: Colors.white,

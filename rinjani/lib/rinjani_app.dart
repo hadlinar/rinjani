@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'app_module.dart';
 import 'router.dart' as r;
 
 class RinjaniApp extends StatelessWidget {
@@ -7,11 +9,16 @@ class RinjaniApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: AppModule.alice.getNavigatorKey(),
       theme: ThemeData(
           backgroundColor: Color(0xFFffffff),
           primaryColor: Color(0xFF008ECC),
           accentColor: Color(0xFF008ECC),
           canvasColor: Colors.transparent,
+          appBarTheme: AppBarTheme(
+            backwardsCompatibility: false, // 1
+            systemOverlayStyle: SystemUiOverlayStyle.dark, // 2
+          ),
           textTheme: TextTheme(
               bodyText1: TextStyle(
                   fontFamily: "CircularStd-Bold", fontWeight: FontWeight.bold),

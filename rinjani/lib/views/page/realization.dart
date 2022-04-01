@@ -7,16 +7,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:rinjani/widget/custom_text_field.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
+import 'package:intl/intl.dart';
 
 class Realization extends StatefulWidget{
-  Visit? visit;
-  bool? fromCal;
-
-  Realization({this.visit, this.fromCal});
 
   @override
   State<StatefulWidget> createState() {
@@ -39,9 +35,21 @@ class _Realization extends State<Realization> {
   String timeStart = "";
   String timeFinish = "";
 
+  bool locationClicked = false;
+
   final descriptionController = TextEditingController();
   final nameController = TextEditingController();
+  final picController = TextEditingController();
   late List<TextEditingController> listNameController = [];
+  late List<TextEditingController> listPicController = [];
+
+  String? _selectedType;
+  String? _selectedTime;
+
+  List typeVal = [
+    "In-office",
+    "Out-office"
+  ];
 
   String Address = '';
   Position? _position;
@@ -55,11 +63,13 @@ class _Realization extends State<Realization> {
     });
   }
 
-  Future<void> GetAddressFromLatLong(Position position)async {
+  Future<void> GetAddressFromLatLong(Position position) async {
+    print("masuk bawahnya");
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
     // print(placemarks);
     Placemark place = placemarks[0];
     setState(()  {
+      locationClicked = true;
       Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
@@ -80,25 +90,14 @@ class _Realization extends State<Realization> {
   List<Visit> visit=[];
   List<String> custName = [];
   List<String> custPos = [];
+  List<String> time = [];
 
   @override
   void initState() {
     super.initState();
+    _selectedType = "In-office";
     cust = [];
     position = [];
-    print(widget.fromCal);
-    if(widget.fromCal == true) {
-      visit.add(widget.visit!);
-
-      nameController.text = visit[0].pic_name;
-      _selectedPIC = visit[0].pic_position;
-      _selectedCust = visit[0].cust_name;
-
-      visitNo = visit[0].visit_no;
-      branchId = visit[0].branch_id;
-      timeStart = visit[0].time_start.toString();
-      timeFinish = visit[0].time_finish.toString();
-    }
     BlocProvider.of<VisitBloc>(context).add(GetVisitEvent());
   }
 
@@ -134,14 +133,18 @@ class _Realization extends State<Realization> {
                     child: CircularProgressIndicator()
                 );
               }
-              else if (state is GetVisitState) {
+              if (state is GetVisitState) {
                 for(int i=0; i<state.getVisit.length; i++) {
-                  cust.add(state.getVisit[i].cust_name);
+                  if(state.getVisit[i].visit_id == "02") {
+                    cust.add(state.getVisit[i].cust_name);
+                  } else if(state.getVisit[i].visit_id == "01") {
+                    time.add(state.getVisit[i].time_start.toString());
+                  }
                 }
-
                 setState(() {
                   visit = state.getVisit;
                   cust;
+                  time;
                   custName = cust.toSet().toList();
                 });
               }
@@ -169,263 +172,295 @@ class _Realization extends State<Realization> {
                               children: <Widget> [
                                 Container(
                                     padding: const EdgeInsets.only(top: 22),
-                                    child: DropdownSearch<String>(
-                                      mode: Mode.MENU,
-                                      showClearButton: true,
-                                      selectedItem: widget.fromCal == true? visit[0].cust_name: _selectedCust,
-                                      items: custName,
-                                      label: "Customer",
-                                      showSearchBox: true,
-                                      onChanged: (val) {
+                                    child: DropdownButtonFormField<String>(
+                                      hint: const Text("Choose type of plan"),
+                                      dropdownColor: Colors.white,
+                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                      value: _selectedType,
+                                      items: typeVal.map((e) {
+                                        return DropdownMenuItem<String>(
+                                          value: e,
+                                          child: Text(e),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? value) {
                                         setState(() {
-                                          custPos = [];
-                                          _selectedPIC = null;
-                                          listNameController = [];
-                                          _selectedCust = val;
-                                          nameController.text = "";
-                                          for(int i=0; i<visit.length; i++) {
-                                            if(visit[i].cust_name == _selectedCust) {
-                                              custPos.add(visit[i].pic_position);
-                                              custId = visit[i].cust_id;
-                                            }
-                                          }
+                                          _selectedType = value;
                                         });
                                       },
-                                      dropdownSearchDecoration: InputDecoration(
-                                        labelText: "Select a customer",
-                                        labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                        alignLabelWithHint: true,
-                                        contentPadding: EdgeInsets.only(left: 12),
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                        labelText: "Type",
+                                        labelStyle: const TextStyle(
+                                            color: Color(0xff757575),
+                                            fontSize: 15,
+                                            fontFamily: 'medium'),
                                         border: OutlineInputBorder(
-                                            borderRadius: BorderRadius .circular(10),
-                                            borderSide: BorderSide()),
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                            borderSide: BorderSide()
+                                        ),
                                       ),
                                     )
                                 ),
-                                Container(
-                                    child: Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Container(
-                                                padding: const EdgeInsets.only(top: 22, bottom: 17),
-                                                child: DropdownSearch<String>(
-                                                  mode: Mode.MENU,
-                                                  showClearButton: true,
-                                                  selectedItem: widget.fromCal == true? visit[0].pic_position : _selectedPIC,
-                                                  items: custPos,
-                                                  label: "PIC",
-                                                  showSearchBox: true,
-                                                  onChanged: (val) {
-                                                    setState(() {
-                                                      nameController.text = "";
-                                                      listNameController = [];
-                                                      _selectedPIC = val;
-                                                      for(int i=0; i<visit.length; i++) {
-                                                        if(visit[i].pic_position == _selectedPIC) {
-                                                          nameController.text = visit[i].pic_name;
-                                                          visitNo = visit[i].visit_no;
-                                                          branchId = visit[i].branch_id;
-                                                          timeStart = visit[i].time_start.toString();
-                                                          timeFinish = visit[i].time_finish.toString();
-                                                        }
-                                                      }
 
-                                                      listNameController = [
-                                                        for (int i = 0; i < nameController.text.split(', ').length; i++)
-                                                          TextEditingController()
-                                                      ];
-
-                                                      for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                        listNameController[i].text = nameController.text.split(', ')[i];
-                                                      }
-                                                    });
-                                                  },
-                                                  // selectedItem: _selectedPIC,
-                                                  dropdownSearchDecoration: InputDecoration(
-                                                    labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                                    alignLabelWithHint: true,
-                                                    contentPadding: const EdgeInsets.only(left: 12),
-                                                    border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius .circular(10),
-                                                        borderSide: const BorderSide()),
-                                                  ),
-                                                )
+                                _selectedType == "" ? Container() : Container(
+                                  child: Column(
+                                    children: <Widget> [
+                                      _selectedType == "In-office" ? Container() : Container(
+                                          padding: const EdgeInsets.only(top: 22),
+                                          child: DropdownSearch<String>(
+                                            mode: Mode.MENU,
+                                            showClearButton: true,
+                                            selectedItem: _selectedCust,
+                                            items: custName,
+                                            label: "Customer",
+                                            showSearchBox: true,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                custPos = [];
+                                                _selectedPIC = null;
+                                                listNameController = [];
+                                                _selectedCust = val;
+                                                picController.text = "";
+                                                nameController.text = "";
+                                                for(int i=0; i<visit.length; i++) {
+                                                  if(visit[i].cust_name == _selectedCust) {
+                                                    custPos.add(visit[i].pic_position);
+                                                    custId = visit[i].cust_id;
+                                                  }
+                                                }
+                                              });
+                                            },
+                                            dropdownSearchDecoration: InputDecoration(
+                                              labelText: "Select a customer",
+                                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                              alignLabelWithHint: true,
+                                              contentPadding: EdgeInsets.only(left: 12),
+                                              border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius .circular(10),
+                                                  borderSide: BorderSide()),
                                             ),
-                                            widget.fromCal == true ? (visit[0].pic_position != null ? Container(
-                                                child: visit[0].pic_position.contains(",") ? Container(
-                                                    child: ListView.builder(
-                                                        itemCount: visit[0].pic_position.split(", ").length,
-                                                        scrollDirection: Axis.vertical,
-                                                        shrinkWrap: true,
-                                                        physics: const NeverScrollableScrollPhysics(),
-                                                        itemBuilder: (context, j){
-                                                          return Container(
-                                                              child: Column(
-                                                                  children: <Widget> [
-                                                                    Align(
-                                                                      alignment: Alignment.centerLeft,
-                                                                      child: Text("PIC position ${j + 1}: ${ visit[0].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                                    ),
-                                                                    Container(
-                                                                      padding: const EdgeInsets.only(top: 17),
-                                                                      child: CustomTextField(label: 'Name', controller: listNameController[j]),
-                                                                    ),
-                                                                  ]
-                                                              )
-
-                                                          );
-                                                        }
-                                                    )
-                                                ) : Container(
-                                                    padding: const EdgeInsets.only(top: 17),
-                                                    child: Column(
-                                                        children: <Widget> [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text("PIC position: ${ visit[0].pic_position}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                          ),
-                                                          Container(
-                                                            padding: const EdgeInsets.only(top: 22),
-                                                            child: CustomTextField(label: 'Name', controller: nameController),
-                                                          ),
-                                                        ]
-                                                    )
-                                                )
-                                            ) : Container(
-                                                padding: const EdgeInsets.only(top: 17, left: 5),
-                                                child: Column(
-                                                    children: <Widget> [
-                                                      Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text("PIC position: ",
-                                                            style: Global.getCustomFont(Global.BLACK, 15, 'bold')
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding: const EdgeInsets.only(top: 22),
-                                                        child: CustomTextField(label: 'Name', controller: nameController),
-                                                      ),
-                                                    ]
-                                                )
-                                            ))
-                                                : (_selectedPIC != null ? Container(
-                                                child: _selectedPIC.contains(",") ? Container(
-                                                    child: ListView.builder(
-                                                        itemCount:_selectedPIC.split(", ").length,
-                                                        scrollDirection: Axis.vertical,
-                                                        shrinkWrap: true,
-                                                        physics: const NeverScrollableScrollPhysics(),
-                                                        itemBuilder: (context, j){
-                                                          return Container(
-                                                              child: Column(
-                                                                  children: <Widget> [
-                                                                    Align(
-                                                                      alignment: Alignment.centerLeft,
-                                                                      child: Text("PIC position ${j + 1}: ${_selectedPIC.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                                    ),
-                                                                    Container(
-                                                                      padding: const EdgeInsets.only(top: 17),
-                                                                      child: CustomTextField(label: 'Name', controller: listNameController[j]),
-                                                                    ),
-                                                                  ]
-                                                              )
-
-                                                          );
-                                                        }
-                                                    )
-                                                ) : Container(
-                                                    padding: const EdgeInsets.only(top: 17),
-                                                    child: Column(
-                                                        children: <Widget> [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text("PIC position: ${_selectedPIC}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
-                                                          ),
-                                                          Container(
-                                                            padding: const EdgeInsets.only(top: 22),
-                                                            child: CustomTextField(label: 'Name', controller: listNameController[0]),
-                                                          ),
-                                                        ]
-                                                    )
-                                                )
-                                            ) : Container(
-                                                padding: const EdgeInsets.only(top: 17, left: 5),
-                                                child: Column(
-                                                    children: <Widget> [
-                                                      Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text("PIC position: ",
-                                                            style: Global.getCustomFont(Global.BLACK, 15, 'bold')
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding: const EdgeInsets.only(top: 22),
-                                                        child: CustomTextField(label: 'Name', controller: nameController),
-                                                      ),
-                                                    ]
-                                                )
-                                            ))
-                                          ],
-                                        )
-                                    )
-                                ),
-                                Container(
-                                  child: TextFormField(
-                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                    controller: descriptionController,
-                                    maxLines: 5,
-                                    maxLength: 200,
-                                    decoration: InputDecoration(
-                                      labelText: "Description",
-                                      alignLabelWithHint: true,
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius .circular(10),
-                                          borderSide: BorderSide()),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      // width: double.infinity,
-                                      color: Colors.white,
-                                      child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                              padding: EdgeInsets.only(top: 9, bottom: 9),
-                                              width: 163,
-                                              height: 56,
-                                              color: Colors.white,
-                                              child: RaisedButton(
-                                                  shape: RoundedRectangleBorder(
-                                                      side: BorderSide(color: Color(Global.BLUE)),
-                                                      borderRadius: BorderRadius.circular(20)
-                                                  ),
-                                                  color: Color(Global.BLUE),
-                                                  onPressed: () {
-                                                    getCurrentLocation();
-                                                  },
-                                                  child: const Text(
-                                                    "Set location",
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily: 'bold',
-                                                        fontSize: 15
-                                                    ),
-                                                  )
+                                          )
+                                      ),
+                                      _selectedType == "In-office" ? Container(
+                                          padding: const EdgeInsets.only(top: 22),
+                                          child: DropdownButtonFormField<String>(
+                                            hint: const Text("Time"),
+                                            dropdownColor: Colors.white,
+                                            style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                            value: _selectedTime,
+                                            items: time.map((e) {
+                                              return DropdownMenuItem<String>(
+                                                value: e,
+                                                child: Text(DateFormat("HH:mm").format(DateFormat("yyyy-MM-dd HH:mm").parse(e))),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? value) {
+                                              setState(() {
+                                                _selectedTime = value;
+                                                print(_selectedTime);
+                                                for(int i=0; i<visit.length; i++) {
+                                                  if(visit[i].time_start.toString() == _selectedTime) {
+                                                    descriptionController.text = visit[i].description;
+                                                    visitNo = visit[i].visit_no;
+                                                    branchId = visit[i].branch_id;
+                                                    timeFinish = visit[i].time_finish.toString();
+                                                  }
+                                                }
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                              contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                              labelText: "Time",
+                                              labelStyle: const TextStyle(
+                                                  color: Color(0xff757575),
+                                                  fontSize: 15,
+                                                  fontFamily: 'medium'),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(10),
+                                                  borderSide: BorderSide()
                                               ),
                                             ),
-                                            Container(
-                                                padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
-                                                child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
-                                              // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
-                                            ),
-                                          ]
+                                          )
+                                      ) : Container(
+                                          child: Container(
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                      padding: const EdgeInsets.only(top: 22, bottom: 17),
+                                                      child: DropdownSearch<String>(
+                                                        mode: Mode.MENU,
+                                                        showClearButton: true,
+                                                        selectedItem: _selectedPIC,
+                                                        items: custPos,
+                                                        label: "PIC",
+                                                        // showSearchBox: true,
+                                                        onChanged: (String? value) {
+                                                          setState(() {
+                                                            _selectedPIC = value;
+                                                            nameController.text = "";
+                                                            listNameController = [];
+                                                            listPicController = [];
+                                                            for(int i=0; i<visit.length; i++) {
+                                                              if(visit[i].pic_position == _selectedPIC) {
+                                                                nameController.text = visit[i].pic_name;
+                                                                picController.text = _selectedPIC;
+                                                                visitNo = visit[i].visit_no;
+                                                                branchId = visit[i].branch_id;
+                                                                timeStart = visit[i].time_start.toString();
+                                                                timeFinish = visit[i].time_finish.toString();
+                                                              }
+                                                            }
+
+                                                            listNameController = [
+                                                              for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                                TextEditingController()
+                                                            ];
+
+                                                            listPicController = [
+                                                              for (int i = 0; i < _selectedPIC.split(', ').length; i++)
+                                                                TextEditingController()
+                                                            ];
+
+                                                            for(int i = 0; i < nameController.text.split(', ').length; i++){
+                                                              listNameController[i].text = nameController.text.split(', ')[i];
+                                                            }
+
+                                                            for(int i = 0; i < _selectedPIC.split(', ').length; i++){
+                                                              listPicController[i].text = picController.text.split(', ')[i];
+                                                            }
+                                                          });
+                                                        },
+                                                        dropdownSearchDecoration: InputDecoration(
+                                                          labelText: "PIC",
+                                                          labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                          alignLabelWithHint: true,
+                                                          contentPadding: EdgeInsets.only(left: 12),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius .circular(10),
+                                                              borderSide: BorderSide()),
+                                                        ),
+                                                      )
+                                                  ),
+                                                  Container(
+                                                      padding: const EdgeInsets.only(bottom: 17),
+                                                      child: Divider()
+                                                  ),
+                                                  _selectedPIC != null ? Container(
+                                                      child: _selectedPIC.contains(",") ? Container(
+                                                          child: ListView.builder(
+                                                              itemCount:_selectedPIC.split(", ").length,
+                                                              scrollDirection: Axis.vertical,
+                                                              shrinkWrap: true,
+                                                              physics: const NeverScrollableScrollPhysics(),
+                                                              itemBuilder: (context, j){
+                                                                return Container(
+                                                                    child: Column(
+                                                                        children: <Widget> [
+                                                                          Container(
+                                                                            child: CustomTextField(label: 'PIC', controller: listPicController[j]),
+                                                                          ),
+                                                                          Container(
+                                                                            child: CustomTextField(label: 'Name', controller: listNameController[j]),
+                                                                          ),
+                                                                        ]
+                                                                    )
+
+                                                                );
+                                                              }
+                                                          )
+                                                      ) : Container(
+                                                          child: Column(
+                                                              children: <Widget> [
+                                                                Container(
+                                                                  child: CustomTextField(label: 'PIC', controller: listPicController[0]),
+                                                                ),
+                                                                Container(
+                                                                  child: CustomTextField(label: 'Name', controller: listNameController[0]),
+                                                                ),
+                                                              ]
+                                                          )
+                                                      )
+                                                  ) :
+                                                  Container(
+                                                      child: Column(
+                                                          children: <Widget> [
+                                                            Container(
+                                                              child: CustomTextField(label: 'PIC', controller: picController),
+                                                            ),
+                                                            Container(
+                                                              child: CustomTextField(label: 'Name', controller: nameController),
+                                                            ),
+                                                          ]
+                                                      )
+                                                  )
+                                                ],
+                                              )
+                                          )
                                       ),
-                                    )
-                                ),
+                                      Container(
+                                        padding: _selectedType == "In-office" ? const EdgeInsets.only(top: 17) : const EdgeInsets.all(0),
+                                        child: TextFormField(
+                                          style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                          controller: descriptionController,
+                                          maxLines: 5,
+                                          maxLength: 200,
+                                          decoration: InputDecoration(
+                                            labelText: "Description",
+                                            alignLabelWithHint: true,
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius .circular(10),
+                                                borderSide: BorderSide()),
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Container(
+                                            // width: double.infinity,
+                                            color: Colors.white,
+                                            child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Container(
+                                                    padding: EdgeInsets.only(top: 9, bottom: 9),
+                                                    width: 163,
+                                                    height: 56,
+                                                    color: Colors.white,
+                                                    child: RaisedButton(
+                                                        shape: RoundedRectangleBorder(
+                                                            side: BorderSide(color: Color(Global.BLUE)),
+                                                            borderRadius: BorderRadius.circular(20)
+                                                        ),
+                                                        color: Color(Global.BLUE),
+                                                        onPressed: () {
+                                                          getCurrentLocation();
+                                                        },
+                                                        child: const Text(
+                                                          "Set location",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontFamily: 'bold',
+                                                              fontSize: 15
+                                                          ),
+                                                        )
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                      padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
+                                                      child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
+                                                    // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
+                                                  ),
+                                                ]
+                                            ),
+                                          )
+                                      ),
+                                    ]
+                                  )
+                                )
                               ]
                           )
                       ),
@@ -436,7 +471,8 @@ class _Realization extends State<Realization> {
           bottomNavigationBar: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                  padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                  margin: const EdgeInsets.only(bottom: 20),
                   width: double.infinity,
                   height: 56,
                   color: Colors.white,
@@ -452,35 +488,61 @@ class _Realization extends State<Realization> {
                           name.add(listNameController[i].text);
                         }
                         String picName = name.join(", ");
-                        print(picName);
-                        print(visitNo);
-                        print(branchId);
-                        print(_selectedCust); //
-                        print(_position!.longitude.toString(),);
-                        print(store.get("nik")); //
-                        print(descriptionController.text);
-                        print(_selectedPIC); //
-                        print(nameController.text);
-                        print('y');
-                        print("0.7893");
-                        print("113.9213");
 
-                        // BlocProvider.of<VisitBloc>(context).add(
-                        //     AddRealizationEvent(
-                        //       visitNo,
-                        //       branchId,
-                        //       custId,
-                        //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toLocal().toString(),
-                        //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeFinish).toLocal().toString(),
-                        //       store.get("nik"),
-                        //       descriptionController.text,
-                        //       _selectedPIC,
-                        //       picName,
-                        //       "y",
-                        //       _position!.latitude.toString(),
-                        //       _position!.longitude.toString(),
-                        //     )
-                        // );
+                        List<String> pos = [];
+                        for(int i=0; i<listPicController.length; i++) {
+                          pos.add(listPicController[i].text);
+                        }
+                        String picPos = pos.join(", ");
+
+                        _selectedType == "In-office" ?
+                            (descriptionController.text != "" && locationClicked == true ? BlocProvider.of<VisitBloc>(context).add(
+                                AddRealizationEvent(
+                                  visitNo,
+                                  branchId,
+                                  "",
+                                  _selectedTime!,
+                                  DateTime.now().toString(),
+                                  store.get("nik"),
+                                  descriptionController.text,
+                                  "",
+                                  "",
+                                  "y",
+                                  _position!.latitude.toString(),
+                                  _position!.longitude.toString(),
+                                )
+                            ) : showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Global.defaultModal(() {
+                                    Navigator.pop(context);
+                                  }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                }
+                            ))
+                            : (descriptionController.text != "" && locationClicked == true && picPos != "" && picName != "" && custId != ""? BlocProvider.of<VisitBloc>(context).add(
+                            AddRealizationEvent(
+                              visitNo,
+                              branchId,
+                              custId,
+                              DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toString(),
+                              DateTime.now().toString(),
+                              store.get("nik"),
+                              descriptionController.text,
+                              picPos,
+                              picName,
+                              "y",
+                              _position!.latitude.toString(),
+                              _position!.longitude.toString(),
+                            )
+                        ) : showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Global.defaultModal(() {
+                                Navigator.pop(context);
+                              }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                            }
+                        ));
+
 
                       },
                       child: const Text(

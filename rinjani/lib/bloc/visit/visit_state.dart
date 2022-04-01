@@ -42,3 +42,5 @@ class SuccessAddVisitState extends VisitBlocState{}
 class SuccessAddRealizationState extends VisitBlocState{}
 
 class NotLogginInState extends VisitBlocState{}
+
+class SuccessDeleteVisitState extends VisitBlocState{}

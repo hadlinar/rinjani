@@ -59,39 +59,6 @@ class _OutOffice extends State<OutOffice> {
                     margin: const EdgeInsets.only(bottom: 5),
                     child: const Divider(),
                   ),
-                  // Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Container(
-                  //       width: double.infinity,
-                  //       color: Colors.white,
-                  //       child: Stack(
-                  //           children: <Widget>[
-                  //             Container(
-                  //               padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                  //               width: 153,
-                  //               height: 56,
-                  //               color: Colors.white,
-                  //               child: RaisedButton(
-                  //                   shape: RoundedRectangleBorder(
-                  //                       side: BorderSide(color: Color(Global.BLUE)),
-                  //                       borderRadius: BorderRadius.circular(20)
-                  //                   ),
-                  //                   color: Color(Global.BLUE),
-                  //                   onPressed: _addCount,
-                  //                   child: const Text(
-                  //                     "Add visit",
-                  //                     style: TextStyle(
-                  //                         color: Colors.white,
-                  //                         fontFamily: 'bold',
-                  //                         fontSize: 15
-                  //                     ),
-                  //                   )
-                  //               ),
-                  //             ),
-                  //           ]
-                  //       ),
-                  //     )
-                  // ),
                 ]
             )
         )
@@ -123,7 +90,7 @@ class _AddPlan extends State<AddPlan> {
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
 
-  DateTime initialDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day+1);
+  DateTime initialDate = DateTime.now();
 
   DateTime start = DateTime.now();
   DateTime end = DateTime.now();
@@ -131,7 +98,12 @@ class _AddPlan extends State<AddPlan> {
   int indexCard = 0;
   int indexPIC = 0;
 
+  bool clicked = false;
+  bool clickedStart = false;
+  bool clickedEnd = false;
+
   late String result;
+  late String initDate;
 
   Column createCard(int key) {
     String pos = '';
@@ -252,17 +224,20 @@ class _AddPlan extends State<AddPlan> {
     cards.add(createCard(indexPIC));
     _values = [];
     result = '';
+    initDate = "";
   }
 
   void datePicker(ctx) {
     showDatePicker(
         context: context,
-        initialDate: DateTime(initialDate.year, initialDate.month, initialDate.day+1),
-        firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2050)
     ).then((date) {
       setState((){
+        store.set("clicked", true);
         initialDate = date!;
+        initDate = initialDate.toString();
       });
     });
   }
@@ -295,7 +270,11 @@ class _AddPlan extends State<AddPlan> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                onPressed: () {
+                  clickedStart = true;
+                  Navigator.of(ctx).pop();
+                  store.set("clickedStart", clickedStart);
+                }
               )
             ],
           ),
@@ -331,7 +310,11 @@ class _AddPlan extends State<AddPlan> {
                 child: Text("Save",
                   style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
                 ),
-                onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    clickedEnd = true;
+                    Navigator.of(ctx).pop();
+                    store.set("clickedEnd", clickedEnd);
+                  }
               )
             ],
           ),
@@ -359,18 +342,36 @@ class _AddPlan extends State<AddPlan> {
                     child:
                     Column(
                       children: <Widget> [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("Date",
-                            style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                            textAlign: TextAlign.left,
-                          ),
+                        Row(
+                            children: <Widget> [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Pick a date: ",
+                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                  child: InkWell(
+                                      onTap: () {
+                                        datePicker(context);
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.only(left: 17),
+                                          child: ImageIcon(
+                                            AssetImage(Global.CALENDAR_ICON),
+                                            color: Color(Global.BLUE),
+                                            size: 18,
+                                          )
+                                      )
+                                  )
+                              )
+                            ]
                         ),
                         Container(
                           child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Container(
-                                // width: 130,
+                              child: initDate != "" ? Container(
                                   margin: const EdgeInsets.only(bottom: 30, top: 17),
                                   child: InkWell(
                                       onTap: () => datePicker(context),
@@ -385,7 +386,7 @@ class _AddPlan extends State<AddPlan> {
                                           )
                                       )
                                   )
-                              )
+                              ) : Container()
                           ),
                         ),
                         Align(

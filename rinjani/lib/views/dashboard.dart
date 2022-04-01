@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rinjani/bloc/user/user_bloc.dart';
 import 'package:rinjani/utils/global.dart';
@@ -30,7 +31,6 @@ class _Dashboard extends State<Dashboard> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserBloc, UserBlocState>(
       builder: (context, state) {
-        print(state.toString() + " dashboard");
         if(state is LoadingUserState || state is InitialUserBlocState) {
           return Container(
             color: Colors.white,
@@ -41,169 +41,184 @@ class _Dashboard extends State<Dashboard> {
         }
         if(state is GetUserState) {
           store.set("role_id", state.getUser.role_id);
+          store.set("user_id", state.getUser.user_id);
           store.set("branch_id", state.getUser.branch_id);
-          return Scaffold(
-              extendBodyBehindAppBar: true,
-              appBar: AppBar(
-                elevation: 0,
-                automaticallyImplyLeading: false,
-                backgroundColor: Colors.transparent,
-              ),
-              body: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFF3FCFF),
-                        Color(0xFF32BFFC),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.center,
-                    )
+          return WillPopScope(
+            onWillPop: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Global.defaultModal(() {
+                      Navigator.pop(context);
+                      SystemNavigator.pop();
+                    }, context, Global.WARNING_ICON, "Are you sure you want to quit Rinjani?", "Yes", true);
+                  }
+              );
+              return Future.value(true);
+            },
+            child: Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                  elevation: 0,
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.transparent,
                 ),
-                child: ListView(
-                  physics: NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget> [
-                        Container(
-                          padding: const EdgeInsets.only(right: 22),
-                          child: InkWell(
-                            child: IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Global.defaultModal(() {
-                                          Navigator.pop(context);
-                                          BlocProvider.of<UserBloc>(
-                                              context)
-                                              .add(LogoutEvent());
-                                        }, context, Global.WARNING_ICON, "Are you sure you want to log out?", "Yes", true);
-                                      }
-                                  );
-                                },
-                                icon: ImageIcon(
-                                  AssetImage(Global.LOGOUT_ICON),
-                                  color: Color(Global.BLACK),
-                                  size: 28,
-                                )
+                body: Container(
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFFF3FCFF),
+                          Color(0xFF32BFFC),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.center,
+                      )
+                  ),
+                  child: ListView(
+                    physics: NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget> [
+                          Container(
+                            padding: const EdgeInsets.only(right: 22),
+                            child: InkWell(
+                              child: IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Global.defaultModal(() {
+                                            Navigator.pop(context);
+                                            BlocProvider.of<UserBloc>(
+                                                context)
+                                                .add(LogoutEvent());
+                                          }, context, Global.WARNING_ICON, "Are you sure you want to log out?", "Yes", true);
+                                        }
+                                    );
+                                  },
+                                  icon: ImageIcon(
+                                    AssetImage(Global.LOGOUT_ICON),
+                                    color: Color(Global.BLACK),
+                                    size: 28,
+                                  )
+                              ),
+                            )
+                          )
+                        ]
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: 21, left: 22, right: 22),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                state.getUser.name,
+                                style: Global.getCustomFont(Global.BLACK, 22, 'bold')
                             ),
                           )
-                        )
-                      ]
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 21, left: 22, right: 22),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              state.getUser.name,
-                              style: Global.getCustomFont(Global.BLACK, 22, 'bold')
-                          ),
-                        )
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 12, left: 22, right: 22, bottom: 32),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              state.getUser.nik,
-                              style: Global.getCustomFont(Global.BLACK, 22, 'book')
-                          ),
-                        )
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.center,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.white,
-                                  Colors.white,
-                                ]
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: 12, left: 22, right: 22, bottom: 32),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                state.getUser.nik,
+                                style: Global.getCustomFont(Global.BLACK, 22, 'book')
                             ),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30)
-                            )
-                        ),
-                        child: state.getUser.role_id == "2" ? Container(
-                          padding: EdgeInsets.only(top: 32, left: 42),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => Report()
-                                        ));
-                                      },
-                                      child: Global.getMenuCard("report.png", 0xffF2EFA7)
-                                  ),
-                                  Global.getMenuText("Report")
-                                ],
-                              )
-                            ],
-                          ),
-                        ) :
-                        Container(
-                          padding: EdgeInsets.only(top: 32),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => Calendar()
-                                        ));
-                                      },
-                                      child: Global.getMenuCard("planning.png", 0xffE1BBBB)
-                                  ),
-                                  Global.getMenuText("Planning")
-                                ],
+                          )
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.center,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.white,
+                                    Colors.white,
+                                  ]
                               ),
-                              Column(
-                                children: <Widget>[
-                                  GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => Realization()
-                                        ));
-                                      },
-                                      child: Global.getMenuCard("realization.png", 0xffDAC2ED)
-                                  ),
-                                  Global.getMenuText("Realization")
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => Report()
-                                        ));
-                                      },
-                                      child: Global.getMenuCard("report.png", 0xffF2EFA7)
-                                  ),
-                                  Global.getMenuText("Report")
-                                ],
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30)
                               )
-                            ],
                           ),
-                        )
-                    ),
-                  ],
-                ),
-              )
+                          child: state.getUser.role_id == "2" ? Container(
+                            padding: EdgeInsets.only(top: 32, left: 42),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => Report()
+                                          ));
+                                        },
+                                        child: Global.getMenuCard("report.png", 0xffF2EFA7)
+                                    ),
+                                    Global.getMenuText("Report")
+                                  ],
+                                )
+                              ],
+                            ),
+                          ) :
+                          Container(
+                            padding: EdgeInsets.only(top: 32),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => Calendar()
+                                          ));
+                                        },
+                                        child: Global.getMenuCard("planning.png", 0xffE1BBBB)
+                                    ),
+                                    Global.getMenuText("Planning")
+                                  ],
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => Realization()
+                                          ));
+                                        },
+                                        child: Global.getMenuCard("realization.png", 0xffDAC2ED)
+                                    ),
+                                    Global.getMenuText("Realization")
+                                  ],
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => Report()
+                                          ));
+                                        },
+                                        child: Global.getMenuCard("report.png", 0xffF2EFA7)
+                                    ),
+                                    Global.getMenuText("Report")
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
+                )
+            ),
           );
         }
         if(state is FailedUserState || state is NotLoggedinState) {
