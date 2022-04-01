@@ -149,7 +149,8 @@ class _Plan extends State<Plan> {
                 bottomNavigationBar: Stack(
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                        padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                        margin: const EdgeInsets.only(bottom: 20),
                         width: double.infinity,
                         height: 56,
                         color: Colors.white,
@@ -160,7 +161,6 @@ class _Plan extends State<Plan> {
                             ),
                             color: Color(Global.BLUE),
                             onPressed: () {
-
                               if(defaultType == "in-office") {
                                 String timeStart = store.get("timeStart").toString();
                                 String timeEnd = store.get("timeEnd").toString();

@@ -43,7 +43,6 @@ class _Dashboard extends State<Dashboard> {
           store.set("role_id", state.getUser.role_id);
           store.set("user_id", state.getUser.user_id);
           store.set("branch_id", state.getUser.branch_id);
-          print(state.getUser.user_id);
           return WillPopScope(
             onWillPop: () {
               showDialog(

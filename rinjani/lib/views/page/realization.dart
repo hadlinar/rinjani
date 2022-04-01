@@ -63,7 +63,8 @@ class _Realization extends State<Realization> {
     });
   }
 
-  Future<void> GetAddressFromLatLong(Position position)async {
+  Future<void> GetAddressFromLatLong(Position position) async {
+    print("masuk bawahnya");
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
     // print(placemarks);
     Placemark place = placemarks[0];
@@ -470,7 +471,8 @@ class _Realization extends State<Realization> {
           bottomNavigationBar: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                  padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                  margin: const EdgeInsets.only(bottom: 20),
                   width: double.infinity,
                   height: 56,
                   color: Colors.white,

@@ -84,9 +84,13 @@ class _LoginPage extends State<LoginPage> {
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
         },
-          child: SafeArea(
-            child: Scaffold(
+          child:  Scaffold(
                 backgroundColor: Colors.white,
+                appBar: AppBar(
+                  elevation: 0,
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.transparent,
+                ),
                 body: SingleChildScrollView(
                   child: Container(
                       padding: const EdgeInsets.only(left: 21, right: 21),
@@ -177,7 +181,6 @@ class _LoginPage extends State<LoginPage> {
                   ),
                 )
             )
-        )
         )
     );
   }
