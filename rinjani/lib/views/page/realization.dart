@@ -56,6 +56,7 @@ class _Realization extends State<Realization> {
 
   void getCurrentLocation() async {
     Position position = await _determinePosition();
+    print("masuk sini");
 
     setState(() {
       _position = position;
@@ -64,9 +65,8 @@ class _Realization extends State<Realization> {
   }
 
   Future<void> GetAddressFromLatLong(Position position) async {
-    print("masuk bawahnya");
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    // print(placemarks);
+    print(placemarks);
     Placemark place = placemarks[0];
     setState(()  {
       locationClicked = true;
@@ -360,7 +360,7 @@ class _Realization extends State<Realization> {
                                                                     child: Column(
                                                                         children: <Widget> [
                                                                           Container(
-                                                                            child: CustomTextField(label: 'PIC', controller: listPicController[j]),
+                                                                            child: CustomTextField(label: 'PIC ${j+1}', controller: listPicController[j]),
                                                                           ),
                                                                           Container(
                                                                             child: CustomTextField(label: 'Name', controller: listNameController[j]),

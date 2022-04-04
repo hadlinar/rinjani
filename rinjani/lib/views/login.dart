@@ -98,7 +98,7 @@ class _LoginPage extends State<LoginPage> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            height: 200,
+                            height: 239,
                             child: Image.asset(
                               'assets/images/logo.png',
                             ),
