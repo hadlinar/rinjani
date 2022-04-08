@@ -127,6 +127,8 @@ class _CalendarState extends State<Calendar> {
         details.targetElement == CalendarElement.agenda) {
       final Visit _visit = details.appointments![0];
 
+      var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toString());
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -159,7 +161,7 @@ class _CalendarState extends State<Calendar> {
                 _visit.visit_id == "02" ?
                 Container(
                   padding: const EdgeInsets.only(top: 5),
-                  height: 50,
+                  height: 80,
                   width: MediaQuery.of(context).size.width*0.75,
                   child: Align(
                       alignment: Alignment.centerLeft,
@@ -195,7 +197,8 @@ class _CalendarState extends State<Calendar> {
                 Container(
                   height: 17,
                 ),
-                DateTime.now().isAfter(_visit.time_start) ? Container(
+                DateTime.now().isAfter(time) ?
+                Container(
                   child: Container(
                       child: RaisedButton(
                           shape: RoundedRectangleBorder(
@@ -221,7 +224,7 @@ class _CalendarState extends State<Calendar> {
                           )
                       )
                   ),
-                ) : Row(
+                ):Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(

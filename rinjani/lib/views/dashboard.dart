@@ -34,7 +34,7 @@ class _Dashboard extends State<Dashboard> {
         if(state is LoadingUserState || state is InitialUserBlocState) {
           return Container(
             color: Colors.white,
-            child: Center(
+            child: const Center(
               child: CircularProgressIndicator()
             )
           );
@@ -42,6 +42,7 @@ class _Dashboard extends State<Dashboard> {
         if(state is GetUserState) {
           store.set("role_id", state.getUser.role_id);
           store.set("user_id", state.getUser.user_id);
+          store.set("name", state.getUser.name);
           store.set("branch_id", state.getUser.branch_id);
           return WillPopScope(
             onWillPop: () {
@@ -67,15 +68,15 @@ class _Dashboard extends State<Dashboard> {
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color(0xFFF3FCFF),
-                          Color(0xFF32BFFC),
+                          Color(0xFF9FC4D4),
+                          Color(0xFF0071A4),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.center,
                       )
                   ),
                   child: ListView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -98,8 +99,8 @@ class _Dashboard extends State<Dashboard> {
                                     );
                                   },
                                   icon: ImageIcon(
-                                    AssetImage(Global.LOGOUT_ICON),
-                                    color: Color(Global.BLACK),
+                                    const AssetImage(Global.LOGOUT_ICON),
+                                    color: Color(Global.WHITE),
                                     size: 28,
                                   )
                               ),
@@ -108,22 +109,22 @@ class _Dashboard extends State<Dashboard> {
                         ]
                       ),
                       Padding(
-                          padding: EdgeInsets.only(top: 21, left: 22, right: 22),
+                          padding: const EdgeInsets.only(top: 21, left: 22, right: 22),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                                 state.getUser.name,
-                                style: Global.getCustomFont(Global.BLACK, 22, 'bold')
+                                style: Global.getCustomFont(0xFFFFFFFF, 22, 'bold')
                             ),
                           )
                       ),
                       Padding(
-                          padding: EdgeInsets.only(top: 12, left: 22, right: 22, bottom: 32),
+                          padding: const EdgeInsets.only(top: 12, left: 22, right: 22, bottom: 32),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                                 state.getUser.nik,
-                                style: Global.getCustomFont(Global.BLACK, 22, 'book')
+                                style: Global.getCustomFont(0xFFFFFFFF, 22, 'book')
                             ),
                           )
                       ),

@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../models/pdf.dart';
 import '../../models/visit.dart';
 
 @immutable
@@ -44,3 +45,9 @@ class SuccessAddRealizationState extends VisitBlocState{}
 class NotLogginInState extends VisitBlocState{}
 
 class SuccessDeleteVisitState extends VisitBlocState{}
+
+class GetPDFState extends VisitBlocState{
+  List<PDF> getPDF;
+
+  GetPDFState(this.getPDF);
+}

@@ -28,6 +28,8 @@ class Global {
   static const WARNING_ICON = "assets/icon/ic_warning.png";
   static const EMPTY_ICON = "assets/icon/ic_empty.png";
   static const LOGOUT_ICON = "assets/icon/ic_logout.png";
+  static const DOWNLOAD_ICON = "assets/icon/ic_download.png";
+  static const LOGO_ICON = "assets/icon/ic_logo.png";
 
   static String ACCESS_TOKEN = "access_token";
 

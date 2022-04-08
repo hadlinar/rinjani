@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../models/visit.dart';
 import '../../utils/global.dart';
@@ -17,6 +19,25 @@ class DetailReport extends StatefulWidget {
 }
 
 class _DetailReport extends State<DetailReport> {
+  String address = '';
+
+  @override
+  void initState(){
+    super.initState();
+    GetAddressFromLatLong(widget.realization.latitude, widget.realization.longitude);
+  }
+
+  Future<void> GetAddressFromLatLong(double lat, double long) async {
+    print("${lat} ${long}");
+    double latitude = lat;
+    double longitude = long;
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    setState(()  {
+      address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +113,14 @@ class _DetailReport extends State<DetailReport> {
                                     'Customer',
                                     style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 30),
-                                    child: Text(
-                                      widget.realization.customer == null ? "null" : widget.realization.customer,
-                                      style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                    ),
+                                  Flexible(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(left: 30),
+                                      child: Text(
+                                        widget.realization.customer,
+                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                      ),
+                                    )
                                   )
                                 ],
                               )
@@ -159,6 +182,29 @@ class _DetailReport extends State<DetailReport> {
                                       "$time on $date",
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
+                                  )
+                                ],
+                              )
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 17),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: <Widget> [
+                                  Text(
+                                    'Location',
+                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(left: 38),
+                                      child: Text(
+                                        address,
+                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                      ),
+                                    )
                                   )
                                 ],
                               )

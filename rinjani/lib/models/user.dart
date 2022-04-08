@@ -7,6 +7,7 @@ class User{
   String nik;
   String name;
   String branch_id;
+  String branch_name;
   String email;
   String role_id;
   String flg_used;
@@ -16,6 +17,7 @@ class User{
     required this.nik,
     required this.name,
     required this.branch_id,
+    required this.branch_name,
     required this.email,
     required this.role_id,
     required this.flg_used

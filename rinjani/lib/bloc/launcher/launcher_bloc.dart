@@ -41,7 +41,6 @@ class LauncherBloc extends Bloc<LauncherBlocEvent, LauncherBlocState> {
         yield LoggedInState();
       }
       on DioError catch(e) {
-        print(e.response);
         _sharedPreferences.clear();
         yield NotLoggedinState();
       }

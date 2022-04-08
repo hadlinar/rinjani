@@ -86,3 +86,10 @@ class DeleteVisitEvent extends VisitBlocEvent{
 
   DeleteVisitEvent(this.visitNo);
 }
+
+class GetPDFEvent extends VisitBlocEvent{
+  String startDate;
+  String endDate;
+
+  GetPDFEvent(this.startDate, this.endDate);
+}

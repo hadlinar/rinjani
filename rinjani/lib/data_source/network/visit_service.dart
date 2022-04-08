@@ -2,6 +2,7 @@ import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
+import '../../models/pdf.dart';
 import '../../models/visit.dart';
 import '../../utils/global.dart';
 
@@ -39,4 +40,6 @@ abstract class VisitService{
   @DELETE('/visit/{visitNo}')
   Future<DeleteVisitResponse> deleteVisit(@Header("Authorization") String authorization, @Path('visitNo') String visitNo);
 
+  @GET('/pdf/{startDate}/{endDate}')
+  Future<PDFResponse> getPDF(@Header("Authorization") String authorization, @Path('startDate') String startDate, @Path('endDate') String endDate);
 }

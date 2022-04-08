@@ -57,7 +57,7 @@ class _LoginPage extends State<LoginPage> {
                           margin: EdgeInsets.only(top: 12),
                           child: Center(
                             child: Text("Please wait",
-                                style: Global.getCustomFont(Global.GREY, 14, 'normal'),
+                                style: Global.getCustomFont(Global.GREY, 14, 'book'),
                                 textAlign: TextAlign.center)
                           ),
                         ),
@@ -94,11 +94,11 @@ class _LoginPage extends State<LoginPage> {
                 body: SingleChildScrollView(
                   child: Container(
                       padding: const EdgeInsets.only(left: 21, right: 21),
-                      margin: const EdgeInsets.only(top: 80),
+                      margin: const EdgeInsets.only(top: 60),
                       child: Column(
                         children: <Widget>[
                           Container(
-                            height: 200,
+                            height: 239,
                             child: Image.asset(
                               'assets/images/logo.png',
                             ),
@@ -122,24 +122,52 @@ class _LoginPage extends State<LoginPage> {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(bottom: 20),
+                            margin: EdgeInsets.only(bottom: 32.0),
                             child: TextFormField(
-                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                              maxLines: 1,
-                              obscureText: true,
                               controller: passwordController,
                               onChanged: (text) {
                                 pass = text;
                               },
+                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                              obscureText: showPassword,
                               decoration: InputDecoration(
                                 labelText: "Password",
                                 alignLabelWithHint: true,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius .circular(10),
-                                    borderSide: BorderSide()),
+                                    borderSide: const BorderSide()
+                                ),
+                                suffixIcon: IconButton(
+                                    icon: const Icon(Icons.remove_red_eye),
+                                    onPressed: () {
+                                      setState(() {
+                                        showPassword = !showPassword;
+                                      });
+                                    }
+                                )
                               ),
                             ),
                           ),
+
+                          // Container(
+                          //   margin: const EdgeInsets.only(bottom: 20),
+                          //   child: TextFormField(
+                          //     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                          //     maxLines: 1,
+                          //     obscureText: true,
+                          //     controller: passwordController,
+                          //     onChanged: (text) {
+                          //       pass = text;
+                          //     },
+                          //     decoration: InputDecoration(
+                          //       labelText: "Password",
+                          //       alignLabelWithHint: true,
+                          //       border: OutlineInputBorder(
+                          //           borderRadius: BorderRadius .circular(10),
+                          //           borderSide: BorderSide()),
+                          //     ),
+                          //   ),
+                          // ),
                           Container(
                             child: Stack(
                                 children: <Widget>[
