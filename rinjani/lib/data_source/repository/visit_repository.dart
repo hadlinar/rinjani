@@ -1,5 +1,6 @@
 import 'package:rinjani/models/visit.dart';
 
+import '../../models/pdf.dart';
 import '../network/visit_service.dart';
 
 class VisitRepository {
@@ -95,6 +96,11 @@ class VisitRepository {
 
   Future<DeleteVisitResponse> deleteVisit(String token, String visitNo) async {
     final response = await visitService.deleteVisit(token, visitNo);
+    return response;
+  }
+
+  Future<PDFResponse> getPDF(String token, String startDate, String endDate) async {
+    final response = await visitService.getPDF(token, startDate, endDate);
     return response;
   }
 }

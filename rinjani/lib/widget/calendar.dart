@@ -128,9 +128,6 @@ class _CalendarState extends State<Calendar> {
       final Visit _visit = details.appointments![0];
 
       var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toString());
-      // print("${DateFormat("yyyy-MM-dd HH:mm:ss").format(time)} time finish");
-      // print("${DateTime.now()} now");
-      // print(DateTime.now().isAfter(time));
 
       showDialog(
         context: context,

@@ -48,7 +48,6 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
   Stream<UserBlocState> _mapUserToState(GetUserEvent e) async* {
     yield LoadingUserState();
     final token = _sharedPreferences.getString("access_token");
-    print(token);
     try{
       final response = await _userRepository.getUser("Bearer $token");
       if (response.message == "ok") {
@@ -56,12 +55,10 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
       }
 
     } on DioError catch(e) {
-      print(e.response?.statusCode);
       if(e.response?.statusCode == 403) {
         yield NotLoggedinState();
       }
       else {
-        print(e.response?.data);
         yield FailedUserState();
       }
     }
@@ -78,7 +75,6 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
         yield NotLoggedinState();
       }
     } on DioError catch (e) {
-      print(e.message);
       if(e.response?.statusCode == 400){
         yield NotLoggedinState();
       }

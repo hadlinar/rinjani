@@ -15,22 +15,22 @@ class RinjaniApp extends StatelessWidget {
           primaryColor: Color(0xFF008ECC),
           accentColor: Color(0xFF008ECC),
           canvasColor: Colors.transparent,
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             backwardsCompatibility: false, // 1
             systemOverlayStyle: SystemUiOverlayStyle.dark, // 2
           ),
           textTheme: TextTheme(
-              bodyText1: TextStyle(
+              bodyText1: const TextStyle(
                   fontFamily: "CircularStd-Bold", fontWeight: FontWeight.bold),
-              bodyText2: TextStyle(fontFamily: "CircularStd-Medium"),
-              caption: TextStyle(
+              bodyText2: const TextStyle(fontFamily: "CircularStd-Medium"),
+              caption: const TextStyle(
                   fontFamily: "CircularStd-Bold", fontWeight: FontWeight.w400),
-              headline1: TextStyle(
+              headline1: const TextStyle(
                   color: Colors.black,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   fontFamily: "Circular Std"),
-              headline2: TextStyle(fontSize: 14),
+              headline2: const TextStyle(fontSize: 14),
               button: TextStyle(
                   fontSize: 14, color: Theme.of(context).accentColor))),
       onGenerateRoute: r.Router.generateRouter,

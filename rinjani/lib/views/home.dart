@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'package:rinjani/views/login.dart';
 
 import '../bloc/launcher/launcher_bloc.dart';
+import '../utils/global.dart';
 import 'dashboard.dart';
 
 class Home extends StatefulWidget {
@@ -26,16 +27,29 @@ class _Home extends State<Home> {
     return Scaffold(
         body: BlocListener<LauncherBloc, LauncherBlocState>(
             listener: (context, state) {
-              print(state.toString() + " launcher");
               if (state is LoggedInState) {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Dashboard()
-                ));
+                SplashScreen(
+                    seconds: 8,
+                    navigateAfterSeconds: Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => Dashboard()
+                    )),
+                    image: Image.asset(Global.LOGO_ICON),
+                    photoSize: 100.0,
+                    backgroundColor: Colors.white,
+                    loaderColor: Colors.blue
+                );
               }
-              else if (state is NotLoggedinState) {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => LoginPage()
-                ));
+              if (state is NotLoggedinState) {
+                SplashScreen(
+                    seconds: 8,
+                    navigateAfterSeconds: Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => LoginPage()
+                    )),
+                    image: Image.asset(Global.LOGO_ICON),
+                    photoSize: 100.0,
+                    backgroundColor: Colors.white,
+                    loaderColor: Colors.blue
+                );
               }
             },
             child: Container(
