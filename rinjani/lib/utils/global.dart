@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
 
-  static const String baseURL = "http://170.1.70.67:4200";
+  static const String baseURL = "http://170.1.70.67:3001/rinjani";
   static int BLACK = 0xff333333;
   static int BLUE = 0xff2F80ED;
   static int GREY = 0xff828282;

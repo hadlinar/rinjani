@@ -10,7 +10,7 @@ part of 'branch_service.dart';
 
 class _BranchService implements BranchService {
   _BranchService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://170.1.70.67:4200';
+    baseUrl ??= 'http://170.1.70.67:3001/rinjani';
   }
 
   final Dio _dio;
