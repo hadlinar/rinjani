@@ -1,4 +1,4 @@
-package com.example.rinjani
+package com.rinjani.rinjani
 
 import io.flutter.embedding.android.FlutterActivity
 
