@@ -10,7 +10,7 @@ part of 'role_service.dart';
 
 class _RoleService implements RoleService {
   _RoleService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://170.1.70.67:3001/rinjani';
+    baseUrl ??= 'http://103.140.207.25:3001/rinjani';
   }
 
   final Dio _dio;
