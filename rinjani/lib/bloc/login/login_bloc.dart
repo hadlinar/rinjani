@@ -44,11 +44,13 @@ class LoginBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
         yield SuccesssLoginState();
       }
     } on DioError catch (e) {
-      print(e.message);
-      if(e.response?.statusCode == 400){
-        yield NotLoggedinState();
-      }
-        yield FailedLoginState();
+        if (e.response?.statusCode == 401) {
+          yield WrongPasswordLoginState();
+        } else if (e.response?.statusCode == 500) {
+          yield ServerErrorState();
+        } else if (e.response?.statusCode == 400) {
+          yield NotLoggedinState();
+        }
       }
     }
 }

@@ -67,8 +67,13 @@ class _CalendarState extends State<Calendar> {
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.only(left: 21, right: 21, top: 21),
-            child: SfCalendar(
+            child:
+            SfCalendar(
                 view: CalendarView.month,
+                showNavigationArrow: true,
+                headerStyle: const CalendarHeaderStyle(
+                  textAlign: TextAlign.center,
+                ),
                 dataSource: EventDataSource(visit),
                 initialSelectedDate: DateTime.now(),
                 cellBorderColor: Colors.transparent,
