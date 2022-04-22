@@ -43,7 +43,7 @@ class _Realization extends State<Realization> {
   late List<TextEditingController> listNameController = [];
   late List<TextEditingController> listPicController = [];
   late List<TextEditingController> listDescriptionController = [];
-  String? formerDescription;
+  String formerDescription = '';
 
   String? _selectedType;
   String? _selectedTime;
@@ -262,7 +262,7 @@ class _Realization extends State<Realization> {
                                                 print(_selectedTime);
                                                 for(int i=0; i<visit.length; i++) {
                                                   if(visit[i].time_start.toLocal().toString() == _selectedTime) {
-                                                    descriptionController.text = visit[i].description;
+                                                    // descriptionController.text = visit[i].description;
                                                     formerDescription = visit[i].description;
                                                     visitNo = visit[i].visit_no;
                                                     branchId = visit[i].branch_id;
@@ -385,7 +385,7 @@ class _Realization extends State<Realization> {
                                                                               maxLines: 5,
                                                                               maxLength: 200,
                                                                               decoration: InputDecoration(
-                                                                                labelText: "Description",
+                                                                                labelText: "Description for realization",
                                                                                 alignLabelWithHint: true,
                                                                                 border: OutlineInputBorder(
                                                                                     borderRadius: BorderRadius .circular(10),
@@ -471,19 +471,33 @@ class _Realization extends State<Realization> {
                                       ),
                                       _selectedType == "In-office" ? Container(
                                         padding: const EdgeInsets.only(top: 17),
-                                        child: TextFormField(
-                                          style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                          controller: descriptionController,
-                                          maxLines: 5,
-                                          maxLength: 200,
-                                          decoration: InputDecoration(
-                                            labelText: "Description",
-                                            alignLabelWithHint: true,
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius .circular(10),
-                                                borderSide: BorderSide()),
-                                          ),
-                                        ),
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                                child: Container(
+                                                  padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                  child: Text(
+                                                      "Planned description: $formerDescription",
+                                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                  ),
+                                                )
+                                            ),
+                                            TextFormField(
+                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                              controller: descriptionController,
+                                              maxLines: 5,
+                                              maxLength: 200,
+                                              decoration: InputDecoration(
+                                                labelText: "Description for realization",
+                                                alignLabelWithHint: true,
+                                                border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius .circular(10),
+                                                    borderSide: BorderSide()),
+                                              ),
+                                            ),
+                                          ],
+                                        )
                                       ) : Container(),
                                       Align(
                                           alignment: Alignment.centerLeft,
