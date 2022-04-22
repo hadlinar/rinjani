@@ -42,6 +42,8 @@ class _Realization extends State<Realization> {
   final picController = TextEditingController();
   late List<TextEditingController> listNameController = [];
   late List<TextEditingController> listPicController = [];
+  late List<TextEditingController> listDescriptionController = [];
+  String? formerDescription;
 
   String? _selectedType;
   String? _selectedTime;
@@ -65,7 +67,6 @@ class _Realization extends State<Realization> {
 
   Future<void> GetAddressFromLatLong(Position position) async {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
     Placemark place = placemarks[0];
     setState(()  {
       locationClicked = true;
@@ -260,8 +261,9 @@ class _Realization extends State<Realization> {
                                                 _selectedTime = value;
                                                 print(_selectedTime);
                                                 for(int i=0; i<visit.length; i++) {
-                                                  if(visit[i].time_start.toString() == _selectedTime) {
+                                                  if(visit[i].time_start.toLocal().toString() == _selectedTime) {
                                                     descriptionController.text = visit[i].description;
+                                                    formerDescription = visit[i].description;
                                                     visitNo = visit[i].visit_no;
                                                     branchId = visit[i].branch_id;
                                                     timeFinish = visit[i].time_finish.toString();
@@ -305,6 +307,8 @@ class _Realization extends State<Realization> {
                                                             for(int i=0; i<visit.length; i++) {
                                                               if(visit[i].pic_position == _selectedPIC) {
                                                                 nameController.text = visit[i].pic_name;
+                                                                descriptionController.text = visit[i].description;
+                                                                formerDescription = visit[i].description;
                                                                 picController.text = _selectedPIC;
                                                                 visitNo = visit[i].visit_no;
                                                                 branchId = visit[i].branch_id;
@@ -323,12 +327,21 @@ class _Realization extends State<Realization> {
                                                                 TextEditingController()
                                                             ];
 
+                                                            listDescriptionController = [
+                                                              for (int i = 0; i < descriptionController.text.split(', ').length; i++)
+                                                                TextEditingController()
+                                                            ];
+
                                                             for(int i = 0; i < nameController.text.split(', ').length; i++){
                                                               listNameController[i].text = nameController.text.split(', ')[i];
                                                             }
 
                                                             for(int i = 0; i < _selectedPIC.split(', ').length; i++){
                                                               listPicController[i].text = picController.text.split(', ')[i];
+                                                            }
+
+                                                            for(int i = 0; i < descriptionController.text.split(', ').length; i++){
+                                                              listDescriptionController[i].text = descriptionController.text.split(', ')[i];
                                                             }
                                                           });
                                                         },
@@ -364,6 +377,31 @@ class _Realization extends State<Realization> {
                                                                           Container(
                                                                             child: CustomTextField(label: 'Name', controller: listNameController[j]),
                                                                           ),
+                                                                          Container(
+                                                                            padding: const EdgeInsets.only(top: 5),
+                                                                            child: TextFormField(
+                                                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                              controller: listDescriptionController[j],
+                                                                              maxLines: 5,
+                                                                              maxLength: 200,
+                                                                              decoration: InputDecoration(
+                                                                                labelText: "Description",
+                                                                                alignLabelWithHint: true,
+                                                                                border: OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius .circular(10),
+                                                                                    borderSide: BorderSide()),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          j == _selectedPIC.split(", ").length-1 ? Container() :
+                                                                          Container(
+                                                                            padding: const EdgeInsets.only(top: 10, bottom: 17),
+                                                                            child: const Divider(
+                                                                              height: 10,
+                                                                              thickness: 0.5,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          )
                                                                         ]
                                                                     )
 
@@ -379,6 +417,22 @@ class _Realization extends State<Realization> {
                                                                 Container(
                                                                   child: CustomTextField(label: 'Name', controller: listNameController[0]),
                                                                 ),
+                                                                Container(
+                                                                  padding: const EdgeInsets.only(top: 5),
+                                                                  child: TextFormField(
+                                                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                    controller: listDescriptionController[0],
+                                                                    maxLines: 5,
+                                                                    maxLength: 200,
+                                                                    decoration: InputDecoration(
+                                                                      labelText: "Description",
+                                                                      alignLabelWithHint: true,
+                                                                      border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius .circular(10),
+                                                                          borderSide: BorderSide()),
+                                                                    ),
+                                                                  ),
+                                                                )
                                                               ]
                                                           )
                                                       )
@@ -392,6 +446,22 @@ class _Realization extends State<Realization> {
                                                             Container(
                                                               child: CustomTextField(label: 'Name', controller: nameController),
                                                             ),
+                                                            Container(
+                                                              padding: const EdgeInsets.only(top: 5),
+                                                              child: TextFormField(
+                                                                style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                controller: descriptionController,
+                                                                maxLines: 5,
+                                                                maxLength: 200,
+                                                                decoration: InputDecoration(
+                                                                  labelText: "Description",
+                                                                  alignLabelWithHint: true,
+                                                                  border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius .circular(10),
+                                                                      borderSide: BorderSide()),
+                                                                ),
+                                                              ),
+                                                            )
                                                           ]
                                                       )
                                                   )
@@ -399,8 +469,8 @@ class _Realization extends State<Realization> {
                                               )
                                           )
                                       ),
-                                      Container(
-                                        padding: _selectedType == "In-office" ? const EdgeInsets.only(top: 17) : const EdgeInsets.all(0),
+                                      _selectedType == "In-office" ? Container(
+                                        padding: const EdgeInsets.only(top: 17),
                                         child: TextFormField(
                                           style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                                           controller: descriptionController,
@@ -414,7 +484,7 @@ class _Realization extends State<Realization> {
                                                 borderSide: BorderSide()),
                                           ),
                                         ),
-                                      ),
+                                      ) : Container(),
                                       Align(
                                           alignment: Alignment.centerLeft,
                                           child: Container(
@@ -494,23 +564,32 @@ class _Realization extends State<Realization> {
                         }
                         String picPos = pos.join(", ");
 
+                        List<String> desc = [];
+                        for(int i=0; i<listDescriptionController.length; i++) {
+                          desc.add(listDescriptionController[i].text);
+                        }
+                        String descNew = desc.join(", ");
+
                         _selectedType == "In-office" ?
-                            (descriptionController.text != "" && locationClicked == true ? BlocProvider.of<VisitBloc>(context).add(
+                            (descriptionController.text != "" && locationClicked == true ?
+                            BlocProvider.of<VisitBloc>(context).add(
                                 AddRealizationEvent(
                                   visitNo,
                                   branchId,
                                   "",
                                   _selectedTime!,
                                   DateTime.now().toString(),
-                                  store.get("nik"),
-                                  descriptionController.text,
+                                  store.get("user_id"),
+                                  formerDescription!,
                                   "",
                                   "",
                                   "y",
                                   _position!.latitude.toString(),
                                   _position!.longitude.toString(),
+                                  descriptionController.text
                                 )
-                            ) : showDialog(
+                            )
+                                : showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return Global.defaultModal(() {
@@ -518,22 +597,25 @@ class _Realization extends State<Realization> {
                                   }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
                                 }
                             ))
-                            : (descriptionController.text != "" && locationClicked == true && picPos != "" && picName != "" && custId != ""? BlocProvider.of<VisitBloc>(context).add(
-                            AddRealizationEvent(
-                              visitNo,
-                              branchId,
-                              custId,
-                              DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toString(),
-                              DateTime.now().toString(),
-                              store.get("nik"),
-                              descriptionController.text,
-                              picPos,
-                              picName,
-                              "y",
-                              _position!.latitude.toString(),
-                              _position!.longitude.toString(),
+                            : (descriptionController.text != "" && locationClicked == true && picPos != "" && picName != "" && custId != ""? 
+                            BlocProvider.of<VisitBloc>(context).add(
+                                AddRealizationEvent(
+                                  visitNo,
+                                  branchId,
+                                  custId,
+                                  DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toString(),
+                                  DateTime.now().toString(),
+                                  store.get("user_id"),
+                                  formerDescription!,
+                                  picPos,
+                                  picName,
+                                  "y",
+                                  _position!.latitude.toString(),
+                                  _position!.longitude.toString(),
+                                  descNew
+                                )
                             )
-                        ) : showDialog(
+                            : showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return Global.defaultModal(() {
@@ -541,8 +623,6 @@ class _Realization extends State<Realization> {
                               }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
                             }
                         ));
-
-
                       },
                       child: const Text(
                         "Save",

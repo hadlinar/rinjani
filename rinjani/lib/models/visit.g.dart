@@ -95,6 +95,7 @@ Realization _$RealizationFromJson(Map<String, dynamic> json) => Realization(
       status_visit: json['status_visit'] as String,
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
+      description_real: json['description_real'] as String,
     );
 
 Map<String, dynamic> _$RealizationToJson(Realization instance) =>
@@ -115,6 +116,7 @@ Map<String, dynamic> _$RealizationToJson(Realization instance) =>
       'status_visit': instance.status_visit,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'description_real': instance.description_real,
     };
 
 RealizationResponse _$RealizationResponseFromJson(Map<String, dynamic> json) =>
@@ -180,6 +182,7 @@ PostReal _$PostRealFromJson(Map<String, dynamic> json) => PostReal(
       status_visit: json['status_visit'] as String,
       latitude: json['latitude'] as String,
       longitude: json['longitude'] as String,
+      description_real: json['description_real'] as String,
     );
 
 Map<String, dynamic> _$PostRealToJson(PostReal instance) => <String, dynamic>{
@@ -194,6 +197,7 @@ Map<String, dynamic> _$PostRealToJson(PostReal instance) => <String, dynamic>{
       'status_visit': instance.status_visit,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'description_real': instance.description_real,
     };
 
 PostRealResponse _$PostRealResponseFromJson(Map<String, dynamic> json) =>

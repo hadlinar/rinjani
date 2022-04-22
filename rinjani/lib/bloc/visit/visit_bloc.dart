@@ -169,10 +169,10 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
           status_visit: e.status_visit,
           latitude: e.latitude,
           longitude: e.longitude,
+          description_real: e.description_real,
           token: "Bearer $token"
       );
       if (response.message == "posted"){
-        print(response.message);
         yield SuccessAddRealizationState();
       }
     } on DioError catch(e) {

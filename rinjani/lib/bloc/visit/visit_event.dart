@@ -43,6 +43,7 @@ class AddRealizationEvent extends VisitBlocEvent{
   final String status_visit;
   final String latitude;
   final String longitude;
+  final String description_real;
 
   AddRealizationEvent(
       this.visit_no,
@@ -57,6 +58,7 @@ class AddRealizationEvent extends VisitBlocEvent{
       this.status_visit,
       this.latitude,
       this.longitude,
+      this.description_real
       );
 }
 

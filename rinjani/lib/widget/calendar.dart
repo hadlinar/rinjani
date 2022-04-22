@@ -177,8 +177,6 @@ class _CalendarState extends State<Calendar> {
                               shrinkWrap: true,
                               // physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, j){
-                                print(j);
-                                print(_visit.pic_name.split(", ").length);
                                 return Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +209,7 @@ class _CalendarState extends State<Calendar> {
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 5, left: 3),
-                            child: Text("${_visit.description}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                            child: Text(_visit.description, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                           )
 
                         ],

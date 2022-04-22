@@ -76,6 +76,7 @@ class VisitRepository {
     required String status_visit,
     required String latitude,
     required String longitude,
+    required String description_real,
     required String token,
   }) async {
     final response = await visitService.addRealization(token, {
@@ -89,7 +90,8 @@ class VisitRepository {
       "pic_name": pic_name,
       "status_visit": status_visit,
       "latitude": latitude,
-      "longitude": longitude
+      "longitude": longitude,
+      "description_real": description_real
     });
     return response;
   }
