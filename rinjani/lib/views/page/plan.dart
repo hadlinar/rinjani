@@ -132,15 +132,15 @@ class _Plan extends State<Plan> {
                               ),
                             )
                         ),
-                        defaultType == "in-office" ? Container(
+                        defaultType == "In-office" ? Container(
                             child: InOffice(
                                 defaultType!
                             )
                         )
-                            : (defaultType == "out-office" ? Container(
+                            : (defaultType == "Out-office" ? Container(
                             child: OutOffice()
                         )
-                            : (defaultType == "off" ? Container(
+                            : (defaultType == "Off" ? Container(
                             child: Off()
                         ) : Container()))
                       ],
@@ -161,7 +161,7 @@ class _Plan extends State<Plan> {
                             ),
                             color: Color(Global.BLUE),
                             onPressed: () {
-                              if(defaultType == "in-office") {
+                              if(defaultType == "In-office") {
                                 String timeStart = store.get("timeStart").toString();
                                 String timeEnd = store.get("timeEnd").toString();
                                 String desc = store.get("desc").toString();
@@ -197,7 +197,7 @@ class _Plan extends State<Plan> {
                                 }
 
                               }
-                              else if(defaultType == "off") {
+                              else if(defaultType == "Off") {
                                 String type = store.get("offType");
                                 String desc = type != "Other" ? type : store.get("descOff");
                                 var hourPagi = 8;

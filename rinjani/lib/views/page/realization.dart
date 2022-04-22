@@ -56,7 +56,6 @@ class _Realization extends State<Realization> {
 
   void getCurrentLocation() async {
     Position position = await _determinePosition();
-    print("masuk sini");
 
     setState(() {
       _position = position;
@@ -105,7 +104,7 @@ class _Realization extends State<Realization> {
   Widget build(BuildContext context) {
     return GestureDetector (
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
           appBar:AppBar(
@@ -138,7 +137,7 @@ class _Realization extends State<Realization> {
                   if(state.getVisit[i].visit_id == "02") {
                     cust.add(state.getVisit[i].cust_name);
                   } else if(state.getVisit[i].visit_id == "01") {
-                    time.add(state.getVisit[i].time_start.toString());
+                    time.add(state.getVisit[i].time_start.toLocal().toString());
                   }
                 }
                 setState(() {
