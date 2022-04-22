@@ -138,8 +138,8 @@ class _InOffice extends State<InOffice> {
 
   @override
   Widget build(BuildContext context) {
-    start = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
-    end = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
+    start = DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
+    end = DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
 
     store.set("desc", descriptionController.text);
     store.set("timeStart", start);

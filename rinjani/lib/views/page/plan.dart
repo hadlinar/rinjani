@@ -242,14 +242,17 @@ class _Plan extends State<Plan> {
                                 List<Map<String, dynamic>> res = store.get("result");
                                 List<String> pos = [];
                                 List<String> name = [];
+                                List<String> desc = [];
 
                                 for(int i=0; i<res.length; i++ ){
                                   pos.add(res[i]['pic']['position']);
                                   name.add(res[i]['pic']['name']);
+                                  desc.add(res[i]['pic']['description']);
                                 }
 
                                 String position = pos.join(", ");
                                 String name1 = name.join(", ");
+                                String description = desc.join(", ");
 
                                 DateTime timeStart = store.get("startTime");
                                 DateTime timeEnd = store.get("endTime");
@@ -260,7 +263,7 @@ class _Plan extends State<Plan> {
                                 String clickedStart = store.get("clickedStart").toString();
                                 String clickedEnd = store.get("clickedEnd").toString();
 
-                                if(position != "" && name1 != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
+                                if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
                                   BlocProvider.of<VisitBloc>(context).add(
                                       AddVisitEvent(
                                         "02",
@@ -268,8 +271,8 @@ class _Plan extends State<Plan> {
                                         cust_id,
                                         timeStart.toString(),
                                         timeEnd.toString(),
-                                        store.get("nik"),
-                                        "",
+                                        store.get("user_id"),
+                                        description,
                                         position,
                                         name1,
                                         "n",

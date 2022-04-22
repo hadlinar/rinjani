@@ -34,12 +34,6 @@ class _OutOffice extends State<OutOffice> {
     BlocProvider.of<CustomerBloc>(context).add(GetCustomerEvent(store.get("branch_id")));
   }
 
-  void _addCount() {
-    setState((){
-      _count++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     List<Widget> _container = List.generate(_count, (int i) {
@@ -108,10 +102,13 @@ class _AddPlan extends State<AddPlan> {
   Column createCard(int key) {
     String pos = '';
     String name = '';
+    String desc = '';
     var positionController = TextEditingController();
     var nameController = TextEditingController();
+    var descriptionController = TextEditingController();
     positionTextEditing.add(positionController);
     nameTextEditing.add(nameController);
+    nameTextEditing.add(descriptionController);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -138,9 +135,11 @@ class _AddPlan extends State<AddPlan> {
             onChange: (val) {
               pos = val;
               if(name == null) {
-                _onUpdate(indexPIC: indexPIC, valPos: val, valName: '');
+                _onUpdate(indexPIC: indexPIC, valPos: val, valName: '', valDesc: desc);
+              } else if (desc == null) {
+                _onUpdate(indexPIC: indexPIC, valPos: val, valName: name, valDesc: '');
               } else {
-                _onUpdate(indexPIC: indexPIC, valPos: val, valName: name);
+                _onUpdate(indexPIC: indexPIC, valPos: val, valName: name, valDesc: desc);
               }
             },
           ),
@@ -153,18 +152,47 @@ class _AddPlan extends State<AddPlan> {
               onChange: (val) {
                 name = val;
                 if(pos == null) {
-                  _onUpdate(indexPIC: indexPIC, valPos: '', valName: val);
+                  _onUpdate(indexPIC: indexPIC, valPos: '', valName: val, valDesc: desc);
+                } else if (desc == null) {
+                  _onUpdate(indexPIC: indexPIC, valPos: pos, valName: val, valDesc: '');
                 } else {
-                  _onUpdate(indexPIC: indexPIC, valPos: pos, valName: val);
+                  _onUpdate(indexPIC: indexPIC, valPos: pos, valName: val, valDesc: desc);
                 }
               },
             )
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 21, right: 21, bottom: 17),
+          child: TextFormField(
+            style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+            controller: descriptionController,
+            autofocus: true,
+            maxLines: 5,
+            maxLength: 200,
+            onChanged: (val) {
+              desc = val;
+              if(pos == null) {
+                _onUpdate(indexPIC: indexPIC, valPos: '', valName: name, valDesc: val);
+              } else if (name == null) {
+                _onUpdate(indexPIC: indexPIC, valPos: pos, valName: '', valDesc: val);
+              } else {
+                _onUpdate(indexPIC: indexPIC, valPos: pos, valName: name, valDesc: val);
+              }
+            },
+            decoration: InputDecoration(
+              labelText: "Description",
+              alignLabelWithHint: true,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius .circular(10),
+                  borderSide: BorderSide()),
+            ),
+          ),
         )
       ],
     );
   }
 
-  _onUpdate({int? indexPIC, String? valPos, String? valName}){
+  _onUpdate({int? indexPIC, String? valPos, String? valName, String? valDesc}){
     int? foundKey = -1;
 
     for(var map in _values) {
@@ -184,7 +212,8 @@ class _AddPlan extends State<AddPlan> {
       'id' : indexPIC,
       'pic': {
         'position': valPos,
-        'name': valName
+        'name': valName,
+        'description': valDesc
       }
     };
 
@@ -192,8 +221,8 @@ class _AddPlan extends State<AddPlan> {
     store.set("result", _values);
 
     setState(() {
-      start = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
-      end = new DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
+      start = DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
+      end = DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
 
       store.set("startTime", start);
       store.set("endTime", end);
@@ -261,7 +290,6 @@ class _AddPlan extends State<AddPlan> {
                     use24hFormat: true,
                     onDateTimeChanged: (val) {
                       setState(() {
-                        print(val);
                         timeStart = val;
                       });
                     }),
@@ -328,7 +356,6 @@ class _AddPlan extends State<AddPlan> {
 
     return BlocBuilder<CustomerBloc, CustomerBlocState>(
       builder: (context, state){
-        print(state.toString());
         if(state is CustomerList) {
           customer = state.getCustomer;
           for(int i=0; i < customer.length; i++) {
