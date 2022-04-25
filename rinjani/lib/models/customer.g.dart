@@ -65,3 +65,25 @@ Map<String, dynamic> _$CustomerResponseToJson(CustomerResponse instance) =>
       'message': instance.message,
       'result': instance.result,
     };
+
+NewCustomer _$NewCustomerFromJson(Map<String, dynamic> json) => NewCustomer(
+      branch_id: json['branch_id'] as String,
+      cust_name: json['cust_name'] as String,
+    );
+
+Map<String, dynamic> _$NewCustomerToJson(NewCustomer instance) =>
+    <String, dynamic>{
+      'branch_id': instance.branch_id,
+      'cust_name': instance.cust_name,
+    };
+
+NewCustomerResponse _$NewCustomerResponseFromJson(Map<String, dynamic> json) =>
+    NewCustomerResponse(
+      json['message'] as String,
+    );
+
+Map<String, dynamic> _$NewCustomerResponseToJson(
+        NewCustomerResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+    };

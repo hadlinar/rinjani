@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rinjani/data_source/repository/customer_repository.dart';
-
+import 'package:dio/dio.dart';
 
 import 'customer_state.dart';
 import 'customer_event.dart';
@@ -28,6 +28,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     if(event is GetCustomerEvent) {
       yield* _mapCustomerToState(event);
     }
+    if(event is AddCustomerEvent) {
+      yield* _mapAddCustomerToState(event);
+    }
   }
 
   Stream<CustomerBlocState> _mapCustomerCategoryToState() async* {
@@ -42,5 +45,19 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     yield CustomerList(response.result);
   }
 
-
+  Stream<CustomerBlocState> _mapAddCustomerToState(AddCustomerEvent e) async* {
+    yield LoadingCustomerState();
+    try {
+      final response = await _customerRepository.addCustomer(
+          branch_id: e.branch_id,
+          cust_name: e.cust_name
+      );
+      if (response.message == "ok"){
+        yield SuccessAddCustomer();
+      }
+    } on DioError catch(e) {
+      print(e.response?.statusCode);
+      yield FailedCustomerState();
+    }
+  }
 }

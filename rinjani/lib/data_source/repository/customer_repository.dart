@@ -18,4 +18,15 @@ class CustomerRepository {
     return response;
   }
 
+  Future<NewCustomerResponse> addCustomer({
+    required String branch_id,
+    required String cust_name
+  }) async {
+    final response = await customerService.addCustomer({
+      "branch_id": branch_id,
+      "cust_name": cust_name
+    });
+    return response;
+  }
+
 }

@@ -81,6 +81,8 @@ class _AddPlan extends State<AddPlan> {
   var cards = <Column>[];
   var _selectedCust = null;
 
+  var newCustomerController = TextEditingController();
+
   DateTime timeStart = DateTime.now();
   DateTime timeEnd = DateTime.now();
 
@@ -499,6 +501,119 @@ class _AddPlan extends State<AddPlan> {
                             borderRadius: BorderRadius .circular(10),
                             borderSide: BorderSide()),
                       ),
+                    )
+                ),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                        width: 200,
+                        padding: const EdgeInsets.only(left: 21),
+                        margin: const EdgeInsets.only(bottom: 30),
+                        child: InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(10)
+                                          )
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Container(
+                                            child: Text("Add new customer",
+                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                              textAlign: TextAlign.left,
+                                            )
+                                          ),
+                                          Container(
+                                            height: 17,
+                                          ),
+                                          Container(
+                                            child: CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: RaisedButton(
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          side: BorderSide(
+                                                              color: Theme
+                                                                  .of(context)
+                                                                  .accentColor,
+                                                              width: 3
+                                                          )
+                                                      ),
+                                                      color: Colors.white,
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text(
+                                                        "Cancel",
+                                                        style: TextStyle(
+                                                            color: Color(Global.BLUE),
+                                                            fontFamily: 'bold',
+                                                            fontSize: 15
+                                                        ),
+                                                      )
+                                                  )
+                                              ),
+                                              Container(
+                                                width: 25,
+                                              ),
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: RaisedButton(
+                                                      shape: RoundedRectangleBorder(
+                                                          side:
+                                                          BorderSide(color: Color(Global.BLUE)),
+                                                          borderRadius: BorderRadius.circular(10)),
+                                                      color: Color(Global.BLUE),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        "Add",
+                                                        style: Global.getCustomFont(Global.WHITE, 14,
+                                                            'bold'),
+                                                      )
+                                                  )
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                              );
+                            },
+                            child: Container(
+                                child: Row(
+                                    children: <Widget> [
+                                      const ImageIcon(
+                                        AssetImage(Global.ADD_ICON),
+                                        size: 18,
+                                      ),
+                                      Container(
+                                          padding: const EdgeInsets.only(left: 17),
+                                          child: const Text('Add new customer',
+                                              style: TextStyle(
+                                                color: Color(0xff4F4F4F),
+                                                fontFamily: 'book',
+                                                fontSize: 13,
+                                                decoration: TextDecoration.underline,
+                                              )
+                                          )
+                                      )
+                                    ]
+                                )
+                            )
+                        )
                     )
                 ),
                 Container(

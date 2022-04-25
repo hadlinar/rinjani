@@ -55,3 +55,25 @@ class CustomerResponse{
 
   factory CustomerResponse.fromJson(Map<String,dynamic> json) => _$CustomerResponseFromJson(json);
 }
+
+@JsonSerializable()
+class NewCustomer{
+  String branch_id;
+  String cust_name;
+
+  NewCustomer({
+    required this.branch_id,
+    required this.cust_name
+  });
+
+  factory NewCustomer.fromJson(Map<String,dynamic> json) => _$NewCustomerFromJson(json);
+}
+
+@JsonSerializable()
+class NewCustomerResponse{
+  String message;
+
+  NewCustomerResponse(this.message);
+
+  factory NewCustomerResponse.fromJson(Map<String,dynamic> json) => _$NewCustomerResponseFromJson(json);
+}

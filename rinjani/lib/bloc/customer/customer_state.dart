@@ -24,3 +24,5 @@ class CustomerList extends CustomerBlocState{
 
   CustomerList(this.getCustomer);
 }
+
+class SuccessAddCustomer extends CustomerBlocState{}
