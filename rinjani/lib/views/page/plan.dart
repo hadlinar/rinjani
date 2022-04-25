@@ -209,8 +209,8 @@ class _Plan extends State<Plan> {
                                 var timeStart, timeFinish;
                                 timeStart = DateTime.now();
                                 timeFinish = DateTime.now();
-                                timeStart = new DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
-                                timeFinish = new DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
+                                timeStart = DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
+                                timeFinish = DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
 
                                 if(clicked != "false" && desc != null && date != null) {
                                   BlocProvider.of<VisitBloc>(context).add(

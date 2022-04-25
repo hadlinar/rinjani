@@ -38,12 +38,17 @@ class _Realization extends State<Realization> {
   bool locationClicked = false;
 
   final descriptionController = TextEditingController();
+  final formerDescController = TextEditingController();
   final nameController = TextEditingController();
   final picController = TextEditingController();
   late List<TextEditingController> listNameController = [];
   late List<TextEditingController> listPicController = [];
   late List<TextEditingController> listDescriptionController = [];
+  late List<TextEditingController> listFormerDescController = [];
   String formerDescription = '';
+
+  bool clickedStart = false;
+  DateTime realTimeStart = DateTime.now();
 
   String? _selectedType;
   String? _selectedTime;
@@ -91,6 +96,44 @@ class _Realization extends State<Realization> {
   List<String> custName = [];
   List<String> custPos = [];
   List<String> time = [];
+
+  void startTime(ctx) {
+    showCupertinoModalPopup(
+        context: ctx,
+        builder: (_) => Container(
+          height: 300,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 200,
+                child: CupertinoDatePicker(
+                    initialDateTime: DateTime.now().add(
+                      Duration(minutes: 60 - DateTime.now().minute % 30),
+                    ),
+                    mode: CupertinoDatePickerMode.time,
+                    minuteInterval: 15,
+                    use24hFormat: true,
+                    onDateTimeChanged: (val) {
+                      setState(() {
+                        realTimeStart = val;
+                      });
+                    }),
+              ),
+              CupertinoButton(
+                  child: Text("Save",
+                    style: TextStyle(color: Color(Global.BLUE), fontSize: 18, fontFamily: 'medium'),
+                  ),
+                  onPressed: () {
+                    clickedStart = true;
+                    Navigator.of(ctx).pop();
+                  }
+              )
+            ],
+          ),
+        )
+    );
+  }
 
   @override
   void initState() {
@@ -259,7 +302,6 @@ class _Realization extends State<Realization> {
                                             onChanged: (String? value) {
                                               setState(() {
                                                 _selectedTime = value;
-                                                print(_selectedTime);
                                                 for(int i=0; i<visit.length; i++) {
                                                   if(visit[i].time_start.toLocal().toString() == _selectedTime) {
                                                     // descriptionController.text = visit[i].description;
@@ -297,7 +339,6 @@ class _Realization extends State<Realization> {
                                                         selectedItem: _selectedPIC,
                                                         items: custPos,
                                                         label: "PIC",
-                                                        // showSearchBox: true,
                                                         onChanged: (String? value) {
                                                           setState(() {
                                                             _selectedPIC = value;
@@ -307,8 +348,9 @@ class _Realization extends State<Realization> {
                                                             for(int i=0; i<visit.length; i++) {
                                                               if(visit[i].pic_position == _selectedPIC) {
                                                                 nameController.text = visit[i].pic_name;
-                                                                descriptionController.text = visit[i].description;
+                                                                // descriptionController.text = visit[i].description;
                                                                 formerDescription = visit[i].description;
+                                                                formerDescController.text = visit[i].description;
                                                                 picController.text = _selectedPIC;
                                                                 visitNo = visit[i].visit_no;
                                                                 branchId = visit[i].branch_id;
@@ -328,7 +370,12 @@ class _Realization extends State<Realization> {
                                                             ];
 
                                                             listDescriptionController = [
-                                                              for (int i = 0; i < descriptionController.text.split(', ').length; i++)
+                                                              for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                                TextEditingController()
+                                                            ];
+
+                                                            listFormerDescController = [
+                                                              for (int i = 0; i < formerDescController.text.split(', ').length; i++)
                                                                 TextEditingController()
                                                             ];
 
@@ -340,8 +387,12 @@ class _Realization extends State<Realization> {
                                                               listPicController[i].text = picController.text.split(', ')[i];
                                                             }
 
-                                                            for(int i = 0; i < descriptionController.text.split(', ').length; i++){
-                                                              listDescriptionController[i].text = descriptionController.text.split(', ')[i];
+                                                            // for(int i = 0; i < nameController.text.split(', ').length; i++){
+                                                            //   listDescriptionController[i].text = nameController.text.split(', ')[i];
+                                                            // }
+
+                                                            for(int i = 0; i < formerDescController.text.split(', ').length; i++){
+                                                              listFormerDescController[i].text = formerDescController.text.split(', ')[i];
                                                             }
                                                           });
                                                         },
@@ -358,7 +409,47 @@ class _Realization extends State<Realization> {
                                                   ),
                                                   Container(
                                                       padding: const EdgeInsets.only(bottom: 17),
-                                                      child: Divider()
+                                                      child: const Divider(
+                                                        height: 10,
+                                                        thickness: 0.5,
+                                                        color: Colors.grey,
+                                                      )
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(left: 10),
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text("Realization start time:",
+                                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                        textAlign: TextAlign.left,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(bottom: 17),
+                                                    child: Row(
+                                                        children: <Widget> [
+                                                          Align(
+                                                            alignment: Alignment.centerLeft,
+                                                            child: CupertinoButton(
+                                                              child: Row(
+                                                                  children: <Widget> [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.only(right: 22),
+                                                                      child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
+                                                                    ),
+                                                                    ImageIcon(
+                                                                      const AssetImage(Global.CLOCK_ICON),
+                                                                      color: Color(Global.BLUE),
+                                                                      size: 18,
+                                                                    )
+                                                                  ]
+                                                              ),
+                                                              onPressed: () => startTime(context),
+                                                            ),
+                                                          ),
+                                                        ]
+                                                    ),
                                                   ),
                                                   _selectedPIC != null ? Container(
                                                       child: _selectedPIC.contains(",") ? Container(
@@ -376,6 +467,16 @@ class _Realization extends State<Realization> {
                                                                           ),
                                                                           Container(
                                                                             child: CustomTextField(label: 'Name', controller: listNameController[j]),
+                                                                          ),
+                                                                          Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Container(
+                                                                                padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                                child: Text(
+                                                                                    "Planned description: ${listFormerDescController[j].text}",
+                                                                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                                ),
+                                                                              )
                                                                           ),
                                                                           Container(
                                                                             padding: const EdgeInsets.only(top: 5),
@@ -417,6 +518,16 @@ class _Realization extends State<Realization> {
                                                                 Container(
                                                                   child: CustomTextField(label: 'Name', controller: listNameController[0]),
                                                                 ),
+                                                                Align(
+                                                                    alignment: Alignment.centerLeft,
+                                                                    child: Container(
+                                                                      padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                      child: Text(
+                                                                          "Planned description: ${listFormerDescController[0].text}",
+                                                                          style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                      ),
+                                                                    )
+                                                                ),
                                                                 Container(
                                                                   padding: const EdgeInsets.only(top: 5),
                                                                   child: TextFormField(
@@ -425,7 +536,7 @@ class _Realization extends State<Realization> {
                                                                     maxLines: 5,
                                                                     maxLength: 200,
                                                                     decoration: InputDecoration(
-                                                                      labelText: "Description",
+                                                                      labelText: "Description for realization",
                                                                       alignLabelWithHint: true,
                                                                       border: OutlineInputBorder(
                                                                           borderRadius: BorderRadius .circular(10),
@@ -445,6 +556,16 @@ class _Realization extends State<Realization> {
                                                             ),
                                                             Container(
                                                               child: CustomTextField(label: 'Name', controller: nameController),
+                                                            ),
+                                                            Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Container(
+                                                                  padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                  child: Text(
+                                                                      "Planned description: ",
+                                                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                  ),
+                                                                )
                                                             ),
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 5),
@@ -473,6 +594,39 @@ class _Realization extends State<Realization> {
                                         padding: const EdgeInsets.only(top: 17),
                                         child: Column(
                                           children: [
+                                            Container(
+                                              padding: const EdgeInsets.only(left: 10),
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("Realization start time:",
+                                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                                children: <Widget> [
+                                                  Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: CupertinoButton(
+                                                      child: Row(
+                                                          children: <Widget> [
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(right: 22),
+                                                              child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
+                                                            ),
+                                                            ImageIcon(
+                                                              const AssetImage(Global.CLOCK_ICON),
+                                                              color: Color(Global.BLUE),
+                                                              size: 18,
+                                                            )
+                                                          ]
+                                                      ),
+                                                      onPressed: () => startTime(context),
+                                                    ),
+                                                  ),
+                                                ]
+                                            ),
                                             Align(
                                               alignment: Alignment.centerLeft,
                                                 child: Container(
@@ -585,16 +739,16 @@ class _Realization extends State<Realization> {
                         String descNew = desc.join(", ");
 
                         _selectedType == "In-office" ?
-                            (descriptionController.text != "" && locationClicked == true ?
+                            (descriptionController.text != "" && locationClicked == true && clickedStart == true ?
                             BlocProvider.of<VisitBloc>(context).add(
                                 AddRealizationEvent(
                                   visitNo,
                                   branchId,
                                   "",
-                                  _selectedTime!,
+                                  realTimeStart.toString(),
                                   DateTime.now().toString(),
                                   store.get("user_id"),
-                                  formerDescription!,
+                                  formerDescription,
                                   "",
                                   "",
                                   "y",
@@ -611,16 +765,17 @@ class _Realization extends State<Realization> {
                                   }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
                                 }
                             ))
-                            : (descriptionController.text != "" && locationClicked == true && picPos != "" && picName != "" && custId != ""? 
-                            BlocProvider.of<VisitBloc>(context).add(
+                            : (descNew != "" && clickedStart == true && locationClicked == true && picPos != "" && picName != "" && custId != ""?
+
+                               BlocProvider.of<VisitBloc>(context).add(
                                 AddRealizationEvent(
                                   visitNo,
                                   branchId,
                                   custId,
-                                  DateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStart).toString(),
+                                  realTimeStart.toString(),
                                   DateTime.now().toString(),
                                   store.get("user_id"),
-                                  formerDescription!,
+                                  formerDescription,
                                   picPos,
                                   picName,
                                   "y",
