@@ -98,7 +98,6 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
         yield GetVisitState(response.result);
       }
     } on DioError catch(e) {
-      print(e.message);
       if(e.response?.statusCode == 500) {
         yield NotLogginInState();
       }

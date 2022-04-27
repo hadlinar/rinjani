@@ -42,7 +42,9 @@ class _DetailReport extends State<DetailReport> {
   @override
   Widget build(BuildContext context) {
     String date = DateFormat("EEEE, dd MMM yyyy").format(widget.realization.time_finish);
-    String time = DateFormat("HH:mm").format(widget.realization.time_finish);
+    String dateStart = DateFormat("EEEE, dd MMM yyyy").format(widget.realization.time_start);
+    String time = DateFormat("HH:mm").format(widget.realization.time_finish.toLocal());
+    String timeStart = DateFormat("HH:mm").format(widget.realization.time_start.toLocal());
     return SafeArea(
         top: false,
         bottom: false,
@@ -139,7 +141,7 @@ class _DetailReport extends State<DetailReport> {
                                     ),
                                   ),
                                   Container(
-                                      padding: const EdgeInsets.only(left: 74),
+                                      padding: const EdgeInsets.only(left: 73),
                                       child: widget.realization.pic_name.contains(",") ? Container(
                                           child: SizedBox(
                                               width: 200,
@@ -173,13 +175,34 @@ class _DetailReport extends State<DetailReport> {
                               child: Row(
                                 children: <Widget> [
                                   Text(
-                                    'Date',
+                                    'Time start',
                                     style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 64),
+                                    padding: const EdgeInsets.only(left: 29),
                                     child: Text(
-                                      "$time on $date",
+                                      "$timeStart, $dateStart",
+                                      style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                    ),
+                                  )
+                                ],
+                              )
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 17),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: <Widget> [
+                                  Text(
+                                    'Time end',
+                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 34),
+                                    child: Text(
+                                      "$time, $date",
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )
@@ -219,15 +242,76 @@ class _DetailReport extends State<DetailReport> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget> [
                                   Text(
-                                    'Report',
+                                    'Planned description',
                                     style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(left: 24, top: 17, bottom: 17),
-                                    child: Text(
-                                      widget.realization.description,
-                                      style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
-                                    ),
+                                    child: widget.realization.description.contains(",") ? Container(
+                                        child: SizedBox(
+                                            width: 300,
+                                            child: ListView.builder(
+                                                itemCount: widget.realization.description.split(", ").length,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                physics: NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, j){
+                                                  return Container(
+                                                    padding: const EdgeInsets.only(top: 5),
+                                                    child: Text("-  ${widget.realization.description.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'book')),
+                                                  );
+                                                }
+                                            )
+                                        )
+                                    ) : Container(
+                                      child: Text(widget.realization.description,
+                                          style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                                        ),
+                                    )
+                                  )
+                                ],
+                              )
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 17),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget> [
+                                  Text(
+                                    'Realization description',
+                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 24, top: 17, bottom: 17),
+                                    child: widget.realization.description_real.contains(",") ? Container(
+                                        child: SizedBox(
+                                            width: 300,
+                                            child: ListView.builder(
+                                                itemCount: widget.realization.description_real.split(", ").length,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                physics: NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, j){
+                                                  return Container(
+                                                    padding: const EdgeInsets.only(top: 5),
+                                                    child: Text("-  ${widget.realization.description_real.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'book')),
+                                                  );
+                                                }
+                                            )
+                                        )
+                                    ) : Container(
+                                      child: Text(widget.realization.description_real,
+                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                                      ),
+                                    )
+                                    // Text(
+                                    //   widget.realization.description_real,
+                                    //   style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'book'),
+                                    // ),
                                   )
                                 ],
                               )

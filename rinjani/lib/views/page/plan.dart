@@ -170,7 +170,7 @@ class _Plan extends State<Plan> {
                                 String clicked = store.get("clicked").toString();
                                 String clickedStart = store.get("clickedStart").toString();
                                 String clickedEnd = store.get("clickedEnd").toString();
-                                print(clicked);
+
 
                                 if(desc != "" && clicked != "false" && clickedStart == "true" && clickedEnd == "true") {
                                   BlocProvider.of<VisitBloc>(context).add(

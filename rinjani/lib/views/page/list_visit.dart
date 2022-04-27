@@ -153,7 +153,6 @@ class _ListVisit extends State<ListVisit> {
                       ),
                       BlocBuilder<VisitBloc, VisitBlocState> (
                         builder: (context, state) {
-                          print(state.toString());
                           if(state is LoadingVisitState) {
                             return Container(
                                 padding: const EdgeInsets.only(top: 20),
@@ -208,7 +207,7 @@ class _ListVisit extends State<ListVisit> {
                                                             alignment: Alignment.centerLeft,
                                                             child: state.getRealization[i].pic_name.contains(",") ? Container(
                                                                 child: SizedBox(
-                                                                    width: 300,
+                                                                    width: 289,
                                                                     child: ListView.builder(
                                                                         itemCount: state.getRealization[i].pic_name.split(", ").length,
                                                                         scrollDirection: Axis.vertical,

@@ -239,7 +239,6 @@ class _AddPlan extends State<AddPlan> {
   _onRemove(int key){
     setState(() {
       _values.removeWhere((e) => e.values.first == key);
-      print(_values);
       for(var map in _values) {
         if(map.containsKey('id')) {
           if(map['id'] > key) {

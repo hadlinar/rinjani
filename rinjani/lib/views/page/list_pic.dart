@@ -209,7 +209,7 @@ class _ListPIC extends State<ListPIC> {
                                                                       alignment: Alignment.centerLeft,
                                                                       child: state.getRealization[i].pic_name.contains(",") ? Container(
                                                                           child: SizedBox(
-                                                                              width: 300,
+                                                                              width: 289,
                                                                               child: ListView.builder(
                                                                                   itemCount: state.getRealization[i].pic_name.split(", ").length,
                                                                                   scrollDirection: Axis.vertical,
