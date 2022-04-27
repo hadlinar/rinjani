@@ -1,5 +1,6 @@
 import 'package:rinjani/models/visit.dart';
 
+import '../../models/customer.dart';
 import '../../models/pdf.dart';
 import '../network/visit_service.dart';
 
@@ -103,6 +104,34 @@ class VisitRepository {
 
   Future<PDFResponse> getPDF(String token, String startDate, String endDate) async {
     final response = await visitService.getPDF(token, startDate, endDate);
+    return response;
+  }
+
+  Future<NewCustomerResponse> addCustomer({
+    required String branch_id,
+    required String cust_name,
+    required String visit_id,
+    required String cust_id,
+    required String time_start,
+    required String time_finish,
+    required String description,
+    required String pic_position,
+    required String pic_name,
+    required String status_visit,
+    required String token,
+  }) async {
+    final response = await visitService.addCustomer(token, {
+      "branch_id": branch_id,
+      "cust_name": cust_name,
+      "visit_id": visit_id,
+      "cust_id": cust_id,
+      "time_start": time_start,
+      "time_finish": time_finish,
+      "description": description,
+      "pic_position": pic_position,
+      "pic_name": pic_name,
+      "status_visit": status_visit,
+    });
     return response;
   }
 }

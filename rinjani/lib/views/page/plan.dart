@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rinjani/bloc/customer/customer_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/views/page/plan_in_office.dart';
 import 'package:rinjani/views/page/plan_off.dart';
@@ -56,6 +57,7 @@ class _Plan extends State<Plan> {
                     store.set("clicked", false);
                     store.set("clickedStart", false);
                     store.set("clickedEnd", false);
+                    store.set("savedCust", false);
                   }, context, Global.CHECK_ICON, "Visit saved", "Ok", false);
                 }
             );
@@ -263,21 +265,42 @@ class _Plan extends State<Plan> {
                                 String clickedStart = store.get("clickedStart").toString();
                                 String clickedEnd = store.get("clickedEnd").toString();
 
+                                bool savedCust = store.get("savedCust");
+                                String newCust = store.get("cust_name").toString();
+
                                 if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
-                                  BlocProvider.of<VisitBloc>(context).add(
-                                      AddVisitEvent(
-                                        "02",
-                                        store.get("branch_id"),
-                                        cust_id,
-                                        timeStart.toString(),
-                                        timeEnd.toString(),
-                                        store.get("user_id"),
-                                        description,
-                                        position,
-                                        name1,
-                                        "n",
-                                      )
-                                  );
+                                  if(savedCust && newCust != "") {
+                                    BlocProvider.of<VisitBloc>(context).add(
+                                        AddCustomerEvent(
+                                            store.get("branch_id"),
+                                            newCust,
+                                            "02",
+                                            "",
+                                            timeStart.toString(),
+                                            timeEnd.toString(),
+                                            store.get("user_id"),
+                                            description,
+                                            position,
+                                            name1,
+                                            "n",
+                                        )
+                                    );
+                                  } else {
+                                    BlocProvider.of<VisitBloc>(context).add(
+                                        AddVisitEvent(
+                                          "02",
+                                          store.get("branch_id"),
+                                          cust_id,
+                                          timeStart.toString(),
+                                          timeEnd.toString(),
+                                          store.get("user_id"),
+                                          description,
+                                          position,
+                                          name1,
+                                          "n",
+                                        )
+                                    );
+                                  }
                                 } else {
                                   showDialog(
                                       context: context,

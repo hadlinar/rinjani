@@ -18,7 +18,4 @@ abstract class CustomerService{
   @GET('/customer/{branchId}')
   Future<CustomerResponse> getCustomer(@Path("branchId") String branchId);
 
-  @POST('/add_customer')
-  Future<NewCustomerResponse> addCustomer(@Body() Map<String,dynamic> body);
-
 }

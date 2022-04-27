@@ -11,13 +11,3 @@ class GetCustomerEvent extends CustomerBlocEvent{
 
   GetCustomerEvent(this.id);
 }
-
-class AddCustomerEvent extends CustomerBlocEvent{
-  final String branch_id;
-  final String cust_name;
-
-  AddCustomerEvent(
-    this.branch_id,
-    this.cust_name
-  );
-}

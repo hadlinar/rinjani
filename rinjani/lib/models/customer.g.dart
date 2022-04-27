@@ -69,12 +69,30 @@ Map<String, dynamic> _$CustomerResponseToJson(CustomerResponse instance) =>
 NewCustomer _$NewCustomerFromJson(Map<String, dynamic> json) => NewCustomer(
       branch_id: json['branch_id'] as String,
       cust_name: json['cust_name'] as String,
+      visit_id: json['visit_id'] as String,
+      cust_id: json['cust_id'] as String,
+      time_start: json['time_start'] as String,
+      time_finish: json['time_finish'] as String,
+      user_id: json['user_id'] as String,
+      description: json['description'] as String,
+      pic_position: json['pic_position'] as String,
+      pic_name: json['pic_name'] as String,
+      status_visit: json['status_visit'] as String,
     );
 
 Map<String, dynamic> _$NewCustomerToJson(NewCustomer instance) =>
     <String, dynamic>{
       'branch_id': instance.branch_id,
       'cust_name': instance.cust_name,
+      'visit_id': instance.visit_id,
+      'cust_id': instance.cust_id,
+      'time_start': instance.time_start,
+      'time_finish': instance.time_finish,
+      'user_id': instance.user_id,
+      'description': instance.description,
+      'pic_position': instance.pic_position,
+      'pic_name': instance.pic_name,
+      'status_visit': instance.status_visit,
     };
 
 NewCustomerResponse _$NewCustomerResponseFromJson(Map<String, dynamic> json) =>

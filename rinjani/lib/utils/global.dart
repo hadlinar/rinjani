@@ -33,7 +33,6 @@ class Global {
 
   static String ACCESS_TOKEN = "access_token";
 
-
   static void setState(Null Function() param0) {}
 
   static TextStyle getCustomFont(int color, double fontSize, String fontName) {

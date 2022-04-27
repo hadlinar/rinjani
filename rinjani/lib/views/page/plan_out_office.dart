@@ -98,6 +98,8 @@ class _AddPlan extends State<AddPlan> {
   bool clickedStart = false;
   bool clickedEnd = false;
 
+  bool savedCust = false;
+
   late String result;
   late String initDate;
 
@@ -226,6 +228,7 @@ class _AddPlan extends State<AddPlan> {
       start = DateTime(initialDate.year, initialDate.month, initialDate.day, timeStart.hour, timeStart.minute, timeStart.second, timeStart.millisecond, timeStart.microsecond);
       end = DateTime(initialDate.year, initialDate.month, initialDate.day, timeEnd.hour, timeEnd.minute, timeEnd.second, timeEnd.millisecond, timeEnd.microsecond);
 
+      store.set("savedCust", savedCust);
       store.set("startTime", start);
       store.set("endTime", end);
       store.set("customer", _selectedCust);
@@ -352,6 +355,89 @@ class _AddPlan extends State<AddPlan> {
     );
   }
 
+  void dialogNewCust () {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)
+                )
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                    child: Text("Add new customer",
+                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                      textAlign: TextAlign.left,
+                    )
+                ),
+                Container(
+                  height: 17,
+                ),
+                Container(
+                  child: CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                    color: Theme
+                                        .of(context)
+                                        .accentColor,
+                                    width: 3
+                                )
+                            ),
+                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  color: Color(Global.BLUE),
+                                  fontFamily: 'bold',
+                                  fontSize: 15
+                              ),
+                            )
+                        )
+                    ),
+                    Container(
+                      width: 25,
+                    ),
+                    Expanded(
+                        flex: 1,
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                side:
+                                BorderSide(color: Color(Global.BLUE)),
+                                borderRadius: BorderRadius.circular(10)),
+                            color: Color(Global.BLUE),
+                            onPressed: () {
+                              setState(() {
+                                savedCust = true;
+                              });
+                              store.set("cust_name", newCustomerController.text );
+                              Navigator.pop(context);
+                            },
+                            child: Text("Add", style: Global.getCustomFont(Global.WHITE, 14, 'bold'))
+                        )
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -471,14 +557,42 @@ class _AddPlan extends State<AddPlan> {
                       ],
                     )
                 ),
-                Container(
+                savedCust ? Container(
+                  padding: const EdgeInsets.only(left: 21, right: 21, bottom: 17),
+                  child: TextField(
+                    controller: newCustomerController,
+                    onTap: () {
+                      dialogNewCust();
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'New customer',
+                      contentPadding: EdgeInsets.only(bottom: 5,left: 7,top: 5),
+                      alignLabelWithHint: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(),
+                      ),
+                      suffixIcon: newCustomerController.text.isEmpty
+                          ? null // Show nothing if the text field is empty
+                          : IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            savedCust = false;
+                          });
+                          newCustomerController.clear();
+                        },
+                      ), // Show the clear button if the text field has something
+                    ),
+                  ),
+                ) : Container(
                     padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17),
                     child: DropdownSearch<String>(
                       mode: Mode.MENU,
                       showClearButton: true,
                       showSelectedItems: true,
                       items: customerName,
-                      dropdownSearchBaseStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                      dropdownSearchBaseStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                       label: "Customer",
                       showSearchBox: true,
                       onChanged: (val) {
@@ -503,7 +617,7 @@ class _AddPlan extends State<AddPlan> {
                       ),
                     )
                 ),
-                Align(
+                savedCust ? Container() : Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
                         width: 200,
@@ -511,86 +625,7 @@ class _AddPlan extends State<AddPlan> {
                         margin: const EdgeInsets.only(bottom: 30),
                         child: InkWell(
                             onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(10)
-                                          )
-                                      ),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Container(
-                                            child: Text("Add new customer",
-                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                              textAlign: TextAlign.left,
-                                            )
-                                          ),
-                                          Container(
-                                            height: 17,
-                                          ),
-                                          Container(
-                                            child: CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Expanded(
-                                                  flex: 1,
-                                                  child: RaisedButton(
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                          side: BorderSide(
-                                                              color: Theme
-                                                                  .of(context)
-                                                                  .accentColor,
-                                                              width: 3
-                                                          )
-                                                      ),
-                                                      color: Colors.white,
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: Text(
-                                                        "Cancel",
-                                                        style: TextStyle(
-                                                            color: Color(Global.BLUE),
-                                                            fontFamily: 'bold',
-                                                            fontSize: 15
-                                                        ),
-                                                      )
-                                                  )
-                                              ),
-                                              Container(
-                                                width: 25,
-                                              ),
-                                              Expanded(
-                                                  flex: 1,
-                                                  child: RaisedButton(
-                                                      shape: RoundedRectangleBorder(
-                                                          side:
-                                                          BorderSide(color: Color(Global.BLUE)),
-                                                          borderRadius: BorderRadius.circular(10)),
-                                                      color: Color(Global.BLUE),
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        "Add",
-                                                        style: Global.getCustomFont(Global.WHITE, 14,
-                                                            'bold'),
-                                                      )
-                                                  )
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  }
-                              );
+                              dialogNewCust();
                             },
                             child: Container(
                                 child: Row(
