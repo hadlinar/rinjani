@@ -54,6 +54,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is GetPDFEvent) {
       yield* _mapGetPDFToState(event);
     }
+    if(event is AddCustomerEvent) {
+      yield* _mapAddNewCustomerState(event);
+    }
   }
 
   Stream<VisitBlocState> _mapVisitCategoryToState(GetVisitCategoryEvent event) async* {
@@ -95,7 +98,6 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
         yield GetVisitState(response.result);
       }
     } on DioError catch(e) {
-      print(e.message);
       if(e.response?.statusCode == 500) {
         yield NotLogginInState();
       }
@@ -169,10 +171,10 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
           status_visit: e.status_visit,
           latitude: e.latitude,
           longitude: e.longitude,
+          description_real: e.description_real,
           token: "Bearer $token"
       );
       if (response.message == "posted"){
-        print(response.message);
         yield SuccessAddRealizationState();
       }
     } on DioError catch(e) {
@@ -217,6 +219,36 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
       final response = await _visitRepository.getPDF("Bearer $token", e.startDate, e.endDate);
       if (response.message == "ok") {
         yield GetPDFState(response.result);
+      }
+    } on DioError catch(e) {
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
+      }
+      else {
+        yield FailedVisitState();
+      }
+    }
+  }
+
+  Stream<VisitBlocState> _mapAddNewCustomerState(AddCustomerEvent e) async* {
+    yield LoadingVisitState();
+    final token = _sharedPreferences.getString("access_token");
+    try {
+      final response = await _visitRepository.addCustomer(
+          branch_id: e.branch_id,
+          cust_name: e.cust_name,
+          visit_id: e.visit_id,
+          cust_id: e.cust_id,
+          time_start: e.time_start,
+          time_finish: e.time_finish,
+          description: e.description,
+          pic_position: e.pic_position,
+          pic_name: e.pic_name,
+          status_visit:e.status_visit,
+          token: "Bearer $token"
+      );
+      if (response.message == "ok"){
+        yield SuccessAddVisitState();
       }
     } on DioError catch(e) {
       if(e.response?.statusCode == 500) {

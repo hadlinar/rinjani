@@ -17,4 +17,5 @@ abstract class CustomerService{
 
   @GET('/customer/{branchId}')
   Future<CustomerResponse> getCustomer(@Path("branchId") String branchId);
+
 }

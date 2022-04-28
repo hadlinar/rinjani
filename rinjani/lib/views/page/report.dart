@@ -479,6 +479,45 @@ class _Report extends State<Report> {
                                   )
                               ),
                             ),
+                            realization.length != 0 ? InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => ListPIC(
+                                        _selectedBranchId,
+                                        backReportOp: (int resMessage, BuildContext ctx, String id) {
+                                          if (resMessage == 1) {
+                                            Navigator.of(ctx).pop();
+                                            if(store.get("role_id") == "2") {
+                                              reportOp(ctx, id);
+                                            } else {
+                                              BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("year"));
+                                            }
+                                          }
+                                        },
+                                      ))
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget> [
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'More',
+                                        style: TextStyle(color: Color(Global.BLUE), fontSize: 15, fontFamily: 'book'),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 4, left: 10),
+                                      child: ImageIcon(
+                                        AssetImage(Global.ARROW_ICON),
+                                        size: 18,
+                                      ),
+                                    )
+
+                                  ],
+                                )
+                            ) : Container()
                           ],
                         )
                     ),
@@ -1007,6 +1046,45 @@ class _Report extends State<Report> {
                                           )
                                       ),
                                     ),
+                                    finalCustName.length != 0 ? InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => ListCustomer(
+                                                _selectedBranchId,
+                                                backReportOp: (int resMessage, BuildContext ctx, String id) {
+                                                  if (resMessage == 1) {
+                                                    Navigator.of(ctx).pop();
+                                                    if(store.get("role_id") == "2") {
+                                                      reportOp(ctx, id);
+                                                    } else {
+                                                      BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("year"));
+                                                    }
+                                                  }
+                                                },
+                                              ))
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: <Widget> [
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                'More',
+                                                style: TextStyle(color: Color(Global.BLUE), fontSize: 15, fontFamily: 'book'),
+                                              ),
+                                            ),
+                                            const Padding(
+                                              padding: EdgeInsets.only(top: 4, left: 10),
+                                              child: ImageIcon(
+                                                AssetImage(Global.ARROW_ICON),
+                                                size: 18,
+                                              ),
+                                            )
+
+                                          ],
+                                        )
+                                    ) : Container()
                                   ],
                                 )
                             ),

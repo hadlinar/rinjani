@@ -67,8 +67,13 @@ class _CalendarState extends State<Calendar> {
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.only(left: 21, right: 21, top: 21),
-            child: SfCalendar(
+            child:
+            SfCalendar(
                 view: CalendarView.month,
+                showNavigationArrow: true,
+                headerStyle: const CalendarHeaderStyle(
+                  textAlign: TextAlign.center,
+                ),
                 dataSource: EventDataSource(visit),
                 initialSelectedDate: DateTime.now(),
                 cellBorderColor: Colors.transparent,
@@ -127,7 +132,7 @@ class _CalendarState extends State<Calendar> {
         details.targetElement == CalendarElement.agenda) {
       final Visit _visit = details.appointments![0];
 
-      var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toString());
+      var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toLocal().toString());
 
       showDialog(
         context: context,
@@ -152,7 +157,7 @@ class _CalendarState extends State<Calendar> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${DateFormat("HH:mm").format(_visit.time_start)} - ${DateFormat("HH:mm").format(_visit.time_finish)}",
+                      "${DateFormat("HH:mm").format(_visit.time_start.toLocal())} - ${DateFormat("HH:mm").format(_visit.time_finish.toLocal())}",
                       style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                       textAlign: TextAlign.left,
                     ),
@@ -161,7 +166,7 @@ class _CalendarState extends State<Calendar> {
                 _visit.visit_id == "02" ?
                 Container(
                   padding: const EdgeInsets.only(top: 5),
-                  height: 80,
+                  height:  _visit.pic_name.contains(",") ? 150 : 50,
                   width: MediaQuery.of(context).size.width*0.75,
                   child: Align(
                       alignment: Alignment.centerLeft,
@@ -170,16 +175,44 @@ class _CalendarState extends State<Calendar> {
                               itemCount: _visit.pic_name.split(", ").length,
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, j){
-                                return Container(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text("${_visit.pic_name.split(", ")[j]} - ${_visit.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 5, left: 3),
+                                      child: Text("${_visit.pic_name.split(", ")[j]} - ${_visit.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 5, bottom: 5, left: 3),
+                                      child: Text("${_visit.description.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                    ),
+                                    j == _visit.pic_name.split(", ").length-1 ? Container() :
+                                    const Divider(
+                                      height: 10,
+                                      thickness: 0.5,
+                                      color: Colors.grey,
+                                    )
+                                  ],
                                 );
                               }
                           )
-                      ) : Container(
-                        child: Text("${_visit.pic_name} - ${_visit.pic_position}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                      ) : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(top: 5, left: 3),
+                            child: Text("${_visit.pic_name} - ${_visit.pic_position}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 5, left: 3),
+                            child: Text(_visit.description, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                          )
+
+                        ],
                       )
                   ),
                 )

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rinjani/bloc/customer/customer_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/views/page/plan_in_office.dart';
 import 'package:rinjani/views/page/plan_off.dart';
@@ -56,6 +57,7 @@ class _Plan extends State<Plan> {
                     store.set("clicked", false);
                     store.set("clickedStart", false);
                     store.set("clickedEnd", false);
+                    store.set("savedCust", false);
                   }, context, Global.CHECK_ICON, "Visit saved", "Ok", false);
                 }
             );
@@ -132,15 +134,15 @@ class _Plan extends State<Plan> {
                               ),
                             )
                         ),
-                        defaultType == "in-office" ? Container(
+                        defaultType == "In-office" ? Container(
                             child: InOffice(
                                 defaultType!
                             )
                         )
-                            : (defaultType == "out-office" ? Container(
+                            : (defaultType == "Out-office" ? Container(
                             child: OutOffice()
                         )
-                            : (defaultType == "off" ? Container(
+                            : (defaultType == "Off" ? Container(
                             child: Off()
                         ) : Container()))
                       ],
@@ -161,14 +163,14 @@ class _Plan extends State<Plan> {
                             ),
                             color: Color(Global.BLUE),
                             onPressed: () {
-                              if(defaultType == "in-office") {
+                              if(defaultType == "In-office") {
                                 String timeStart = store.get("timeStart").toString();
                                 String timeEnd = store.get("timeEnd").toString();
                                 String desc = store.get("desc").toString();
                                 String clicked = store.get("clicked").toString();
                                 String clickedStart = store.get("clickedStart").toString();
                                 String clickedEnd = store.get("clickedEnd").toString();
-                                print(clicked);
+
 
                                 if(desc != "" && clicked != "false" && clickedStart == "true" && clickedEnd == "true") {
                                   BlocProvider.of<VisitBloc>(context).add(
@@ -197,7 +199,7 @@ class _Plan extends State<Plan> {
                                 }
 
                               }
-                              else if(defaultType == "off") {
+                              else if(defaultType == "Off") {
                                 String type = store.get("offType");
                                 String desc = type != "Other" ? type : store.get("descOff");
                                 var hourPagi = 8;
@@ -209,8 +211,8 @@ class _Plan extends State<Plan> {
                                 var timeStart, timeFinish;
                                 timeStart = DateTime.now();
                                 timeFinish = DateTime.now();
-                                timeStart = new DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
-                                timeFinish = new DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
+                                timeStart = DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
+                                timeFinish = DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
 
                                 if(clicked != "false" && desc != null && date != null) {
                                   BlocProvider.of<VisitBloc>(context).add(
@@ -242,14 +244,17 @@ class _Plan extends State<Plan> {
                                 List<Map<String, dynamic>> res = store.get("result");
                                 List<String> pos = [];
                                 List<String> name = [];
+                                List<String> desc = [];
 
                                 for(int i=0; i<res.length; i++ ){
                                   pos.add(res[i]['pic']['position']);
                                   name.add(res[i]['pic']['name']);
+                                  desc.add(res[i]['pic']['description']);
                                 }
 
                                 String position = pos.join(", ");
                                 String name1 = name.join(", ");
+                                String description = desc.join(", ");
 
                                 DateTime timeStart = store.get("startTime");
                                 DateTime timeEnd = store.get("endTime");
@@ -260,21 +265,42 @@ class _Plan extends State<Plan> {
                                 String clickedStart = store.get("clickedStart").toString();
                                 String clickedEnd = store.get("clickedEnd").toString();
 
-                                if(position != "" && name1 != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
-                                  BlocProvider.of<VisitBloc>(context).add(
-                                      AddVisitEvent(
-                                        "02",
-                                        store.get("branch_id"),
-                                        cust_id,
-                                        timeStart.toString(),
-                                        timeEnd.toString(),
-                                        store.get("nik"),
-                                        "",
-                                        position,
-                                        name1,
-                                        "n",
-                                      )
-                                  );
+                                bool savedCust = store.get("savedCust");
+                                String newCust = store.get("cust_name").toString();
+
+                                if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
+                                  if(savedCust && newCust != "") {
+                                    BlocProvider.of<VisitBloc>(context).add(
+                                        AddCustomerEvent(
+                                            store.get("branch_id"),
+                                            newCust,
+                                            "02",
+                                            "",
+                                            timeStart.toString(),
+                                            timeEnd.toString(),
+                                            store.get("user_id"),
+                                            description,
+                                            position,
+                                            name1,
+                                            "n",
+                                        )
+                                    );
+                                  } else {
+                                    BlocProvider.of<VisitBloc>(context).add(
+                                        AddVisitEvent(
+                                          "02",
+                                          store.get("branch_id"),
+                                          cust_id,
+                                          timeStart.toString(),
+                                          timeEnd.toString(),
+                                          store.get("user_id"),
+                                          description,
+                                          position,
+                                          name1,
+                                          "n",
+                                        )
+                                    );
+                                  }
                                 } else {
                                   showDialog(
                                       context: context,

@@ -35,13 +35,11 @@ class AppModule {
   AppModule(this.base_url);
 
   static final GetIt injector = GetIt.instance;
-  static Alice alice = new Alice(showNotification: true);
 
   Future<void> configureOthers() async {
     final dio = Dio();
     injector.registerSingleton(dio);
     injector.registerSingleton(await SharedPreferences.getInstance());
-    dio.interceptors.add(alice.getDioInterceptor());
   }
 
   void configureService() {

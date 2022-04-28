@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
 
+  // static const String baseURL = "http://10.0.2.2:3001/rinjani";
   static const String baseURL = "http://103.140.207.25:3001/rinjani";
   static int BLACK = 0xff333333;
   static int BLUE = 0xff2F80ED;
@@ -32,7 +33,6 @@ class Global {
   static const LOGO_ICON = "assets/icon/ic_logo.png";
 
   static String ACCESS_TOKEN = "access_token";
-
 
   static void setState(Null Function() param0) {}
 

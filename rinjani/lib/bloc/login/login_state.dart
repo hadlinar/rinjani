@@ -13,7 +13,7 @@ class LoadingLoginState extends LoginBlocState{}
 
 class SuccesssLoginState extends LoginBlocState{}
 
-class FailedLoginState extends LoginBlocState{}
+class WrongPasswordLoginState extends LoginBlocState{}
 
 class NotLoggedinState extends LoginBlocState{}
 

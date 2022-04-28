@@ -2,6 +2,7 @@ import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
+import '../../models/customer.dart';
 import '../../models/pdf.dart';
 import '../../models/visit.dart';
 import '../../utils/global.dart';
@@ -42,4 +43,7 @@ abstract class VisitService{
 
   @GET('/pdf/{startDate}/{endDate}')
   Future<PDFResponse> getPDF(@Header("Authorization") String authorization, @Path('startDate') String startDate, @Path('endDate') String endDate);
+
+  @POST('/add_customer')
+  Future<NewCustomerResponse> addCustomer(@Header("Authorization") String authorization, @Body() Map<String,dynamic> body);
 }

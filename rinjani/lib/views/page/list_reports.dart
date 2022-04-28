@@ -212,11 +212,18 @@ class _ListReport extends State<ListReport> {
                                                                         mainAxisAlignment: MainAxisAlignment.start,
                                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                                         children: [
+                                                                          Container(
+                                                                            padding: const EdgeInsets.only(top: 5),
+                                                                            child: Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Text(state.getRealization[i].customer, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                            ),
+                                                                          ),
                                                                           Align(
                                                                               alignment: Alignment.centerLeft,
                                                                               child: state.getRealization[i].pic_name.contains(",") ? Container(
                                                                                   child: SizedBox(
-                                                                                      width: 300,
+                                                                                      width: 289,
                                                                                       child: ListView.builder(
                                                                                           itemCount: state.getRealization[i].pic_name.split(", ").length,
                                                                                           scrollDirection: Axis.vertical,
@@ -236,13 +243,6 @@ class _ListReport extends State<ListReport> {
                                                                                 ),
                                                                               )
                                                                           ),
-                                                                          Container(
-                                                                            padding: const EdgeInsets.only(top: 5),
-                                                                            child: Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(state.getRealization[i].customer, style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
-                                                                            ),
-                                                                          ),
                                                                         ],
                                                                       ),
                                                                     ],
@@ -251,7 +251,7 @@ class _ListReport extends State<ListReport> {
                                                                     margin: const EdgeInsets.only(right: 17, left: 30, top: 5),
                                                                     child: Align(
                                                                       alignment: Alignment.topLeft,
-                                                                      child: Text(state.getRealization[i].description, style: Global.getCustomFont(Global.GREY, 14, 'book')),
+                                                                      child: Text(state.getRealization[i].description_real, style: Global.getCustomFont(Global.GREY, 14, 'book')),
                                                                     ),
                                                                   ),
                                                                 ],

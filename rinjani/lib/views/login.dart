@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/bloc/user/user_bloc.dart';
+// import 'package:rinjani/bloc/user/user_bloc.dart';
 
 import '../../utils/global.dart';
 import '../bloc/login/login_bloc.dart';
 import '../utils/global_state.dart';
-import '../widget/custom_text_field.dart';
 import 'dashboard.dart';
 import 'home.dart';
 
@@ -36,7 +35,7 @@ class _LoginPage extends State<LoginPage> {
               builder: (context) => Dashboard()
             ));
           }
-          if(state is LoadingLoginState){
+          if (state is LoadingLoginState){
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -67,7 +66,7 @@ class _LoginPage extends State<LoginPage> {
                 }
               );
           }
-          if (state is FailedLoginState) {
+          if (state is WrongPasswordLoginState) {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -78,8 +77,30 @@ class _LoginPage extends State<LoginPage> {
                 }
             );
           }
-
+          if (state is ServerErrorState) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Global.defaultModal(() {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }, context, Global.WARNING_ICON, "Internal Server Error", "Try again", false);
+                }
+            );
+          }
+          if (state is NotLoggedinState) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Global.defaultModal(() {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }, context, Global.WARNING_ICON, "NIK is not registered", "Try again", false);
+                }
+            );
+          }
         },
+
         child: GestureDetector (
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
@@ -148,61 +169,39 @@ class _LoginPage extends State<LoginPage> {
                               ),
                             ),
                           ),
+                          Stack(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                                  width: 150,
+                                  height: 56,
+                                  color: Colors.white,
+                                  child: RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(color: Color(Global.BLUE)),
+                                          borderRadius: BorderRadius.circular(30)
+                                      ),
+                                      color: Color(Global.BLUE),
+                                      onPressed: () {
+                                        BlocProvider.of<LoginBloc>(context).add(
+                                            LoginEvent(
+                                              nik,
+                                              pass
+                                            )
+                                        );
 
-                          // Container(
-                          //   margin: const EdgeInsets.only(bottom: 20),
-                          //   child: TextFormField(
-                          //     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                          //     maxLines: 1,
-                          //     obscureText: true,
-                          //     controller: passwordController,
-                          //     onChanged: (text) {
-                          //       pass = text;
-                          //     },
-                          //     decoration: InputDecoration(
-                          //       labelText: "Password",
-                          //       alignLabelWithHint: true,
-                          //       border: OutlineInputBorder(
-                          //           borderRadius: BorderRadius .circular(10),
-                          //           borderSide: BorderSide()),
-                          //     ),
-                          //   ),
-                          // ),
-                          Container(
-                            child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                                    width: 150,
-                                    height: 56,
-                                    color: Colors.white,
-                                    child: RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            side: BorderSide(color: Color(Global.BLUE)),
-                                            borderRadius: BorderRadius.circular(30)
+                                      },
+                                      child: const Text(
+                                        "Login",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'bold',
+                                            fontSize: 15
                                         ),
-                                        color: Color(Global.BLUE),
-                                        onPressed: () {
-                                          BlocProvider.of<LoginBloc>(context).add(
-                                              LoginEvent(
-                                                nik,
-                                                pass
-                                              )
-                                          );
-
-                                        },
-                                        child: const Text(
-                                          "Login",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'bold',
-                                              fontSize: 15
-                                          ),
-                                        )
-                                    ),
+                                      )
                                   ),
-                                ]
-                            ),
+                                ),
+                              ]
                           )
                         ] ,
                       )
