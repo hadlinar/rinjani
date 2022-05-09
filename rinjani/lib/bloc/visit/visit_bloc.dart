@@ -249,10 +249,14 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
       );
       if (response.message == "ok"){
         yield SuccessAddVisitState();
+      } else if (response.message == "Customer is already registered") {
+        yield FailedAddCustVisitState();
       }
     } on DioError catch(e) {
       if(e.response?.statusCode == 500) {
         yield NotLogginInState();
+      } else if (e.response?.statusCode == 400) {
+        yield FailedAddCustVisitState();
       }
       else {
         yield FailedVisitState();

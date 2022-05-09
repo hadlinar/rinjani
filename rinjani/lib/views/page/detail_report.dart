@@ -28,7 +28,6 @@ class _DetailReport extends State<DetailReport> {
   }
 
   Future<void> GetAddressFromLatLong(double lat, double long) async {
-    print("${lat} ${long}");
     double latitude = lat;
     double longitude = long;
     List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);

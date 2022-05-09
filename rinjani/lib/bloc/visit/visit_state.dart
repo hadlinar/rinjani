@@ -14,6 +14,8 @@ class SuccesssVisitState extends VisitBlocState{}
 
 class FailedVisitState extends VisitBlocState{}
 
+class FailedAddCustVisitState extends VisitBlocState{}
+
 class VisitCategoryList extends VisitBlocState{
   List<VisitCategory> getVisitCategory;
 
