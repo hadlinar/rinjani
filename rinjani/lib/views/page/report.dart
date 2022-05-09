@@ -581,35 +581,34 @@ class _Report extends State<Report> {
                             builder: (BuildContext context) {
 
                               String initDate = "";
-                              DateTime initialDate = DateTime.now();
+                              DateTime initialDateStart = DateTime.now();
+                              DateTime initialDateEnd = DateTime.now();
 
-                              void datePickerStart(ctx) {
-                                showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2050)
-                                ).then((date) {
-                                  setState((){
-                                    initialDate = date!;
-                                    initDate = initialDate.toString();
-                                  });
-                                });
-                              }
-
-                              void datePickerEnd(ctx) {
-                                showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2050)
-                                ).then((date) {
-                                  setState((){
-                                    initialDate = date!;
-                                    initDate = initialDate.toString();
-                                  });
-                                });
-                              }
+                              // void datePickerStart(ctx) {
+                              //   showDatePicker(
+                              //       context: context,
+                              //       initialDate: DateTime.now(),
+                              //       firstDate: DateTime.now(),
+                              //       lastDate: DateTime(2050)
+                              //   ).then((date) {
+                              //     setState((){
+                              //       initialDate = date!;
+                              //     });
+                              //   });
+                              // }
+                              //
+                              // void datePickerEnd(ctx) {
+                              //   showDatePicker(
+                              //       context: context,
+                              //       initialDate: DateTime.now(),
+                              //       firstDate: DateTime.now(),
+                              //       lastDate: DateTime(2050)
+                              //   ).then((date) {
+                              //     setState((){
+                              //       initialDate = date!;
+                              //     });
+                              //   });
+                              // }
 
                               return StatefulBuilder(
                                 builder: (context, setState) {
@@ -642,7 +641,18 @@ class _Report extends State<Report> {
                                               Container(
                                                   child: InkWell(
                                                       onTap: () {
-                                                        datePickerStart(context);
+                                                        setState(() {
+                                                          showDatePicker(
+                                                              context: context,
+                                                              initialDate: DateTime.now(),
+                                                              firstDate: DateTime.now(),
+                                                              lastDate: DateTime(2050)
+                                                          ).then((date) {
+                                                            setState((){
+                                                              initialDateStart = date!;
+                                                            });
+                                                          });
+                                                        });
                                                       },
                                                       child: Container(
                                                           padding: const EdgeInsets.only(left: 17),
@@ -661,20 +671,13 @@ class _Report extends State<Report> {
                                               alignment: Alignment.centerLeft,
                                               child: Container(
                                                   margin: const EdgeInsets.only(bottom: 30, top: 10),
-                                                  child: InkWell(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          datePickerStart(context);
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                          padding: const EdgeInsets.only(left: 17),
-                                                          child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDate).toString(),
-                                                              style: const TextStyle(
-                                                                color: Color(0xff4F4F4F),
-                                                                fontFamily: 'book',
-                                                                fontSize: 15,
-                                                              )
+                                                  child: Container(
+                                                      padding: const EdgeInsets.only(left: 17),
+                                                      child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDateStart).toString(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xff4F4F4F),
+                                                            fontFamily: 'book',
+                                                            fontSize: 15,
                                                           )
                                                       )
                                                   )
@@ -693,7 +696,16 @@ class _Report extends State<Report> {
                                               Container(
                                                   child: InkWell(
                                                       onTap: () {
-                                                        datePickerEnd(context);
+                                                        showDatePicker(
+                                                            context: context,
+                                                            initialDate: DateTime.now(),
+                                                            firstDate: DateTime.now(),
+                                                            lastDate: DateTime(2050)
+                                                        ).then((date) {
+                                                          setState((){
+                                                            initialDateEnd = date!;
+                                                          });
+                                                        });
                                                       },
                                                       child: Container(
                                                           padding: const EdgeInsets.only(left: 17),
@@ -712,16 +724,13 @@ class _Report extends State<Report> {
                                               alignment: Alignment.centerLeft,
                                               child: Container(
                                                   margin: const EdgeInsets.only(bottom: 30, top: 10),
-                                                  child: InkWell(
-                                                      onTap: () => datePickerEnd(context),
-                                                      child: Container(
-                                                          padding: const EdgeInsets.only(left: 17),
-                                                          child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDate).toString(),
-                                                              style: const TextStyle(
-                                                                color: Color(0xff4F4F4F),
-                                                                fontFamily: 'book',
-                                                                fontSize: 15,
-                                                              )
+                                                  child: Container(
+                                                      padding: const EdgeInsets.only(left: 17),
+                                                      child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDateEnd).toString(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xff4F4F4F),
+                                                            fontFamily: 'book',
+                                                            fontSize: 15,
                                                           )
                                                       )
                                                   )
