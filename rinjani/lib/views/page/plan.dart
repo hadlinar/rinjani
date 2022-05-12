@@ -42,7 +42,6 @@ class _Plan extends State<Plan> {
   Widget build(BuildContext context) {
     return BlocListener<VisitBloc, VisitBlocState>(
         listener: (context, state) {
-          print(state.toString());
           if (state is InitialVisitBlocState || state is LoadingVisitState) {
             const Center(
                 child: CircularProgressIndicator()

@@ -57,6 +57,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is AddCustomerEvent) {
       yield* _mapAddNewCustomerState(event);
     }
+    if(event is GetRankEvent) {
+      yield* _mapGetRankState(event);
+    }
   }
 
   Stream<VisitBlocState> _mapVisitCategoryToState(GetVisitCategoryEvent event) async* {
@@ -257,6 +260,28 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
         yield NotLogginInState();
       } else if (e.response?.statusCode == 400) {
         yield FailedAddCustVisitState();
+      }
+      else {
+        yield FailedVisitState();
+      }
+    }
+  }
+
+  Stream<VisitBlocState> _mapGetRankState(GetRankEvent e) async* {
+
+    yield LoadingVisitState();
+    try{
+      print("sebelum repository");
+      final response = await _visitRepository.getRank(e.type);
+      if (response.message == "highest") {
+        yield GetRankingHighState(response.ranking);
+      } else if (response.message == "lowest") {
+        yield GetRankingLowState(response.ranking);
+      }
+    } on DioError catch(e) {
+      print(e.message);
+      if(e.response?.statusCode == 500) {
+        yield NotLogginInState();
       }
       else {
         yield FailedVisitState();

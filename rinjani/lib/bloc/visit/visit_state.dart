@@ -53,3 +53,15 @@ class GetPDFState extends VisitBlocState{
 
   GetPDFState(this.getPDF);
 }
+
+class GetRankingHighState extends VisitBlocState{
+  List<Ranking> getRanking;
+
+  GetRankingHighState(this.getRanking);
+}
+
+class GetRankingLowState extends VisitBlocState{
+  List<Ranking> getRanking;
+
+  GetRankingLowState(this.getRanking);
+}

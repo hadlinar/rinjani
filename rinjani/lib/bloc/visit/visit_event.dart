@@ -121,5 +121,11 @@ class AddCustomerEvent extends VisitBlocEvent{
       this.pic_position,
       this.pic_name,
       this.status_visit
-      );
+  );
+}
+
+class GetRankEvent extends VisitBlocEvent{
+  String type;
+
+  GetRankEvent(this.type);
 }

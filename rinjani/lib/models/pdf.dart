@@ -1,6 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'pdf.g.dart';
 
+
+// "message": "ok",
+// "result": [
+// {
+// "real_no": "RLS-2022-BGR-0001",
+// "visit_no": "VST-2022-BGR-0001",
+// "branch_id": "44",
+// "branch": "BOGOR",
+// "cust_id": "CUST-2022-0001",
+// "customer": "test new cust",
+// "email": "admin@nusindo.co.id",
+// "time_start": "2022-04-27T01:30:00.000Z",
+// "time_finish": "2022-04-27T02:54:12.863Z",
+// "user_id": "admin",
+// "employee": "ADMIN",
+// "description_real": "changed desc",
+// "pic_position": "pos",
+// "pic_name": "name"
+
 @JsonSerializable()
 class PDF{
   String real_no;
@@ -14,7 +33,7 @@ class PDF{
   String time_finish;
   String user_id;
   String employee;
-  String description;
+  String description_real;
   String pic_position;
   String pic_name;
 
@@ -30,7 +49,7 @@ class PDF{
       this.time_finish,
       this.user_id,
       this.employee,
-      this.description,
+      this.description_real,
       this.pic_position,
       this.pic_name
   );

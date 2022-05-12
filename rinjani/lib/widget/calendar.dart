@@ -22,6 +22,10 @@ class _CalendarState extends State<Calendar> {
   void initState() {
     super.initState();
     BlocProvider.of<VisitBloc>(context).add(GetVisitForRealizationEvent());
+
+    String test = store.get("branch_id");
+    String test1 = store.get("user_id");
+    print('test $test $test1');
   }
 
   @override

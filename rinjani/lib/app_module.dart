@@ -1,4 +1,3 @@
-import 'package:alice/alice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +16,7 @@ import 'package:dio/dio.dart';
 import 'package:rinjani/data_source/repository/visit_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bloc/activity/activity_bloc.dart';
 import 'bloc/employee/employee_bloc.dart';
 import 'bloc/user/user_bloc.dart';
 import 'data_source/network/branch_service.dart';
@@ -101,6 +101,9 @@ class AppModule {
       ),
       BlocProvider<RoleBloc>(
         create: (_) => RoleBloc.create(injector.get()),
+      ),
+      BlocProvider<ActivityBloc>(
+        create: (_) => ActivityBloc.create(injector.get()),
       ),
     ], child: app);
   }

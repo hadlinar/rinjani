@@ -18,7 +18,7 @@ PDF _$PDFFromJson(Map<String, dynamic> json) => PDF(
       json['time_finish'] as String,
       json['user_id'] as String,
       json['employee'] as String,
-      json['description'] as String,
+      json['description_real'] as String,
       json['pic_position'] as String,
       json['pic_name'] as String,
     );
@@ -35,7 +35,7 @@ Map<String, dynamic> _$PDFToJson(PDF instance) => <String, dynamic>{
       'time_finish': instance.time_finish,
       'user_id': instance.user_id,
       'employee': instance.employee,
-      'description': instance.description,
+      'description_real': instance.description_real,
       'pic_position': instance.pic_position,
       'pic_name': instance.pic_name,
     };

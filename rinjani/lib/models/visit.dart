@@ -206,3 +206,71 @@ class DeleteVisitResponse{
 
   factory DeleteVisitResponse.fromJson(Map<String,dynamic> json) => _$DeleteVisitResponseFromJson(json);
 }
+
+@JsonSerializable()
+class Activity{
+  String in_office;
+  String out_office;
+  String off_act;
+  String all_act;
+  String prs_in;
+  String prs_out;
+  String prs_off;
+
+  Activity({
+    required this.in_office,
+    required this.out_office,
+    required this.off_act,
+    required this.all_act,
+    required this.prs_in,
+    required this.prs_out,
+    required this.prs_off,
+  });
+
+  factory Activity.fromJson(Map<String,dynamic> json) => _$ActivityFromJson(json);
+}
+
+@JsonSerializable()
+class ActivityResponse{
+  String message;
+  Activity activity;
+
+  ActivityResponse(this.message, this.activity);
+
+  factory ActivityResponse.fromJson(Map<String,dynamic> json) => _$ActivityResponseFromJson(json);
+}
+
+@JsonSerializable()
+class Ranking{
+  String user_id;
+  String name_user;
+  String branch_id;
+  String branch_name;
+  String in_office;
+  String out_office;
+  String off_act;
+  String all_act;
+
+  Ranking({
+    required this.user_id,
+    required this.name_user,
+    required this.branch_id,
+    required this.branch_name,
+    required this.in_office,
+    required this.out_office,
+    required this.off_act,
+    required this.all_act
+  });
+
+  factory Ranking.fromJson(Map<String,dynamic> json) => _$RankingFromJson(json);
+}
+
+@JsonSerializable()
+class RankingResponse{
+  String message;
+  List<Ranking> ranking;
+
+  RankingResponse(this.message, this.ranking);
+
+  factory RankingResponse.fromJson(Map<String,dynamic> json) => _$RankingResponseFromJson(json);
+}

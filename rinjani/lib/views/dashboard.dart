@@ -91,6 +91,10 @@ class _Dashboard extends State<Dashboard> {
                                         builder: (BuildContext context) {
                                           return Global.defaultModal(() {
                                             Navigator.pop(context);
+                                            store.set("role_id", "");
+                                            store.set("user_id", "");
+                                            store.set("name", "");
+                                            store.set("branch_id", "");
                                             BlocProvider.of<UserBloc>(
                                                 context)
                                                 .add(LogoutEvent());
