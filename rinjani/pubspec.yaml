@@ -88,6 +88,7 @@ flutter:
     - assets/images/realization.png
     - assets/images/report.png
     - assets/images/logo.png
+    - assets/images/analyze.png
 
     #icons
     - assets/icon/ic_back.png
@@ -106,6 +107,8 @@ flutter:
     - assets/icon/ic_logout.png
     - assets/icon/ic_download.png
     - assets/icon/ic_logo.png
+    - assets/icon/ic_red.png
+    - assets/icon/ic_green.png
 
 
     #background

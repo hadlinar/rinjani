@@ -5,10 +5,13 @@ import 'package:rinjani/bloc/branch/branch_bloc.dart';
 import 'package:rinjani/bloc/customer/customer_bloc.dart';
 import 'package:rinjani/bloc/launcher/launcher_bloc.dart';
 import 'package:rinjani/bloc/login/login_bloc.dart';
+import 'package:rinjani/bloc/monitor/monitor_bloc.dart';
+import 'package:rinjani/bloc/ranking/ranking_bloc.dart';
 import 'package:rinjani/bloc/role/role_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/data_source/network/customer_service.dart';
 import 'package:rinjani/data_source/network/login_service.dart';
+import 'package:rinjani/data_source/network/ranking_service.dart';
 import 'package:rinjani/data_source/network/role_service.dart';
 import 'package:rinjani/data_source/network/visit_service.dart';
 import 'package:rinjani/data_source/repository/customer_repository.dart';
@@ -16,15 +19,17 @@ import 'package:dio/dio.dart';
 import 'package:rinjani/data_source/repository/visit_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'bloc/activity/activity_bloc.dart';
 import 'bloc/employee/employee_bloc.dart';
 import 'bloc/user/user_bloc.dart';
 import 'data_source/network/branch_service.dart';
 import 'data_source/network/employee_service.dart';
+import 'data_source/network/monitor_service.dart';
 import 'data_source/network/user_service.dart';
 import 'data_source/repository/branch_repository.dart';
 import 'data_source/repository/employee_repository.dart';
 import 'data_source/repository/login_repository.dart';
+import 'data_source/repository/monitor_repository.dart';
+import 'data_source/repository/ranking_repository.dart';
 import 'data_source/repository/role_repository.dart';
 import 'data_source/repository/user_repository.dart';
 
@@ -64,6 +69,12 @@ class AppModule {
     injector.registerSingleton<RoleService>(
         RoleService.create(injector.get())
     );
+    injector.registerSingleton<RankingService>(
+        RankingService.create(injector.get())
+    );
+    injector.registerSingleton<MonitorService>(
+        MonitorService.create(injector.get())
+    );
   }
 
   void configureRepository() {
@@ -74,6 +85,8 @@ class AppModule {
     injector.registerSingleton(EmployeeRepository(injector.get()));
     injector.registerSingleton(LoginRepository(injector.get()));
     injector.registerSingleton(RoleRepository(injector.get()));
+    injector.registerSingleton(RankingRepository(injector.get()));
+    injector.registerSingleton(MonitorRepository(injector.get()));
   }
 
   Widget configureBloc(Widget app) {
@@ -102,8 +115,11 @@ class AppModule {
       BlocProvider<RoleBloc>(
         create: (_) => RoleBloc.create(injector.get()),
       ),
-      BlocProvider<ActivityBloc>(
-        create: (_) => ActivityBloc.create(injector.get()),
+      BlocProvider<RankingBloc>(
+        create: (_) => RankingBloc.create(injector.get()),
+      ),
+      BlocProvider<MonitorBloc>(
+        create: (_) => MonitorBloc.create(injector.get()),
       ),
     ], child: app);
   }
@@ -112,7 +128,6 @@ class AppModule {
     await configureOthers();
     configureService();
     configureRepository();
-    print("configure");
   }
 
 }

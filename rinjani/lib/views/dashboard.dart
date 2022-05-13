@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rinjani/bloc/user/user_bloc.dart';
 import 'package:rinjani/utils/global.dart';
+import 'package:rinjani/views/page/analyze.dart';
 import 'package:rinjani/views/page/realization.dart';
 import 'package:rinjani/views/page/report.dart';
 import '../utils/global_state.dart';
@@ -167,6 +168,19 @@ class _Dashboard extends State<Dashboard> {
                                     ),
                                     Global.getMenuText("Report")
                                   ],
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => Analyze()
+                                          ));
+                                        },
+                                        child: Global.getMenuCard("analyze.png", 0xffBEE1BB)
+                                    ),
+                                    Global.getMenuText("Analyze")
+                                  ],
                                 )
                               ],
                             ),
@@ -215,7 +229,20 @@ class _Dashboard extends State<Dashboard> {
                                     ),
                                     Global.getMenuText("Report")
                                   ],
-                                )
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => Analyze()
+                                          ));
+                                        },
+                                        child: Global.getMenuCard("analyze.png", 0xffBEE1BB)
+                                    ),
+                                    Global.getMenuText("Analyze")
+                                  ],
+                                ),
                               ],
                             ),
                           )

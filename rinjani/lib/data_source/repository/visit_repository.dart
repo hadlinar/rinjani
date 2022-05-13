@@ -135,14 +135,9 @@ class VisitRepository {
     return response;
   }
 
-  Future<ActivityResponse> getActivity(String branchId) async {
-    final response = await visitService.getActvity(branchId);
-    return response;
-  }
 
-
-  Future<RankingResponse> getRank(String type) async {
-    final response = await visitService.getRank(type);
-    return response;
-  }
+  // Future<Ranking> getRank(String type) async {
+  //   final response = await visitService.getRank(type);
+  //   return response;
+  // }
 }
