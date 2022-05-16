@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rinjani/bloc/user/user_bloc.dart';
+import 'package:rinjani/models/monitor.dart';
 import 'package:rinjani/utils/global.dart';
 import 'package:rinjani/views/page/analyze.dart';
 import 'package:rinjani/views/page/realization.dart';
 import 'package:rinjani/views/page/report.dart';
+import '../bloc/monitor/monitor_bloc.dart';
+import '../bloc/ranking/ranking_bloc.dart';
+import '../models/ranking.dart';
 import '../utils/global_state.dart';
 import '../widget/calendar.dart';
 import 'login.dart';
@@ -21,11 +25,15 @@ class Dashboard extends StatefulWidget{
 final GlobalState store = GlobalState.instance;
 
 class _Dashboard extends State<Dashboard> {
+  List<Ranking> ranking = [];
+  List<Monitor> monitor = [];
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+    BlocProvider.of<RankingBloc>(context).add(GetRankingEvent());
+    BlocProvider.of<MonitorBloc>(context).add(GetMonitorEvent());
   }
 
   @override
@@ -151,11 +159,37 @@ class _Dashboard extends State<Dashboard> {
                               )
                           ),
                           child: state.getUser.role_id == "2" ? Container(
-                            padding: EdgeInsets.only(top: 32, left: 42),
+                            padding: const EdgeInsets.only(top: 32, left: 21),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                Container(
+                                  child: BlocListener<RankingBloc, RankingBlocState>(
+                                    listener: (context, state) {
+                                      if(state is GetRankingState) {
+                                        setState(() {
+                                          ranking = state.getRanking;
+                                        });
+
+                                      }
+                                    },
+                                    child: Container()
+                                  )
+                                ),
+                                Container(
+                                    child: BlocListener<MonitorBloc, MonitorBlocState>(
+                                        listener: (context, state) {
+                                          if(state is GetMonitorState) {
+                                            setState(() {
+                                              monitor = state.getMonitor;
+                                            });
+
+                                          }
+                                        },
+                                        child: Container()
+                                    )
+                                ),
                                 Column(
                                   children: <Widget>[
                                     GestureDetector(
@@ -169,28 +203,59 @@ class _Dashboard extends State<Dashboard> {
                                     Global.getMenuText("Report")
                                   ],
                                 ),
-                                Column(
-                                  children: <Widget>[
-                                    GestureDetector(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(
-                                              builder: (context) => Analyze()
-                                          ));
-                                        },
-                                        child: Global.getMenuCard("analyze.png", 0xffBEE1BB)
-                                    ),
-                                    Global.getMenuText("Analyze")
-                                  ],
+                                Container(
+                                  padding: const EdgeInsets.only(left: 21),
+                                  child: Column(
+                                    children: <Widget>[
+                                      GestureDetector(
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (context) => Analyze(ranking, monitor)
+                                            ));
+                                          },
+                                          child: Global.getMenuCard("analyze.png", 0xffBEE1BB)
+                                      ),
+                                      Global.getMenuText("Analyze")
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
                           ) :
                           Container(
-                            padding: EdgeInsets.only(top: 32),
+                            padding: const EdgeInsets.only(top: 32),
+                            margin: const EdgeInsets.only(right: 9),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
+
+                                Container(
+                                    child: BlocListener<RankingBloc, RankingBlocState>(
+                                        listener: (context, state) {
+                                          if(state is GetRankingState) {
+                                            setState(() {
+                                              ranking = state.getRanking;
+                                            });
+
+                                          }
+                                        },
+                                        child: Container()
+                                    )
+                                ),
+                                Container(
+                                    child: BlocListener<MonitorBloc, MonitorBlocState>(
+                                        listener: (context, state) {
+                                          if(state is GetMonitorState) {
+                                            setState(() {
+                                              monitor = state.getMonitor;
+                                            });
+
+                                          }
+                                        },
+                                        child: Container()
+                                    )
+                                ),
                                 Column(
                                   children: <Widget>[
                                     GestureDetector(
@@ -235,7 +300,7 @@ class _Dashboard extends State<Dashboard> {
                                     GestureDetector(
                                         onTap: (){
                                           Navigator.push(context, MaterialPageRoute(
-                                              builder: (context) => Analyze()
+                                              builder: (context) => Analyze(ranking, monitor)
                                           ));
                                         },
                                         child: Global.getMenuCard("analyze.png", 0xffBEE1BB)
