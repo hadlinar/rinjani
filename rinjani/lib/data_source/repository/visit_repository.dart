@@ -134,4 +134,10 @@ class VisitRepository {
     });
     return response;
   }
+
+
+  // Future<Ranking> getRank(String type) async {
+  //   final response = await visitService.getRank(type);
+  //   return response;
+  // }
 }

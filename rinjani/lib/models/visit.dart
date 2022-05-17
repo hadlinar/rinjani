@@ -206,3 +206,44 @@ class DeleteVisitResponse{
 
   factory DeleteVisitResponse.fromJson(Map<String,dynamic> json) => _$DeleteVisitResponseFromJson(json);
 }
+//
+// @JsonSerializable()
+// class Ranking{
+//   String message;
+//
+//   // String user_id;
+//   // String name_user;
+//   // String branch_id;
+//   // String branch_name;
+//   // String in_office;
+//   // String out_office;
+//   // String off_act;
+//   // String all_act;
+//
+//   Ranking(
+//     this.message
+//     // required this.user_id,
+//     // required this.name_user,
+//     // required this.branch_id,
+//     // required this.branch_name,
+//     // required this.in_office,
+//     // required this.out_office,
+//     // required this.off_act,
+//     // required this.all_act
+//   );
+//
+//   factory Ranking.fromJson(Map<String,dynamic> json) => _$RankingFromJson(json);
+// }
+//
+// @JsonSerializable()
+// class RankingResponse{
+//   String message;
+//   // List<Ranking> ranking;
+//
+//   RankingResponse(
+//       this.message,
+//       // this.ranking
+//       );
+//
+//   factory RankingResponse.fromJson(Map<String,dynamic> json) => _$RankingResponseFromJson(json);
+// }

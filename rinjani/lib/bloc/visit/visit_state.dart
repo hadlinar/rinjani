@@ -14,6 +14,8 @@ class SuccesssVisitState extends VisitBlocState{}
 
 class FailedVisitState extends VisitBlocState{}
 
+class FailedAddCustVisitState extends VisitBlocState{}
+
 class VisitCategoryList extends VisitBlocState{
   List<VisitCategory> getVisitCategory;
 
@@ -51,3 +53,15 @@ class GetPDFState extends VisitBlocState{
 
   GetPDFState(this.getPDF);
 }
+
+// class GetRankingHighState extends VisitBlocState{
+//   Ranking getRanking;
+//
+//   GetRankingHighState(this.getRanking);
+// }
+//
+// class GetRankingLowState extends VisitBlocState{
+//   Ranking getRanking;
+//
+//   GetRankingLowState(this.getRanking);
+// }

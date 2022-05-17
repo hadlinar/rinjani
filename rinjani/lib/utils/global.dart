@@ -31,6 +31,8 @@ class Global {
   static const LOGOUT_ICON = "assets/icon/ic_logout.png";
   static const DOWNLOAD_ICON = "assets/icon/ic_download.png";
   static const LOGO_ICON = "assets/icon/ic_logo.png";
+  static const RED_ICON = "assets/icon/ic_red.png";
+  static const GREEN_ICON = "assets/icon/ic_green.png";
 
   static String ACCESS_TOKEN = "access_token";
 

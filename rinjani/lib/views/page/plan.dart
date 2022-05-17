@@ -42,7 +42,6 @@ class _Plan extends State<Plan> {
   Widget build(BuildContext context) {
     return BlocListener<VisitBloc, VisitBlocState>(
         listener: (context, state) {
-          print(state.toString());
           if (state is InitialVisitBlocState || state is LoadingVisitState) {
             const Center(
                 child: CircularProgressIndicator()
@@ -62,13 +61,24 @@ class _Plan extends State<Plan> {
                 }
             );
 
-          } if(state is VisitCategoryList) {
+          }
+          if(state is VisitCategoryList) {
             for(int i=0; i < 3; i++) {
               visitName?.add(state.getVisitCategory[i].visit_name);
             }
             setState(() {
               visitName;
             });
+          }
+          if(state is FailedAddCustVisitState) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Global.defaultModal(() {
+                    Navigator.pop(context);
+                  }, context, Global.WARNING_ICON, "Customer is already exist", "Ok", false);
+                }
+            );
           }
           else {
             Container();

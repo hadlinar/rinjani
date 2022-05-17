@@ -115,7 +115,7 @@ class _LoginPage extends State<LoginPage> {
                 body: SingleChildScrollView(
                   child: Container(
                       padding: const EdgeInsets.only(left: 21, right: 21),
-                      margin: const EdgeInsets.only(top: 60),
+                      margin: const EdgeInsets.only(top: 50),
                       child: Column(
                         children: <Widget>[
                           Container(
@@ -125,7 +125,7 @@ class _LoginPage extends State<LoginPage> {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(bottom: 20),
+                            margin: const EdgeInsets.only(top: 30, bottom: 20),
                             child: TextFormField(
                               style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                               maxLines: 1,

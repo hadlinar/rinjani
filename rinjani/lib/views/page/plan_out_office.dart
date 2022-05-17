@@ -448,7 +448,6 @@ class _AddPlan extends State<AddPlan> {
           for(int i=0; i < customer.length; i++) {
             customerName.add(customer[i].cust_name);
           }
-
           return Column(
               children: <Widget> [
                 Container(

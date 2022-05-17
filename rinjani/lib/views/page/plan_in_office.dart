@@ -154,8 +154,7 @@ class _InOffice extends State<InOffice> {
                 children: <Widget> [
                   Container(
                       padding: const EdgeInsets.only(right: 21, left: 21, bottom: 17),
-                      child:
-                      Column(
+                      child: Column(
                         children: <Widget> [
                           Container(
                             padding: const EdgeInsets.only(bottom: 17, top: 5),
