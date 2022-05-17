@@ -181,7 +181,7 @@ class _Realization extends State<Realization> {
                   if(state.getVisit[i].visit_id == "02") {
                     cust.add(state.getVisit[i].cust_name);
                   } else if(state.getVisit[i].visit_id == "01") {
-                    time.add(state.getVisit[i].time_start.toLocal().toString());
+                    time.add(state.getVisit[i].time_start.toString());
                   }
                 }
                 setState(() {
@@ -303,8 +303,7 @@ class _Realization extends State<Realization> {
                                               setState(() {
                                                 _selectedTime = value;
                                                 for(int i=0; i<visit.length; i++) {
-                                                  if(visit[i].time_start.toLocal().toString() == _selectedTime) {
-                                                    // descriptionController.text = visit[i].description;
+                                                  if(visit[i].time_start.toString() == _selectedTime) {
                                                     formerDescription = visit[i].description;
                                                     visitNo = visit[i].visit_no;
                                                     branchId = visit[i].branch_id;

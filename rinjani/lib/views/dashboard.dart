@@ -224,7 +224,7 @@ class _Dashboard extends State<Dashboard> {
                           ) :
                           Container(
                             padding: const EdgeInsets.only(top: 32),
-                            margin: const EdgeInsets.only(right: 9),
+                            margin: const EdgeInsets.only(right: 5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,

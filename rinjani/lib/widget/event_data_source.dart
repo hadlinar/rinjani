@@ -16,7 +16,7 @@ class EventDataSource extends CalendarDataSource{
 
   @override
   DateTime getStartTime(int index) {
-    String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_start.toLocal());
+    String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_start);
     DateTime time = DateFormat('yyyy-MM-dd HH:mm:ss').parse(startTime);
     return time;
   }
@@ -24,7 +24,7 @@ class EventDataSource extends CalendarDataSource{
 
   @override
   DateTime getEndTime(int index) {
-    String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_finish.toLocal());
+    String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_finish);
     DateTime time = DateFormat('yyyy-MM-dd HH:mm:ss').parse(endTime);
     return time;
   }
