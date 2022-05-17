@@ -136,7 +136,7 @@ class _CalendarState extends State<Calendar> {
         details.targetElement == CalendarElement.agenda) {
       final Visit _visit = details.appointments![0];
 
-      var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toLocal().toString());
+      var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toString());
 
       showDialog(
         context: context,
@@ -161,7 +161,7 @@ class _CalendarState extends State<Calendar> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${DateFormat("HH:mm").format(_visit.time_start.toLocal())} - ${DateFormat("HH:mm").format(_visit.time_finish.toLocal())}",
+                      "${DateFormat("HH:mm").format(_visit.time_start)} - ${DateFormat("HH:mm").format(_visit.time_finish)}",
                       style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                       textAlign: TextAlign.left,
                     ),

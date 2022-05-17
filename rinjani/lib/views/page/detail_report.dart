@@ -42,8 +42,8 @@ class _DetailReport extends State<DetailReport> {
   Widget build(BuildContext context) {
     String date = DateFormat("EEEE, dd MMM yyyy").format(widget.realization.time_finish);
     String dateStart = DateFormat("EEEE, dd MMM yyyy").format(widget.realization.time_start);
-    String time = DateFormat("HH:mm").format(widget.realization.time_finish.toLocal());
-    String timeStart = DateFormat("HH:mm").format(widget.realization.time_start.toLocal());
+    String time = DateFormat("HH:mm").format(widget.realization.time_finish);
+    String timeStart = DateFormat("HH:mm").format(widget.realization.time_start);
     return SafeArea(
         top: false,
         bottom: false,
