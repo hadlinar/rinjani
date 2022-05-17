@@ -137,8 +137,8 @@ class _CalendarState extends State<Calendar> {
       final Visit _visit = details.appointments![0];
 
       var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toString());
-      int newHourStart = _visit.time_start.hour-7;
-      int newHourEnd = _visit.time_finish.hour-7;
+      int newHourStart = _visit.time_start.hour+0;
+      int newHourEnd = _visit.time_finish.hour+0;
 
       var timeStart = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
       var timeFinish = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);

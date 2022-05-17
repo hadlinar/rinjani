@@ -183,7 +183,7 @@ class _Realization extends State<Realization> {
                   } else if(state.getVisit[i].visit_id == "01") {
 
                     var time1 = DateFormat("yyyy-MM-dd HH:mm:ss").parse(state.getVisit[i].time_start.toString());
-                    int newHourStart = state.getVisit[i].time_start.hour-7;
+                    int newHourStart = state.getVisit[i].time_start.hour+0;
 
                     var timeStart = DateTime(time1.year, time1.month, time1.day, newHourStart, time1.minute, time1.second);
 
@@ -361,8 +361,8 @@ class _Realization extends State<Realization> {
 
 
                                                                 var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
-                                                                int newHourStart = visit[i].time_start.hour-7;
-                                                                int newHourEnd = visit[i].time_finish.hour-7;
+                                                                int newHourStart = visit[i].time_start.hour+0;
+                                                                int newHourEnd = visit[i].time_finish.hour+0;
 
                                                                 var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
                                                                 var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);

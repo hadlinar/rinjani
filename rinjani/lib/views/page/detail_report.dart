@@ -48,8 +48,8 @@ class _DetailReport extends State<DetailReport> {
 
     var time1 = DateFormat("HH:mm").parse(time);
     var timeStart1 = DateFormat("HH:mm").parse(time);
-    int newHourStart = widget.realization.time_start.hour-7;
-    int newHourEnd = widget.realization.time_finish.hour-7;
+    int newHourStart = widget.realization.time_start.hour+0;
+    int newHourEnd = widget.realization.time_finish.hour+0;
 
     var timeStart2 = DateTime(timeStart1.year, timeStart1.month, timeStart1.day, newHourStart, timeStart1.minute, timeStart1.second);
     var timeFinish1 = DateTime(time1.year, time1.month, time1.day, newHourEnd, time1.minute, time1.second);
