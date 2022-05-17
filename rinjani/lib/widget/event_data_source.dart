@@ -16,17 +16,31 @@ class EventDataSource extends CalendarDataSource{
 
   @override
   DateTime getStartTime(int index) {
-    String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_start);
-    DateTime time = DateFormat('yyyy-MM-dd HH:mm:ss').parse(startTime);
-    return time;
+    var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(getEvent(index).time_finish.toString());
+    int newHourStart = getEvent(index).time_start.hour+0;
+    // int newHourEnd = getEvent(index).time_finish.hour-7;
+
+    var timeStart = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
+    // var timeFinish = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
+
+    // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_start);
+    DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeStart.toString());
+    return time1;
   }
 
 
   @override
   DateTime getEndTime(int index) {
-    String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_finish);
-    DateTime time = DateFormat('yyyy-MM-dd HH:mm:ss').parse(endTime);
-    return time;
+    var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(getEvent(index).time_finish.toString());
+    // int newHourStart = getEvent(index).time_start.hour-7;
+    int newHourEnd = getEvent(index).time_finish.hour+0;
+
+    // var timeStart = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
+    var timeFinish = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
+
+    // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(getEvent(index).time_start);
+    DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeFinish.toString());
+    return time1;
   }
 
   @override
