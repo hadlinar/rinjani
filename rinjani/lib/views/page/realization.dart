@@ -181,7 +181,13 @@ class _Realization extends State<Realization> {
                   if(state.getVisit[i].visit_id == "02") {
                     cust.add(state.getVisit[i].cust_name);
                   } else if(state.getVisit[i].visit_id == "01") {
-                    time.add(state.getVisit[i].time_start.toString());
+
+                    var time1 = DateFormat("yyyy-MM-dd HH:mm:ss").parse(state.getVisit[i].time_start.toString());
+                    int newHourStart = state.getVisit[i].time_start.hour-7;
+
+                    var timeStart = DateTime(time1.year, time1.month, time1.day, newHourStart, time1.minute, time1.second);
+
+                    time.add(timeStart.toString());
                   }
                 }
                 setState(() {
@@ -347,14 +353,25 @@ class _Realization extends State<Realization> {
                                                             for(int i=0; i<visit.length; i++) {
                                                               if(visit[i].pic_position == _selectedPIC) {
                                                                 nameController.text = visit[i].pic_name;
-                                                                // descriptionController.text = visit[i].description;
                                                                 formerDescription = visit[i].description;
                                                                 formerDescController.text = visit[i].description;
                                                                 picController.text = _selectedPIC;
                                                                 visitNo = visit[i].visit_no;
                                                                 branchId = visit[i].branch_id;
-                                                                timeStart = visit[i].time_start.toString();
-                                                                timeFinish = visit[i].time_finish.toString();
+
+
+                                                                var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
+                                                                int newHourStart = visit[i].time_start.hour-7;
+                                                                int newHourEnd = visit[i].time_finish.hour-7;
+
+                                                                var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
+                                                                var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
+
+                                                                // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeStart.toString());
+                                                                // DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeFinish.toString());
+
+                                                                timeStart = timeStart1.toString();
+                                                                timeFinish = timeFinish1.toString();
                                                               }
                                                             }
 

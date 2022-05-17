@@ -44,6 +44,19 @@ class _DetailReport extends State<DetailReport> {
     String dateStart = DateFormat("EEEE, dd MMM yyyy").format(widget.realization.time_start);
     String time = DateFormat("HH:mm").format(widget.realization.time_finish);
     String timeStart = DateFormat("HH:mm").format(widget.realization.time_start);
+
+
+    var time1 = DateFormat("HH:mm").parse(time);
+    var timeStart1 = DateFormat("HH:mm").parse(time);
+    int newHourStart = widget.realization.time_start.hour-7;
+    int newHourEnd = widget.realization.time_finish.hour-7;
+
+    var timeStart2 = DateTime(timeStart1.year, timeStart1.month, timeStart1.day, newHourStart, timeStart1.minute, timeStart1.second);
+    var timeFinish1 = DateTime(time1.year, time1.month, time1.day, newHourEnd, time1.minute, time1.second);
+
+    String start = DateFormat("HH:mm").format(timeStart2);
+    String finish = DateFormat("HH:mm").format(timeFinish1);
+
     return SafeArea(
         top: false,
         bottom: false,
@@ -180,7 +193,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 29),
                                     child: Text(
-                                      "$timeStart, $dateStart",
+                                      "$start, $dateStart",
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )
@@ -201,7 +214,7 @@ class _DetailReport extends State<DetailReport> {
                                   Container(
                                     padding: const EdgeInsets.only(left: 34),
                                     child: Text(
-                                      "$time, $date",
+                                      "$finish, $date",
                                       style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
                                     ),
                                   )

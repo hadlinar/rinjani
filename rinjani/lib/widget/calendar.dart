@@ -137,6 +137,11 @@ class _CalendarState extends State<Calendar> {
       final Visit _visit = details.appointments![0];
 
       var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(_visit.time_finish.toString());
+      int newHourStart = _visit.time_start.hour-7;
+      int newHourEnd = _visit.time_finish.hour-7;
+
+      var timeStart = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
+      var timeFinish = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
 
       showDialog(
         context: context,
@@ -161,7 +166,7 @@ class _CalendarState extends State<Calendar> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${DateFormat("HH:mm").format(_visit.time_start)} - ${DateFormat("HH:mm").format(_visit.time_finish)}",
+                      "${DateFormat("HH:mm").format(timeStart)} - ${DateFormat("HH:mm").format(timeFinish)}",
                       style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                       textAlign: TextAlign.left,
                     ),
@@ -234,7 +239,7 @@ class _CalendarState extends State<Calendar> {
                 Container(
                   height: 17,
                 ),
-                DateTime.now().isAfter(time) ?
+                DateTime.now().isAfter(timeFinish) ?
                 Container(
                   child: Container(
                       child: RaisedButton(
