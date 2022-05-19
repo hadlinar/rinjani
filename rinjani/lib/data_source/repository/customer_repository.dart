@@ -7,11 +7,11 @@ class CustomerRepository {
 
   CustomerRepository(this.customerService);
 
-  Future<CustomerCategoryResponse> getCustomerCategory() async {
-    final response = await customerService.getCustomerCategory();
-
-    return response;
-  }
+  // Future<CustomerCategoryResponse> getCustomerCategory() async {
+  //   final response = await customerService.getCustomerCategory();
+  //
+  //   return response;
+  // }
 
   Future<CustomerResponse> getCustomer(String id) async {
     final response = await customerService.getCustomer(id);

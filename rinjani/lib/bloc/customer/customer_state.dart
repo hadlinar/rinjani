@@ -13,12 +13,6 @@ class SuccesssCustomerState extends CustomerBlocState{}
 
 class FailedCustomerState extends CustomerBlocState{}
 
-class CustomerCategoryList extends CustomerBlocState{
-  List<CustomerCategory> getCustomerCategory;
-
-  CustomerCategoryList(this.getCustomerCategory);
-}
-
 class CustomerList extends CustomerBlocState{
   List<Customer> getCustomer;
 

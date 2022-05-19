@@ -99,6 +99,7 @@ class GetPDFEvent extends VisitBlocEvent{
 class AddCustomerEvent extends VisitBlocEvent{
   final String branch_id;
   final String cust_name;
+  final String cat_id;
   final String visit_id;
   final String cust_id;
   final String time_start;
@@ -112,6 +113,7 @@ class AddCustomerEvent extends VisitBlocEvent{
   AddCustomerEvent(
       this.branch_id,
       this.cust_name,
+      this.cat_id,
       this.visit_id,
       this.cust_id,
       this.time_start,

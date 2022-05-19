@@ -47,6 +47,4 @@ abstract class VisitService{
   @POST('/add_customer')
   Future<NewCustomerResponse> addCustomer(@Header("Authorization") String authorization, @Body() Map<String,dynamic> body);
 
-  // @GET('/ranking/{type}')
-  // Future<Ranking> getRank(@Path('type') String type);
 }

@@ -277,13 +277,15 @@ class _Plan extends State<Plan> {
 
                                 bool savedCust = store.get("savedCust");
                                 String newCust = store.get("cust_name").toString();
+                                String catId = store.get("cat_id").toString();
 
                                 if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
-                                  if(savedCust && newCust != "") {
+                                  if(savedCust && newCust != "" && catId != "") {
                                     BlocProvider.of<VisitBloc>(context).add(
                                         AddCustomerEvent(
                                             store.get("branch_id"),
                                             newCust,
+                                            catId,
                                             "02",
                                             "",
                                             timeStart.toString(),

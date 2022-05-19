@@ -240,6 +240,7 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
       final response = await _visitRepository.addCustomer(
           branch_id: e.branch_id,
           cust_name: e.cust_name,
+          cat_id: e.cat_id,
           visit_id: e.visit_id,
           cust_id: e.cust_id,
           time_start: e.time_start,

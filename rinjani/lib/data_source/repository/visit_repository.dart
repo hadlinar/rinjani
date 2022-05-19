@@ -110,6 +110,7 @@ class VisitRepository {
   Future<NewCustomerResponse> addCustomer({
     required String branch_id,
     required String cust_name,
+    required String cat_id,
     required String visit_id,
     required String cust_id,
     required String time_start,
@@ -123,6 +124,7 @@ class VisitRepository {
     final response = await visitService.addCustomer(token, {
       "branch_id": branch_id,
       "cust_name": cust_name,
+      "cat_id": cat_id,
       "visit_id": visit_id,
       "cust_id": cust_id,
       "time_start": time_start,
@@ -134,10 +136,4 @@ class VisitRepository {
     });
     return response;
   }
-
-
-  // Future<Ranking> getRank(String type) async {
-  //   final response = await visitService.getRank(type);
-  //   return response;
-  // }
 }

@@ -3,8 +3,6 @@ part 'customer.g.dart';
 
 @JsonSerializable()
 class CustomerCategory{
-  static const SUCCESS_LOCATION = "ok";
-
   String category_id;
   String category_name;
 
@@ -60,6 +58,7 @@ class CustomerResponse{
 class NewCustomer{
   String branch_id;
   String cust_name;
+  String cat_id;
   String visit_id;
   String cust_id;
   String time_start;
@@ -73,6 +72,7 @@ class NewCustomer{
   NewCustomer({
     required this.branch_id,
     required this.cust_name,
+    required this.cat_id,
     required this.visit_id,
     required this.cust_id,
     required this.time_start,
