@@ -181,33 +181,57 @@ class _Plan extends State<Plan> {
                                 String clickedStart = store.get("clickedStart").toString();
                                 String clickedEnd = store.get("clickedEnd").toString();
 
-
-                                if(desc != "" && clicked != "false" && clickedStart == "true" && clickedEnd == "true") {
-                                  BlocProvider.of<VisitBloc>(context).add(
-                                      AddVisitEvent(
-                                          "01",
-                                          store.get("branch_id"),
-                                          "",
-                                          timeStart,
-                                          timeEnd,
-                                          store.get("nik"),
-                                          desc,
-                                          "",
-                                          "",
-                                          "n"
-                                      )
-                                  );
-                                } else {
+                                if(clicked == "false") {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Global.defaultModal(() {
                                           Navigator.pop(context);
-                                        }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                        }, context, Global.WARNING_ICON, "Please pick a date", "Ok", false);
                                       }
                                   );
+                                } else {
+                                  if(clickedStart == "null" && clickedEnd == "null") {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Global.defaultModal(() {
+                                            Navigator.pop(context);
+                                          }, context, Global.WARNING_ICON, "Please pick start and end time", "Ok", false);
+                                        }
+                                    );
+                                  } else {
+                                    if(desc == "") {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Global.defaultModal(() {
+                                              Navigator.pop(context);
+                                            }, context, Global.WARNING_ICON, "Please fill the description", "Ok", false);
+                                          }
+                                      );
+                                    } else {
+                                      BlocProvider.of<VisitBloc>(context).add(
+                                          AddVisitEvent(
+                                              "01",
+                                              store.get("branch_id"),
+                                              "",
+                                              timeStart,
+                                              timeEnd,
+                                              store.get("nik"),
+                                              desc,
+                                              "",
+                                              "",
+                                              "n"
+                                          )
+                                      );
+                                      store.set("desc", "");
+                                      store.set("clicked", "false");
+                                      store.set("clickedStart", "null");
+                                      store.set("clickedEnd", "null");
+                                    }
+                                  }
                                 }
-
                               }
                               else if(defaultType == "Off") {
                                 String type = store.get("offType");
