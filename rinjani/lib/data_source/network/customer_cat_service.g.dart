@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'customer_service.dart';
+part of 'customer_cat_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'customer_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-class _CustomerService implements CustomerService {
-  _CustomerService(this._dio, {this.baseUrl}) {
+class _CustomerCatService implements CustomerCatService {
+  _CustomerCatService(this._dio, {this.baseUrl}) {
     baseUrl ??= 'http://10.0.2.2:3001/rinjani';
   }
 
@@ -18,18 +18,18 @@ class _CustomerService implements CustomerService {
   String? baseUrl;
 
   @override
-  Future<CustomerResponse> getCustomer(branchId) async {
+  Future<CustomerCategoryResponse> getCustomerCategory() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CustomerResponse>(
+        _setStreamType<CustomerCategoryResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/customer/${branchId}',
+                .compose(_dio.options, '/customers/category',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CustomerResponse.fromJson(_result.data!);
+    final value = CustomerCategoryResponse.fromJson(_result.data!);
     return value;
   }
 

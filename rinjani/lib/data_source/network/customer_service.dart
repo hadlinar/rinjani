@@ -11,9 +11,9 @@ part 'customer_service.g.dart';
 
 abstract class CustomerService{
   static create(Dio dio) => _CustomerService(dio);
-
-  @GET('/customer/category')
-  Future<CustomerCategoryResponse> getCustomerCategory();
+  //
+  // @GET('/customers/category')
+  // Future<CustomerCategoryResponse> getCustomerCategory();
 
   @GET('/customer/{branchId}')
   Future<CustomerResponse> getCustomer(@Path("branchId") String branchId);

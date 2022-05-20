@@ -3,17 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rinjani/bloc/branch/branch_bloc.dart';
 import 'package:rinjani/bloc/customer/customer_bloc.dart';
+import 'package:rinjani/bloc/customer_category/customer_cat_bloc.dart';
 import 'package:rinjani/bloc/launcher/launcher_bloc.dart';
 import 'package:rinjani/bloc/login/login_bloc.dart';
 import 'package:rinjani/bloc/monitor/monitor_bloc.dart';
 import 'package:rinjani/bloc/ranking/ranking_bloc.dart';
 import 'package:rinjani/bloc/role/role_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
+import 'package:rinjani/data_source/network/customer_cat_service.dart';
 import 'package:rinjani/data_source/network/customer_service.dart';
 import 'package:rinjani/data_source/network/login_service.dart';
 import 'package:rinjani/data_source/network/ranking_service.dart';
 import 'package:rinjani/data_source/network/role_service.dart';
 import 'package:rinjani/data_source/network/visit_service.dart';
+import 'package:rinjani/data_source/repository/customer_cat_repository.dart';
 import 'package:rinjani/data_source/repository/customer_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:rinjani/data_source/repository/visit_repository.dart';
@@ -75,6 +78,9 @@ class AppModule {
     injector.registerSingleton<MonitorService>(
         MonitorService.create(injector.get())
     );
+    injector.registerSingleton<CustomerCatService>(
+        CustomerCatService.create(injector.get())
+    );
   }
 
   void configureRepository() {
@@ -87,6 +93,7 @@ class AppModule {
     injector.registerSingleton(RoleRepository(injector.get()));
     injector.registerSingleton(RankingRepository(injector.get()));
     injector.registerSingleton(MonitorRepository(injector.get()));
+    injector.registerSingleton(CustomerCatRepository(injector.get()));
   }
 
   Widget configureBloc(Widget app) {
@@ -120,6 +127,9 @@ class AppModule {
       ),
       BlocProvider<MonitorBloc>(
         create: (_) => MonitorBloc.create(injector.get()),
+      ),
+      BlocProvider<CustomerCatBloc>(
+        create: (_) => CustomerCatBloc.create(injector.get()),
       ),
     ], child: app);
   }

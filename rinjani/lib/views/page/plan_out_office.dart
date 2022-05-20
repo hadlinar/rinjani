@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rinjani/bloc/customer/customer_bloc.dart';
 import 'package:rinjani/models/customer.dart';
 
+import '../../bloc/customer_category/customer_cat_bloc.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 import 'package:intl/intl.dart';
@@ -73,6 +74,8 @@ class _AddPlan extends State<AddPlan> {
 
   List<String> customerName = [];
   List<Customer> customer = [];
+  List<CustomerCategory> custCat = [];
+  String? cusCat;
 
   var positionTextEditing = <TextEditingController>[];
   var nameTextEditing = <TextEditingController>[];
@@ -254,6 +257,7 @@ class _AddPlan extends State<AddPlan> {
   void initState() {
     super.initState();
     BlocProvider.of<CustomerBloc>(context).add(GetCustomerEvent(store.get("branch_id")));
+    BlocProvider.of<CustomerCatBloc>(context).add(GetCustomerCategoryEvent());
     cards.add(createCard(indexPIC));
     _values = [];
     result = '';
@@ -358,80 +362,131 @@ class _AddPlan extends State<AddPlan> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)
-                )
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                    child: Text("Add new customer",
-                      style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                      textAlign: TextAlign.left,
-                    )
-                ),
-                Container(
-                  height: 17,
-                ),
-                Container(
-                  child: CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                        flex: 1,
-                        child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    color: Theme
-                                        .of(context)
-                                        .accentColor,
-                                    width: 3
-                                )
-                            ),
-                            color: Colors.white,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                  color: Color(Global.BLUE),
-                                  fontFamily: 'bold',
-                                  fontSize: 15
+          return BlocBuilder<CustomerCatBloc, CustomerCatBlocState> (
+            builder: (context, state) {
+              if(state is LoadingCustomerState) {
+                return const Center(
+                    child: CircularProgressIndicator()
+                );
+              } if (state is CustomerCategoryList) {
+                custCat = state.getCustomerCategory;
+                return AlertDialog(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)
+                      )
+                  ),
+                  content: SizedBox(
+                    width: 322,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                            child: Text("Add new customer",
+                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                              textAlign: TextAlign.left,
+                            )
+                        ),
+                        Container(
+                          height: 17,
+                        ),
+                        Container(
+                          child: CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
+                        ),
+                        Container(
+                            padding: const EdgeInsets.only(bottom: 21),
+                            child: DropdownButtonFormField<String>(
+                              isExpanded: true,
+                              hint: const Text("Category"),
+                              dropdownColor: Colors.white,
+                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                              value: cusCat,
+                              items: custCat.map((e) {
+                                return DropdownMenuItem<String>(
+                                  value: e.category_id,
+                                  child: Text(e.category_name),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  cusCat = value;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.only(top: 10, bottom: 10, left: 12, right: 12),
+                                labelText: "Category",
+                                labelStyle: const TextStyle(
+                                    color: Color(0xff757575),
+                                    fontSize: 15,
+                                    fontFamily: 'medium'),
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(10),
+                                    borderSide: BorderSide()
+                                ),
                               ),
                             )
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                                flex: 1,
+                                child: RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: Theme
+                                                .of(context)
+                                                .accentColor,
+                                            width: 3
+                                        )
+                                    ),
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                          color: Color(Global.BLUE),
+                                          fontFamily: 'bold',
+                                          fontSize: 15
+                                      ),
+                                    )
+                                )
+                            ),
+                            Container(
+                              width: 25,
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                        side:
+                                        BorderSide(color: Color(Global.BLUE)),
+                                        borderRadius: BorderRadius.circular(10)),
+                                    color: Color(Global.BLUE),
+                                    onPressed: () {
+                                      setState(() {
+                                        savedCust = true;
+                                      });
+                                      store.set("cust_name", newCustomerController.text );
+                                      store.set("cat_id", cusCat);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Add", style: Global.getCustomFont(Global.WHITE, 14, 'bold'))
+                                )
+                            ),
+                          ],
                         )
+                      ],
                     ),
-                    Container(
-                      width: 25,
-                    ),
-                    Expanded(
-                        flex: 1,
-                        child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                side:
-                                BorderSide(color: Color(Global.BLUE)),
-                                borderRadius: BorderRadius.circular(10)),
-                            color: Color(Global.BLUE),
-                            onPressed: () {
-                              setState(() {
-                                savedCust = true;
-                              });
-                              store.set("cust_name", newCustomerController.text );
-                              Navigator.pop(context);
-                            },
-                            child: Text("Add", style: Global.getCustomFont(Global.WHITE, 14, 'bold'))
-                        )
-                    ),
-                  ],
-                )
-              ],
-            ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
           );
         }
     );

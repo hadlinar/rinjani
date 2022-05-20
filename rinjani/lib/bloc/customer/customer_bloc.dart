@@ -23,18 +23,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
 
   @override
   Stream<CustomerBlocState> mapEventToState(CustomerBlocEvent event) async* {
-    if(event is GetCustomerCategoryEvent) {
-      yield* _mapCustomerCategoryToState();
-    }
     if(event is GetCustomerEvent) {
       yield* _mapCustomerToState(event);
     }
-  }
-
-  Stream<CustomerBlocState> _mapCustomerCategoryToState() async* {
-    yield LoadingCustomerState();
-    final response = await _customerRepository.getCustomerCategory();
-    yield CustomerCategoryList(response.result);
   }
 
   Stream<CustomerBlocState> _mapCustomerToState(GetCustomerEvent e) async* {

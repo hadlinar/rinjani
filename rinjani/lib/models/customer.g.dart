@@ -69,6 +69,7 @@ Map<String, dynamic> _$CustomerResponseToJson(CustomerResponse instance) =>
 NewCustomer _$NewCustomerFromJson(Map<String, dynamic> json) => NewCustomer(
       branch_id: json['branch_id'] as String,
       cust_name: json['cust_name'] as String,
+      cat_id: json['cat_id'] as String,
       visit_id: json['visit_id'] as String,
       cust_id: json['cust_id'] as String,
       time_start: json['time_start'] as String,
@@ -84,6 +85,7 @@ Map<String, dynamic> _$NewCustomerToJson(NewCustomer instance) =>
     <String, dynamic>{
       'branch_id': instance.branch_id,
       'cust_name': instance.cust_name,
+      'cat_id': instance.cat_id,
       'visit_id': instance.visit_id,
       'cust_id': instance.cust_id,
       'time_start': instance.time_start,

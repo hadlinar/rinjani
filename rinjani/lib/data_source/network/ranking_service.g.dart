@@ -10,7 +10,7 @@ part of 'ranking_service.dart';
 
 class _RankingService implements RankingService {
   _RankingService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://103.140.207.25:3001/rinjani';
+    baseUrl ??= 'http://10.0.2.2:3001/rinjani';
   }
 
   final Dio _dio;

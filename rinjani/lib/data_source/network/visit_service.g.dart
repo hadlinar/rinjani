@@ -10,7 +10,7 @@ part of 'visit_service.dart';
 
 class _VisitService implements VisitService {
   _VisitService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://103.140.207.25:3001/rinjani';
+    baseUrl ??= 'http://10.0.2.2:3001/rinjani';
   }
 
   final Dio _dio;
