@@ -272,6 +272,7 @@ class _AddPlan extends State<AddPlan> {
         lastDate: DateTime(2050)
     ).then((date) {
       setState((){
+        clicked = true;
         store.set("clicked", true);
         initialDate = date!;
         initDate = initialDate.toString();
@@ -443,6 +444,8 @@ class _AddPlan extends State<AddPlan> {
                                     ),
                                     color: Colors.white,
                                     onPressed: () {
+                                      newCustomerController.text = "";
+                                      cusCat = null;
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
@@ -470,9 +473,31 @@ class _AddPlan extends State<AddPlan> {
                                       setState(() {
                                         savedCust = true;
                                       });
-                                      store.set("cust_name", newCustomerController.text );
-                                      store.set("cat_id", cusCat);
-                                      Navigator.pop(context);
+                                      if(newCustomerController.text == "") {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Global.defaultModal(() {
+                                                Navigator.pop(context);
+                                              }, context, Global.WARNING_ICON, "Please add new customer's name", "Ok", false);
+                                            }
+                                        );
+                                      }
+                                      else if (cusCat == null) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Global.defaultModal(() {
+                                                Navigator.pop(context);
+                                              }, context, Global.WARNING_ICON, "Please add new customer's category", "Ok", false);
+                                            }
+                                        );
+                                      } else {
+                                        store.set("cust_id", "null");
+                                        store.set("cust_name", newCustomerController.text );
+                                        store.set("cat_id", cusCat);
+                                        Navigator.pop(context);
+                                      }
                                     },
                                     child: Text("Add", style: Global.getCustomFont(Global.WHITE, 14, 'bold'))
                                 )
@@ -633,6 +658,7 @@ class _AddPlan extends State<AddPlan> {
                           setState(() {
                             savedCust = false;
                           });
+                          store.set("cust_name", "null");
                           newCustomerController.clear();
                         },
                       ), // Show the clear button if the text field has something

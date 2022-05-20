@@ -224,7 +224,7 @@ class _Plan extends State<Plan> {
                                 timeStart = DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
                                 timeFinish = DateTime(date.year, date.month, date.day, hourSore, newMin, newSec).toString();
 
-                                if(clicked != "false" && desc != null && date != null) {
+                                if(clicked != "false") {
                                   BlocProvider.of<VisitBloc>(context).add(
                                       AddVisitEvent(
                                         "03",
@@ -256,20 +256,9 @@ class _Plan extends State<Plan> {
                                 List<String> name = [];
                                 List<String> desc = [];
 
-                                for(int i=0; i<res.length; i++ ){
-                                  pos.add(res[i]['pic']['position']);
-                                  name.add(res[i]['pic']['name']);
-                                  desc.add(res[i]['pic']['description']);
-                                }
-
-                                String position = pos.join(", ");
-                                String name1 = name.join(", ");
-                                String description = desc.join(", ");
-
                                 DateTime timeStart = store.get("startTime");
                                 DateTime timeEnd = store.get("endTime");
                                 String cust_id = store.get("cust_id").toString();
-
 
                                 String clicked = store.get("clicked").toString();
                                 String clickedStart = store.get("clickedStart").toString();
@@ -279,50 +268,161 @@ class _Plan extends State<Plan> {
                                 String newCust = store.get("cust_name").toString();
                                 String catId = store.get("cat_id").toString();
 
-                                if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
-                                  if(savedCust && newCust != "" && catId != "") {
-                                    BlocProvider.of<VisitBloc>(context).add(
-                                        AddCustomerEvent(
-                                            store.get("branch_id"),
-                                            newCust,
-                                            catId,
-                                            "02",
-                                            "",
-                                            timeStart.toString(),
-                                            timeEnd.toString(),
-                                            store.get("user_id"),
-                                            description,
-                                            position,
-                                            name1,
-                                            "n",
-                                        )
-                                    );
-                                  } else {
-                                    BlocProvider.of<VisitBloc>(context).add(
-                                        AddVisitEvent(
-                                          "02",
-                                          store.get("branch_id"),
-                                          cust_id,
-                                          timeStart.toString(),
-                                          timeEnd.toString(),
-                                          store.get("user_id"),
-                                          description,
-                                          position,
-                                          name1,
-                                          "n",
-                                        )
-                                    );
-                                  }
-                                } else {
+                                print('clicked $clicked');
+                                if(clicked == "null" || clicked == "" || clicked == "false" || clicked == false) {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Global.defaultModal(() {
                                           Navigator.pop(context);
-                                        }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                        }, context, Global.WARNING_ICON, "Please pick a date", "Ok", false);
                                       }
                                   );
+                                } else {
+                                  if(clickedStart != "true" && clickedEnd != "true") {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Global.defaultModal(() {
+                                            Navigator.pop(context);
+                                          }, context, Global.WARNING_ICON, "Please pick start and end time", "Ok", false);
+                                        }
+                                    );
+                                  } else {
+                                    if(cust_id == "null" && newCust == "null") {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Global.defaultModal(() {
+                                              Navigator.pop(context);
+                                            }, context, Global.WARNING_ICON, "Please select or add customer", "Ok", false);
+                                          }
+                                      );
+                                    }
+                                    else {
+                                      if(res == null) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Global.defaultModal(() {
+                                                Navigator.pop(context);
+                                              }, context, Global.WARNING_ICON, "Please fill all PIC data", "Ok", false);
+                                            }
+                                        );
+                                      } else {
+                                        for(int i=0; i<res.length; i++ ){
+                                          pos.add(res[i]['pic']['position']);
+                                          name.add(res[i]['pic']['name']);
+                                          desc.add(res[i]['pic']['description']);
+                                        }
+
+                                        String position = pos.join(", ");
+                                        String name1 = name.join(", ");
+                                        String description = desc.join(", ");
+                                        if(position == "null" || name1 == "null" || description == "null" || name1 == "" || description == "") {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Global.defaultModal(() {
+                                                  Navigator.pop(context);
+                                                }, context, Global.WARNING_ICON, "Please fill all required data for PIC", "Ok", false);
+                                              }
+                                          );
+                                        } else {
+                                          if(savedCust) {
+                                            BlocProvider.of<VisitBloc>(context).add(
+                                                AddCustomerEvent(
+                                                  store.get("branch_id"),
+                                                  newCust,
+                                                  catId,
+                                                  "02",
+                                                  "",
+                                                  timeStart.toString(),
+                                                  timeEnd.toString(),
+                                                  store.get("user_id"),
+                                                  description,
+                                                  position,
+                                                  name1,
+                                                  "n",
+                                                )
+                                            );
+                                          } else {
+                                            BlocProvider.of<VisitBloc>(context).add(
+                                                AddVisitEvent(
+                                                  "02",
+                                                  store.get("branch_id"),
+                                                  cust_id,
+                                                  timeStart.toString(),
+                                                  timeEnd.toString(),
+                                                  store.get("user_id"),
+                                                  description,
+                                                  position,
+                                                  name1,
+                                                  "n",
+                                                )
+                                            );
+                                            List<Map<String, dynamic>> res = store.get("result");
+                                            List<String> pos = [];
+                                            List<String> name = [];
+                                            List<String> desc = [];
+                                            store.set("result", "");
+                                            store.set("clickedStart", "false");
+                                            store.set("clickedEnd", "false");
+                                            store.set("cust_id", "null");
+                                            store.set("clicked", "false");
+                                            store.set("newCust", "null");
+                                            store.set("savedCust", false);
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
                                 }
+
+                                // if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
+                                //   if(savedCust && newCust != "" && catId != "") {
+                                //     BlocProvider.of<VisitBloc>(context).add(
+                                //         AddCustomerEvent(
+                                //           store.get("branch_id"),
+                                //           newCust,
+                                //           catId,
+                                //           "02",
+                                //           "",
+                                //           timeStart.toString(),
+                                //           timeEnd.toString(),
+                                //           store.get("user_id"),
+                                //           description,
+                                //           position,
+                                //           name1,
+                                //           "n",
+                                //         )
+                                //     );
+                                //   } else {
+                                //     BlocProvider.of<VisitBloc>(context).add(
+                                //         AddVisitEvent(
+                                //           "02",
+                                //           store.get("branch_id"),
+                                //           cust_id,
+                                //           timeStart.toString(),
+                                //           timeEnd.toString(),
+                                //           store.get("user_id"),
+                                //           description,
+                                //           position,
+                                //           name1,
+                                //           "n",
+                                //         )
+                                //     );
+                                //   }
+                                // } else {
+                                //   showDialog(
+                                //       context: context,
+                                //       builder: (BuildContext context) {
+                                //         return Global.defaultModal(() {
+                                //           Navigator.pop(context);
+                                //         }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
+                                //       }
+                                //   );
+                                // }
 
                               }
                             },
