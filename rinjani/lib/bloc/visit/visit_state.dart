@@ -48,11 +48,11 @@ class NotLogginInState extends VisitBlocState{}
 
 class SuccessDeleteVisitState extends VisitBlocState{}
 
-class GetPDFState extends VisitBlocState{
-  List<PDF> getPDF;
-
-  GetPDFState(this.getPDF);
-}
+// class GetPDFState extends VisitBlocState{
+//   List<PDF> getPDF;
+//
+//   GetPDFState(this.getPDF);
+// }
 
 // class GetRankingHighState extends VisitBlocState{
 //   Ranking getRanking;

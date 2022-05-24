@@ -1,25 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:rinjani/bloc/rank/activity_bloc.dart';
+import 'package:rinjani/bloc/pdf/pdf_bloc.dart';
 import 'package:rinjani/models/visit.dart';
 import 'package:rinjani/views/page/list_customer.dart';
 import 'package:rinjani/views/page/list_pic.dart';
 import 'package:rinjani/views/page/list_reports.dart';
-import 'package:rinjani/widget/rank.dart';
 
 import '../../bloc/branch/branch_bloc.dart';
-import '../../bloc/ranking/ranking_bloc.dart';
 import '../../bloc/visit/visit_bloc.dart';
 import '../../models/branch.dart';
 import 'package:intl/intl.dart';
 import '../../models/ranking.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+import '../../utils/pdf_report_api.dart';
 import 'list_visit.dart';
 
-import '../../utils/mobile.dart';
+import '../../utils/pdf_api.dart';
 
 class Report extends StatefulWidget {
 
@@ -46,15 +44,15 @@ class _Report extends State<Report> {
 
   late List<Ranking> ranking;
 
-  Future<void> _createPDF() async {
-    PdfDocument document = PdfDocument();
-    document.pages.add();
-
-    List<int> bytes = document.save();
-    document.dispose();
-
-    saveAndLaunchFile(bytes, 'test.pdf');
-  }
+  // Future<void> _createPDF() async {
+  //   PdfDocument document = PdfDocument();
+  //   document.pages.add();
+  //
+  //   List<int> bytes = document.save();
+  //   document.dispose();
+  //
+  //   saveAndLaunchFile(bytes, 'test.pdf');
+  // }
 
   @override
   void initState() {
@@ -64,6 +62,7 @@ class _Report extends State<Report> {
     branch = [];
     foundKey = "";
     BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("year"));
+    BlocProvider.of<BranchBloc>(context).add(GetBranchOpEvent());
     BlocProvider.of<BranchBloc>(context).add(GetBranchOpEvent());
   }
 
@@ -561,238 +560,255 @@ class _Report extends State<Report> {
               iconTheme: IconThemeData(
                 color: Color(Global.BLUE),
               ),
-              // actions:
-              // [
-              //   PopupMenuButton(
-              //       itemBuilder: (context){
-              //         return [
-              //           PopupMenuItem<int>(
-              //             value: 0,
-              //             child: Row(
-              //               children: [
-              //                 Icon(
-              //                   Icons.download_rounded,
-              //                   color: Color(Global.BLUE),
-              //                   size: 28,
-              //                 ),
-              //                 Container(
-              //                   padding: const EdgeInsets.only(left: 10),
-              //                   child: Text("Download report as PDF", style: TextStyle(
-              //                       color: Color(Global.BLACK),
-              //                       fontFamily: 'meidum',
-              //                       fontSize: 15
-              //                   )),
-              //                 ),
-              //               ],
-              //             )
-              //           ),
-              //         ];
-              //       },
-              //       onSelected:(value){
-              //         if(value == 0){
-              //           showDialog(
-              //               context: context,
-              //               builder: (BuildContext context) {
-              //
-              //                 DateTime initialDateStart = DateTime.now();
-              //                 DateTime initialDateEnd = DateTime.now();
-              //
-              //                 var nHour = 23;
-              //                 var nMin = 0;
-              //                 var nSec = 0;
-              //                 var newTime = DateTime.now();
-              //                 String finalDateEnd = "";
-              //
-              //                 return StatefulBuilder(
-              //                   builder: (context, setState) {
-              //                     return AlertDialog(
-              //                       shape: const RoundedRectangleBorder(
-              //                           borderRadius: BorderRadius.all(Radius.circular(10)
-              //                           )
-              //                       ),
-              //                       content: Column(
-              //                         mainAxisSize: MainAxisSize.min,
-              //                         children: <Widget>[
-              //                           Container(
-              //                               child: Text("Download report as PDF",
-              //                                 style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-              //                                 textAlign: TextAlign.left,
-              //                               )
-              //                           ),
-              //                           Container(
-              //                             height: 17,
-              //                           ),
-              //                           Row(
-              //                               children: <Widget> [
-              //                                 Align(
-              //                                   alignment: Alignment.centerLeft,
-              //                                   child: Text("Start date: ",
-              //                                     style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-              //                                     textAlign: TextAlign.left,
-              //                                   ),
-              //                                 ),
-              //                                 Container(
-              //                                     child: InkWell(
-              //                                         onTap: () {
-              //                                           setState(() {
-              //                                             showDatePicker(
-              //                                                 context: context,
-              //                                                 initialDate: DateTime.now(),
-              //                                                 firstDate: DateTime(2010),
-              //                                                 lastDate: DateTime(2050)
-              //                                             ).then((date) {
-              //                                               setState((){
-              //                                                 initialDateStart = date!;
-              //                                               });
-              //                                             });
-              //                                           });
-              //                                         },
-              //                                         child: Container(
-              //                                             padding: const EdgeInsets.only(left: 17),
-              //                                             child: ImageIcon(
-              //                                               const AssetImage(Global.CALENDAR_ICON),
-              //                                               color: Color(Global.BLUE),
-              //                                               size: 18,
-              //                                             )
-              //                                         )
-              //                                     )
-              //                                 )
-              //                               ]
-              //                           ),
-              //                           Container(
-              //                             child: Align(
-              //                                 alignment: Alignment.centerLeft,
-              //                                 child: Container(
-              //                                     margin: const EdgeInsets.only(bottom: 30, top: 10),
-              //                                     child: Container(
-              //                                         padding: const EdgeInsets.only(left: 17),
-              //                                         child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDateStart).toString(),
-              //                                             style: const TextStyle(
-              //                                               color: Color(0xff4F4F4F),
-              //                                               fontFamily: 'book',
-              //                                               fontSize: 15,
-              //                                             )
-              //                                         )
-              //                                     )
-              //                                 )
-              //                             ),
-              //                           ),
-              //                           Row(
-              //                               children: <Widget> [
-              //                                 Align(
-              //                                   alignment: Alignment.centerLeft,
-              //                                   child: Text("End date: ",
-              //                                     style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-              //                                     textAlign: TextAlign.left,
-              //                                   ),
-              //                                 ),
-              //                                 Container(
-              //                                     child: InkWell(
-              //                                         onTap: () {
-              //                                           showDatePicker(
-              //                                               context: context,
-              //                                               initialDate: DateTime.now(),
-              //                                               firstDate: DateTime(2010),
-              //                                               lastDate: DateTime(2050)
-              //                                           ).then((date) {
-              //                                             setState((){
-              //                                               initialDateEnd = date!;
-              //                                               newTime = DateTime(date.year, date.month, date.day, nHour, nMin, nSec);
-              //                                               finalDateEnd = newTime.toString();
-              //                                             });
-              //                                           });
-              //                                         },
-              //                                         child: Container(
-              //                                             padding: const EdgeInsets.only(left: 17),
-              //                                             child: ImageIcon(
-              //                                               const AssetImage(Global.CALENDAR_ICON),
-              //                                               color: Color(Global.BLUE),
-              //                                               size: 18,
-              //                                             )
-              //                                         )
-              //                                     )
-              //                                 )
-              //                               ]
-              //                           ),
-              //                           Container(
-              //                             child: Align(
-              //                                 alignment: Alignment.centerLeft,
-              //                                 child: Container(
-              //                                     margin: const EdgeInsets.only(bottom: 30, top: 10),
-              //                                     child: Container(
-              //                                         padding: const EdgeInsets.only(left: 17),
-              //                                         child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDateEnd).toString(),
-              //                                             style: const TextStyle(
-              //                                               color: Color(0xff4F4F4F),
-              //                                               fontFamily: 'book',
-              //                                               fontSize: 15,
-              //                                             )
-              //                                         )
-              //                                     )
-              //                                 )
-              //                             ),
-              //                           ),
-              //                           Row(
-              //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                             children: <Widget>[
-              //                               Expanded(
-              //                                   flex: 1,
-              //                                   child: RaisedButton(
-              //                                       shape: RoundedRectangleBorder(
-              //                                           borderRadius: BorderRadius.circular(10),
-              //                                           side: BorderSide(
-              //                                               color: Theme
-              //                                                   .of(context)
-              //                                                   .accentColor,
-              //                                               width: 3
-              //                                           )
-              //                                       ),
-              //                                       color: Colors.white,
-              //                                       onPressed: () {
-              //                                         Navigator.of(context).pop();
-              //                                       },
-              //                                       child: Text(
-              //                                         "Cancel",
-              //                                         style: TextStyle(
-              //                                             color: Color(Global.BLUE),
-              //                                             fontFamily: 'bold',
-              //                                             fontSize: 15
-              //                                         ),
-              //                                       )
-              //                                   )
-              //                               ),
-              //                               Container(
-              //                                 width: 25,
-              //                               ),
-              //                               Expanded(
-              //                                   flex: 1,
-              //                                   child: RaisedButton(
-              //                                       shape: RoundedRectangleBorder(
-              //                                           side:
-              //                                           BorderSide(color: Color(Global.BLUE)),
-              //                                           borderRadius: BorderRadius.circular(10)),
-              //                                       color: Color(Global.BLUE),
-              //                                       onPressed: () {
-              //                                         setState(() {
-              //                                           _createPDF();
-              //                                         });
-              //                                       },
-              //                                        child: Text("Download", style: Global.getCustomFont(Global.WHITE, 14, 'bold'))
-              //                                   )
-              //                               ),
-              //                             ],
-              //                           )
-              //                         ],
-              //                       ),
-              //                     );
-              //                   }
-              //                 );
-              //               }
-              //           );
-              //         }
-              //       }
-              //   ),
-              // ],
+              actions:
+              [
+                PopupMenuButton(
+                    itemBuilder: (context){
+                      return [
+                        PopupMenuItem<int>(
+                          value: 0,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download_rounded,
+                                color: Color(Global.BLUE),
+                                size: 28,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text("Download report as PDF", style: TextStyle(
+                                    color: Color(Global.BLACK),
+                                    fontFamily: 'medium',
+                                    fontSize: 15
+                                )),
+                              ),
+                            ],
+                          )
+                        ),
+                      ];
+                    },
+                    onSelected:(value){
+                      if(value == 0){
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+
+                              DateTime initialDateStart = DateTime.now();
+                              DateTime initialDateEnd = DateTime.now();
+
+                              var nHour = 23;
+                              var nMin = 0;
+                              var nSec = 0;
+                              var newTime = DateTime.now();
+                              String finalDateEnd = "";
+
+                              return StatefulBuilder(
+                                builder: (context, setState) {
+                                  return AlertDialog(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10)
+                                        )
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                            child: Text("Download report as PDF",
+                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                              textAlign: TextAlign.left,
+                                            )
+                                        ),
+                                        Container(
+                                          height: 17,
+                                        ),
+                                        Row(
+                                            children: <Widget> [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("Start date: ",
+                                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                              Container(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          showDatePicker(
+                                                              context: context,
+                                                              initialDate: DateTime.now(),
+                                                              firstDate: DateTime(2010),
+                                                              lastDate: DateTime(2050)
+                                                          ).then((date) {
+                                                            setState((){
+                                                              initialDateStart = date!;
+                                                            });
+                                                          });
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                          padding: const EdgeInsets.only(left: 17),
+                                                          child: ImageIcon(
+                                                            const AssetImage(Global.CALENDAR_ICON),
+                                                            color: Color(Global.BLUE),
+                                                            size: 18,
+                                                          )
+                                                      )
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                        Container(
+                                          child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                  margin: const EdgeInsets.only(bottom: 30, top: 10),
+                                                  child: Container(
+                                                      padding: const EdgeInsets.only(left: 17),
+                                                      child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDateStart).toString(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xff4F4F4F),
+                                                            fontFamily: 'book',
+                                                            fontSize: 15,
+                                                          )
+                                                      )
+                                                  )
+                                              )
+                                          ),
+                                        ),
+                                        Row(
+                                            children: <Widget> [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("End date: ",
+                                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                              Container(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        showDatePicker(
+                                                            context: context,
+                                                            initialDate: DateTime.now(),
+                                                            firstDate: DateTime(2010),
+                                                            lastDate: DateTime(2050)
+                                                        ).then((date) {
+                                                          setState((){
+                                                            initialDateEnd = date!;
+                                                            newTime = DateTime(date.year, date.month, date.day, nHour, nMin, nSec);
+                                                            finalDateEnd = newTime.toString();
+                                                          });
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                          padding: const EdgeInsets.only(left: 17),
+                                                          child: ImageIcon(
+                                                            const AssetImage(Global.CALENDAR_ICON),
+                                                            color: Color(Global.BLUE),
+                                                            size: 18,
+                                                          )
+                                                      )
+                                                  )
+                                              )
+                                            ]
+                                        ),
+                                        Container(
+                                          child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                  margin: const EdgeInsets.only(bottom: 30, top: 10),
+                                                  child: Container(
+                                                      padding: const EdgeInsets.only(left: 17),
+                                                      child: Text(DateFormat('EEEE, dd MMMM yyy').format(initialDateEnd).toString(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xff4F4F4F),
+                                                            fontFamily: 'book',
+                                                            fontSize: 15,
+                                                          )
+                                                      )
+                                                  )
+                                              )
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Expanded(
+                                                flex: 1,
+                                                child: RaisedButton(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        side: BorderSide(
+                                                            color: Theme
+                                                                .of(context)
+                                                                .accentColor,
+                                                            width: 3
+                                                        )
+                                                    ),
+                                                    color: Colors.white,
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: Text(
+                                                      "Cancel",
+                                                      style: TextStyle(
+                                                          color: Color(Global.BLUE),
+                                                          fontFamily: 'bold',
+                                                          fontSize: 15
+                                                      ),
+                                                    )
+                                                )
+                                            ),
+                                            Container(
+                                              width: 25,
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: RaisedButton(
+                                                    shape: RoundedRectangleBorder(
+                                                        side:
+                                                        BorderSide(color: Color(Global.BLUE)),
+                                                        borderRadius: BorderRadius.circular(10)),
+                                                    color: Color(Global.BLUE),
+                                                    onPressed: () async {
+                                                      BlocProvider.of<PDFBloc>(context).add(GetPDFEvent(initialDateStart.toString(), finalDateEnd));
+
+                                                      BlocListener<PDFBloc, PDFBlocState>(
+                                                        listener: (context, state) {
+                                                          if(state is LoadingPDFState) {
+                                                            const Center(
+                                                                child: CircularProgressIndicator()
+                                                            );
+                                                          } if (state is GetPDFState) {
+                                                            final pdfFile = PdfReportApi.generate(state.getPDF, initialDateStart.toString(), finalDateEnd);
+
+                                                            PdfApi.openFile(pdfFile);
+                                                          } else {
+                                                            Container();
+                                                          }
+                                                        }
+                                                      );
+                                                      // setState(() {
+                                                      //   final pdfFile = await PdfReportApi.generate(realization);
+                                                      // });
+                                                    },
+                                                     child: Text("Download", style: Global.getCustomFont(Global.WHITE, 14, 'bold'))
+                                                )
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }
+                              );
+                            }
+                        );
+                      }
+                    }
+                ),
+              ],
               leading: IconButton(
                   onPressed: Navigator.of(context).pop,
                   icon: ImageIcon(

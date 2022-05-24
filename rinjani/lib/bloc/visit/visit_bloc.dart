@@ -51,9 +51,9 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     if(event is DeleteVisitEvent) {
       yield* _mapDeleteVisitToState(event);
     }
-    if(event is GetPDFEvent) {
-      yield* _mapGetPDFToState(event);
-    }
+    // if(event is GetPDFEvent) {
+    //   yield* _mapGetPDFToState(event);
+    // }
     if(event is AddCustomerEvent) {
       yield* _mapAddNewCustomerState(event);
     }
@@ -215,23 +215,23 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
     }
   }
 
-  Stream<VisitBlocState> _mapGetPDFToState(GetPDFEvent e) async* {
-    yield LoadingVisitState();
-    final token = _sharedPreferences.getString("access_token");
-    try{
-      final response = await _visitRepository.getPDF("Bearer $token", e.startDate, e.endDate);
-      if (response.message == "ok") {
-        yield GetPDFState(response.result);
-      }
-    } on DioError catch(e) {
-      if(e.response?.statusCode == 500) {
-        yield NotLogginInState();
-      }
-      else {
-        yield FailedVisitState();
-      }
-    }
-  }
+  // Stream<VisitBlocState> _mapGetPDFToState(GetPDFEvent e) async* {
+  //   yield LoadingVisitState();
+  //   final token = _sharedPreferences.getString("access_token");
+  //   try{
+  //     final response = await _visitRepository.getPDF("Bearer $token", e.startDate, e.endDate);
+  //     if (response.message == "ok") {
+  //       yield GetPDFState(response.result);
+  //     }
+  //   } on DioError catch(e) {
+  //     if(e.response?.statusCode == 500) {
+  //       yield NotLogginInState();
+  //     }
+  //     else {
+  //       yield FailedVisitState();
+  //     }
+  //   }
+  // }
 
   Stream<VisitBlocState> _mapAddNewCustomerState(AddCustomerEvent e) async* {
     yield LoadingVisitState();

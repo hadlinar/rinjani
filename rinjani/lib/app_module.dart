@@ -23,15 +23,18 @@ import 'package:rinjani/data_source/repository/visit_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/employee/employee_bloc.dart';
+import 'bloc/pdf/pdf_bloc.dart';
 import 'bloc/user/user_bloc.dart';
 import 'data_source/network/branch_service.dart';
 import 'data_source/network/employee_service.dart';
 import 'data_source/network/monitor_service.dart';
+import 'data_source/network/pdf_service.dart';
 import 'data_source/network/user_service.dart';
 import 'data_source/repository/branch_repository.dart';
 import 'data_source/repository/employee_repository.dart';
 import 'data_source/repository/login_repository.dart';
 import 'data_source/repository/monitor_repository.dart';
+import 'data_source/repository/pdf_repository.dart';
 import 'data_source/repository/ranking_repository.dart';
 import 'data_source/repository/role_repository.dart';
 import 'data_source/repository/user_repository.dart';
@@ -81,6 +84,9 @@ class AppModule {
     injector.registerSingleton<CustomerCatService>(
         CustomerCatService.create(injector.get())
     );
+    injector.registerSingleton<PDFService>(
+        PDFService.create(injector.get())
+    );
   }
 
   void configureRepository() {
@@ -94,6 +100,7 @@ class AppModule {
     injector.registerSingleton(RankingRepository(injector.get()));
     injector.registerSingleton(MonitorRepository(injector.get()));
     injector.registerSingleton(CustomerCatRepository(injector.get()));
+    injector.registerSingleton(PDFRepository(injector.get()));
   }
 
   Widget configureBloc(Widget app) {
@@ -130,6 +137,9 @@ class AppModule {
       ),
       BlocProvider<CustomerCatBloc>(
         create: (_) => CustomerCatBloc.create(injector.get()),
+      ),
+      BlocProvider<PDFBloc>(
+        create: (_) => PDFBloc.create(injector.get(), injector.get()),
       ),
     ], child: app);
   }

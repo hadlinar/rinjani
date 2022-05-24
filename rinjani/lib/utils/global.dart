@@ -34,6 +34,8 @@ class Global {
   static const RED_ICON = "assets/icon/ic_red.png";
   static const GREEN_ICON = "assets/icon/ic_green.png";
 
+  static const ID_FOOD = "assets/images/id_food.png";
+
   static String ACCESS_TOKEN = "access_token";
 
   static void setState(Null Function() param0) {}
