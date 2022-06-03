@@ -1,7 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:rinjani/models/user.dart';
 
-import '../../models/login.dart';
 
 
 @immutable

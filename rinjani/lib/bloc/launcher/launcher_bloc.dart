@@ -1,11 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/data_source/network/user_service.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'launcher_state.dart';
-import 'launcher_event.dart';
 import 'launcher_bloc.dart';
 
 export 'launcher_state.dart';
@@ -22,6 +18,7 @@ class LauncherBloc extends Bloc<LauncherBlocEvent, LauncherBlocState> {
   @override
   LauncherBlocState get initialState => InitialLauncherState();
 
+  @override
   Stream<LauncherBlocState> mapEventToState(
       LauncherBlocEvent event,
       ) async* {
@@ -40,7 +37,7 @@ class LauncherBloc extends Bloc<LauncherBlocEvent, LauncherBlocState> {
       try {
         yield LoggedInState();
       }
-      on DioError catch(e) {
+      on DioError {
         _sharedPreferences.clear();
         yield NotLoggedinState();
       }

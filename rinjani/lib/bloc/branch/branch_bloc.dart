@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_source/repository/branch_repository.dart';
-import 'branch_state.dart';
-import 'branch_event.dart';
 import 'branch_bloc.dart';
 
 export 'branch_state.dart';

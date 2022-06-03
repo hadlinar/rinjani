@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_source/repository/monitor_repository.dart';
-import 'monitor_state.dart';
-import 'monitor_event.dart';
 import 'monitor_bloc.dart';
 
 export 'monitor_state.dart';

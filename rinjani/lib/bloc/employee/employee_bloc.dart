@@ -2,8 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_source/repository/employee_repository.dart';
 
-import 'employee_state.dart';
-import 'employee_event.dart';
 import 'employee_bloc.dart';
 
 export 'employee_state.dart';

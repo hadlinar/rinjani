@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
@@ -115,9 +111,9 @@ class Global {
             width: 80,
             height: 80,
             child: Container(
-              padding: EdgeInsets.all(13),
+              padding: const EdgeInsets.all(13),
               child: Image.asset(
-                'assets/images/${imageCard}',
+                'assets/images/$imageCard',
                 fit: BoxFit.cover,
               ),
             )
@@ -133,7 +129,7 @@ class Global {
       String positiveBtnText,
       bool isShowingNegativeButton) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       title: Image.asset(
         iconPath,
@@ -165,7 +161,7 @@ class Global {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).colorScheme.secondary,
                               width: 3)),
                       color: Colors.white,
                       onPressed: () {
@@ -190,9 +186,9 @@ class Global {
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           side:
-                          BorderSide(color: Theme.of(context).accentColor),
+                          BorderSide(color: Theme.of(context).colorScheme.secondary),
                           borderRadius: BorderRadius.circular(10)),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       onPressed: action,
                       child: Text(
                         positiveBtnText,

@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/bloc/customer/customer_bloc.dart';
 import 'package:rinjani/bloc/visit/visit_bloc.dart';
 import 'package:rinjani/views/page/plan_in_office.dart';
 import 'package:rinjani/views/page/plan_off.dart';
 import 'package:rinjani/views/page/plan_out_office.dart';
-import 'package:intl/intl.dart';
 
-import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 
@@ -139,7 +135,7 @@ class _Plan extends State<Plan> {
                                 border: OutlineInputBorder(
                                     borderRadius:
                                     BorderRadius.circular(10),
-                                    borderSide: BorderSide()
+                                    borderSide: const BorderSide()
                                 ),
                               ),
                             )
@@ -242,7 +238,7 @@ class _Plan extends State<Plan> {
                                 var newSec = 0;
                                 DateTime date = store.get("date");
                                 String clicked = store.get("clicked").toString();
-                                var timeStart, timeFinish;
+                                Object timeStart, timeFinish;
                                 timeStart = DateTime.now();
                                 timeFinish = DateTime.now();
                                 timeStart = DateTime(date.year, date.month, date.day, hourPagi, newMin, newSec).toString();
@@ -254,8 +250,8 @@ class _Plan extends State<Plan> {
                                         "03",
                                         store.get("branch_id"),
                                         "",
-                                        timeStart,
-                                        timeFinish,
+                                        timeStart.toString(),
+                                        timeFinish.toString(),
                                         store.get("nik"),
                                         desc,
                                         "",
@@ -282,7 +278,7 @@ class _Plan extends State<Plan> {
 
                                 DateTime timeStart = store.get("startTime");
                                 DateTime timeEnd = store.get("endTime");
-                                String cust_id = store.get("cust_id").toString();
+                                String custId = store.get("cust_id").toString();
 
                                 String clicked = store.get("clicked").toString();
                                 String clickedStart = store.get("clickedStart").toString();
@@ -313,7 +309,7 @@ class _Plan extends State<Plan> {
                                         }
                                     );
                                   } else {
-                                    if(cust_id == "null" && newCust == "null") {
+                                    if(custId == "null" && newCust == "null") {
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -375,7 +371,7 @@ class _Plan extends State<Plan> {
                                                 AddVisitEvent(
                                                   "02",
                                                   store.get("branch_id"),
-                                                  cust_id,
+                                                  custId,
                                                   timeStart.toString(),
                                                   timeEnd.toString(),
                                                   store.get("user_id"),

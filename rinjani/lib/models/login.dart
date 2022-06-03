@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:rinjani/models/user.dart';
 part 'login.g.dart';
 
 @JsonSerializable()

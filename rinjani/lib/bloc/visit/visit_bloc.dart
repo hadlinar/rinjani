@@ -3,8 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
 import '../../data_source/repository/visit_repository.dart';
-import 'visit_state.dart';
-import 'visit_event.dart';
 import 'visit_bloc.dart';
 
 export 'visit_state.dart';

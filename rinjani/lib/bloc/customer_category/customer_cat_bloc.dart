@@ -1,11 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/data_source/repository/customer_repository.dart';
-import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data_source/repository/customer_cat_repository.dart';
-import 'customer_cat_state.dart';
-import 'customer_cat_event.dart';
 import 'customer_cat_bloc.dart';
 
 export 'customer_cat_state.dart';

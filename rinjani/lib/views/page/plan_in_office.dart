@@ -146,7 +146,7 @@ class _InOffice extends State<InOffice> {
     store.set("timeEnd", end);
     return GestureDetector (
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
             padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
@@ -175,7 +175,7 @@ class _InOffice extends State<InOffice> {
                                         child: Container(
                                             padding: const EdgeInsets.only(left: 17),
                                             child: ImageIcon(
-                                              AssetImage(Global.CALENDAR_ICON),
+                                              const AssetImage(Global.CALENDAR_ICON),
                                               color: Color(Global.BLUE),
                                               size: 18,
                                             )
@@ -225,7 +225,7 @@ class _InOffice extends State<InOffice> {
                                             child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
                                           ),
                                           ImageIcon(
-                                            AssetImage(Global.CLOCK_ICON),
+                                            const AssetImage(Global.CLOCK_ICON),
                                             color: Color(Global.BLUE),
                                             size: 18,
                                           )
@@ -245,7 +245,7 @@ class _InOffice extends State<InOffice> {
                                             child: Global.getDefaultText(DateFormat("HH:mm").format(timeEnd), Global.GREY),
                                           ),
                                           ImageIcon(
-                                            AssetImage(Global.CLOCK_ICON),
+                                            const AssetImage(Global.CLOCK_ICON),
                                             color: Color(Global.BLUE),
                                             size: 18,
                                           )
@@ -273,7 +273,7 @@ class _InOffice extends State<InOffice> {
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius .circular(10),
-                          borderSide: BorderSide()),
+                          borderSide: const BorderSide()),
                     ),
                   ),
                 ]

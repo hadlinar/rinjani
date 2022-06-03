@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import '../../models/user.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 
@@ -144,7 +142,7 @@ class _ListVisit extends State<ListVisit> {
                                   labelStyle: const TextStyle(color: Color(0xff757575), fontSize: 15, fontFamily: 'medium'),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide()
+                                      borderSide: const BorderSide()
                                   ),
                                 ),
                               )
@@ -163,7 +161,7 @@ class _ListVisit extends State<ListVisit> {
                           } else if(state is GetRealizationState) {
                             return Container(
                               padding: const EdgeInsets.only(top: 17),
-                              child: state.getRealization.length != 0 ? ListView.builder(
+                              child: state.getRealization.isNotEmpty ? ListView.builder(
                                   itemCount: state.getRealization.length,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
@@ -212,7 +210,7 @@ class _ListVisit extends State<ListVisit> {
                                                                         itemCount: state.getRealization[i].pic_name.split(", ").length,
                                                                         scrollDirection: Axis.vertical,
                                                                         shrinkWrap: true,
-                                                                        physics: NeverScrollableScrollPhysics(),
+                                                                        physics: const NeverScrollableScrollPhysics(),
                                                                         itemBuilder: (context, j){
                                                                           return Container(
                                                                             padding: const EdgeInsets.only(top: 5),
@@ -231,7 +229,7 @@ class _ListVisit extends State<ListVisit> {
                                                     ),
                                                   ],
                                                 ),
-                                                Divider()
+                                                const Divider()
                                               ]
                                           ),
                                         )
@@ -260,7 +258,7 @@ class _ListVisit extends State<ListVisit> {
                           } else if(state is GetRealizationOpState) {
                             return Container(
                               padding: const EdgeInsets.only(top: 17),
-                              child: state.getRealizationOp.length != 0 ? ListView.builder(
+                              child: state.getRealizationOp.isNotEmpty ? ListView.builder(
                                   itemCount: state.getRealizationOp.length,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
@@ -309,7 +307,7 @@ class _ListVisit extends State<ListVisit> {
                                                                         itemCount: state.getRealizationOp[i].pic_name.split(", ").length,
                                                                         scrollDirection: Axis.vertical,
                                                                         shrinkWrap: true,
-                                                                        physics: NeverScrollableScrollPhysics(),
+                                                                        physics: const NeverScrollableScrollPhysics(),
                                                                         itemBuilder: (context, j){
                                                                           return Container(
                                                                             padding: const EdgeInsets.only(top: 5),
@@ -328,7 +326,7 @@ class _ListVisit extends State<ListVisit> {
                                                     ),
                                                   ],
                                                 ),
-                                                Divider()
+                                                const Divider()
                                               ]
                                           ),
                                         )

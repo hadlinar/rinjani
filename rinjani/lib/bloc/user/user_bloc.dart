@@ -5,8 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data_source/repository/login_repository.dart';
 import '../../data_source/repository/user_repository.dart';
 
-import 'user_state.dart';
-import 'user_event.dart';
 import 'user_bloc.dart';
 
 export 'user_state.dart';

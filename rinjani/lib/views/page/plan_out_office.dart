@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +26,7 @@ final GlobalState store = GlobalState.instance;
 class _OutOffice extends State<OutOffice> {
   var visitCard = <Column>[];
 
-  int _count = 1;
+  final int _count = 1;
 
   @override
   void initState() {
@@ -42,7 +41,7 @@ class _OutOffice extends State<OutOffice> {
     });
     return GestureDetector (
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
             child: Column(
@@ -63,7 +62,7 @@ class _OutOffice extends State<OutOffice> {
 
 class AddPlan extends StatefulWidget {
   final int count;
-  AddPlan(this.count);
+  const AddPlan(this.count);
 
   @override
   State<StatefulWidget> createState() => _AddPlan();
@@ -82,7 +81,7 @@ class _AddPlan extends State<AddPlan> {
   var positionPIC = <String>[];
   var namePIC = <String>[];
   var cards = <Column>[];
-  var _selectedCust = null;
+  var _selectedCust;
 
   var newCustomerController = TextEditingController();
 
@@ -191,7 +190,7 @@ class _AddPlan extends State<AddPlan> {
               alignLabelWithHint: true,
               border: OutlineInputBorder(
                   borderRadius: BorderRadius .circular(10),
-                  borderSide: BorderSide()),
+                  borderSide: const BorderSide()),
             ),
           ),
         )
@@ -422,7 +421,7 @@ class _AddPlan extends State<AddPlan> {
                                 border: OutlineInputBorder(
                                     borderRadius:
                                     BorderRadius.circular(10),
-                                    borderSide: BorderSide()
+                                    borderSide: const BorderSide()
                                 ),
                               ),
                             )
@@ -438,7 +437,7 @@ class _AddPlan extends State<AddPlan> {
                                         side: BorderSide(
                                             color: Theme
                                                 .of(context)
-                                                .accentColor,
+                                                .colorScheme.secondary,
                                             width: 3
                                         )
                                     ),
@@ -552,7 +551,7 @@ class _AddPlan extends State<AddPlan> {
                                       child: Container(
                                           padding: const EdgeInsets.only(left: 17),
                                           child: ImageIcon(
-                                            AssetImage(Global.CALENDAR_ICON),
+                                            const AssetImage(Global.CALENDAR_ICON),
                                             color: Color(Global.BLUE),
                                             size: 18,
                                           )
@@ -601,7 +600,7 @@ class _AddPlan extends State<AddPlan> {
                                           child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
                                         ),
                                         ImageIcon(
-                                          AssetImage(Global.CLOCK_ICON),
+                                          const AssetImage(Global.CLOCK_ICON),
                                           color: Color(Global.BLUE),
                                           size: 18,
                                         )
@@ -621,7 +620,7 @@ class _AddPlan extends State<AddPlan> {
                                           child: Global.getDefaultText(DateFormat("HH:mm").format(timeEnd), Global.GREY),
                                         ),
                                         ImageIcon(
-                                          AssetImage(Global.CLOCK_ICON),
+                                          const AssetImage(Global.CLOCK_ICON),
                                           color: Color(Global.BLUE),
                                           size: 18,
                                         )
@@ -644,11 +643,11 @@ class _AddPlan extends State<AddPlan> {
                     },
                     decoration: InputDecoration(
                       labelText: 'New customer',
-                      contentPadding: EdgeInsets.only(bottom: 5,left: 7,top: 5),
+                      contentPadding: const EdgeInsets.only(bottom: 5,left: 7,top: 5),
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(),
+                        borderSide: const BorderSide(),
                       ),
                       suffixIcon: newCustomerController.text.isEmpty
                           ? null // Show nothing if the text field is empty
@@ -687,12 +686,12 @@ class _AddPlan extends State<AddPlan> {
                       },
                       selectedItem: _selectedCust,
                       dropdownSearchDecoration: InputDecoration(
-                        labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                        labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                         alignLabelWithHint: true,
-                        contentPadding: EdgeInsets.only(left: 12),
+                        contentPadding: const EdgeInsets.only(left: 12),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius .circular(10),
-                            borderSide: BorderSide()),
+                            borderSide: const BorderSide()),
                       ),
                     )
                 ),
@@ -755,7 +754,7 @@ class _AddPlan extends State<AddPlan> {
                                         child: Container(
                                           padding: const EdgeInsets.only(right: 21),
                                           child: ImageIcon(
-                                            AssetImage(Global.CANCEL_ICON),
+                                            const AssetImage(Global.CANCEL_ICON),
                                             size: 18,
                                             color: Color(Global.GREY),
                                           ),
@@ -810,7 +809,7 @@ class _AddPlan extends State<AddPlan> {
         else if(state is LoadingCustomerState) {
           return Container(
               padding: const EdgeInsets.only(top: 30),
-              child: CircularProgressIndicator()
+              child: const CircularProgressIndicator()
           );
         }
         else {

@@ -3,8 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
 import '../../data_source/repository/pdf_repository.dart';
-import 'pdf_state.dart';
-import 'pdf_event.dart';
 import 'pdf_bloc.dart';
 
 export 'pdf_state.dart';

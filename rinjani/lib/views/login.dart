@@ -6,7 +6,6 @@ import '../../utils/global.dart';
 import '../bloc/login/login_bloc.dart';
 import '../utils/global_state.dart';
 import 'dashboard.dart';
-import 'home.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -42,10 +41,10 @@ class _LoginPage extends State<LoginPage> {
                   return AlertDialog(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
-                    title: Container(
+                    title: const SizedBox(
                       height: 50,
                       width: 50,
-                      child: const Center(
+                      child: Center(
                         child: CircularProgressIndicator(),
                       ),
                     ),
@@ -53,7 +52,7 @@ class _LoginPage extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.only(top: 12),
+                          margin: const EdgeInsets.only(top: 12),
                           child: Center(
                             child: Text("Please wait",
                                 style: Global.getCustomFont(Global.GREY, 14, 'book'),
@@ -103,7 +102,7 @@ class _LoginPage extends State<LoginPage> {
 
         child: GestureDetector (
           onTap: () {
-            FocusScope.of(context).requestFocus(new FocusNode());
+            FocusScope.of(context).requestFocus(FocusNode());
         },
           child:  Scaffold(
                 backgroundColor: Colors.white,
@@ -118,7 +117,7 @@ class _LoginPage extends State<LoginPage> {
                       margin: const EdgeInsets.only(top: 50),
                       child: Column(
                         children: <Widget>[
-                          Container(
+                          SizedBox(
                             height: 239,
                             child: Image.asset(
                               'assets/images/logo.png',
@@ -138,12 +137,12 @@ class _LoginPage extends State<LoginPage> {
                                 alignLabelWithHint: true,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius .circular(10),
-                                    borderSide: BorderSide()),
+                                    borderSide: const BorderSide()),
                               ),
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(bottom: 32.0),
+                            margin: const EdgeInsets.only(bottom: 32.0),
                             child: TextFormField(
                               controller: passwordController,
                               onChanged: (text) {
@@ -172,7 +171,7 @@ class _LoginPage extends State<LoginPage> {
                           Stack(
                               children: <Widget>[
                                 Container(
-                                  padding: EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                                  padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
                                   width: 150,
                                   height: 56,
                                   color: Colors.white,

@@ -1,12 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/models/visit.dart';
 import 'package:rinjani/views/page/detail_report.dart';
-import 'package:rinjani/views/page/report.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import '../../models/user.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 
@@ -155,7 +151,7 @@ class _ListReport extends State<ListReport> {
                                             border: OutlineInputBorder(
                                                 borderRadius:
                                                 BorderRadius.circular(10),
-                                                borderSide: BorderSide()
+                                                borderSide: const BorderSide()
                                             ),
                                           ),
                                         )
@@ -177,12 +173,12 @@ class _ListReport extends State<ListReport> {
                                 } else if(state is GetRealizationState) {
                                   return Container(
                                       padding: const EdgeInsets.only(top: 17),
-                                      child: state.getRealization.length != 0 ? Container(
+                                      child: state.getRealization.isNotEmpty ? Container(
                                           child: ListView.builder(
                                               itemCount: state.getRealization.length,
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
-                                              physics: NeverScrollableScrollPhysics(),
+                                              physics: const NeverScrollableScrollPhysics(),
                                               itemBuilder: (context, i){
                                                 return ListTile(
                                                     title: Container(
@@ -228,7 +224,7 @@ class _ListReport extends State<ListReport> {
                                                                                           itemCount: state.getRealization[i].pic_name.split(", ").length,
                                                                                           scrollDirection: Axis.vertical,
                                                                                           shrinkWrap: true,
-                                                                                          physics: NeverScrollableScrollPhysics(),
+                                                                                          physics: const NeverScrollableScrollPhysics(),
                                                                                           itemBuilder: (context, j){
                                                                                             return Container(
                                                                                               padding: const EdgeInsets.only(top: 5),
@@ -257,7 +253,7 @@ class _ListReport extends State<ListReport> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            Divider()
+                                                            const Divider()
                                                           ]
                                                       ),
                                                     )
@@ -286,12 +282,12 @@ class _ListReport extends State<ListReport> {
                                 } else if(state is GetRealizationOpState) {
                                   return Container(
                                       padding: const EdgeInsets.only(top: 17),
-                                      child: state.getRealizationOp.length != 0 ? Container(
+                                      child: state.getRealizationOp.isNotEmpty ? Container(
                                           child: ListView.builder(
                                               itemCount: state.getRealizationOp.length,
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
-                                              physics: NeverScrollableScrollPhysics(),
+                                              physics: const NeverScrollableScrollPhysics(),
                                               itemBuilder: (context, i){
                                                 return ListTile(
                                                     title: Container(
@@ -330,7 +326,7 @@ class _ListReport extends State<ListReport> {
                                                                                           itemCount: state.getRealizationOp[i].pic_name.split(", ").length,
                                                                                           scrollDirection: Axis.vertical,
                                                                                           shrinkWrap: true,
-                                                                                          physics: NeverScrollableScrollPhysics(),
+                                                                                          physics: const NeverScrollableScrollPhysics(),
                                                                                           itemBuilder: (context, j){
                                                                                             return Container(
                                                                                               padding: const EdgeInsets.only(top: 5),
@@ -366,7 +362,7 @@ class _ListReport extends State<ListReport> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            Divider()
+                                                            const Divider()
                                                           ]
                                                       ),
                                                     )

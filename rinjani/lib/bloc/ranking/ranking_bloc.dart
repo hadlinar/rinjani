@@ -1,9 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dio/dio.dart';
 
 import '../../data_source/repository/ranking_repository.dart';
-import 'ranking_state.dart';
-import 'ranking_event.dart';
 import 'ranking_bloc.dart';
 
 export 'ranking_state.dart';

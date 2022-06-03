@@ -24,8 +24,8 @@ typedef SuccessAddRealization = void Function(int resultMessage, BuildContext co
 final GlobalState store = GlobalState.instance;
 
 class _Realization extends State<Realization> {
-  var _selectedCust = null;
-  var _selectedPIC = null;
+  var _selectedCust;
+  var _selectedPIC;
 
   late List<String> cust = [];
   String custId = "";
@@ -157,7 +157,7 @@ class _Realization extends State<Realization> {
             leading: IconButton(
                 onPressed: Navigator.of(context).pop,
                 icon: ImageIcon(
-                  AssetImage(Global.BACK_ICON),
+                  const AssetImage(Global.BACK_ICON),
                   color: Color(Global.BLUE),
                   size: 18,
                 )
@@ -247,7 +247,7 @@ class _Realization extends State<Realization> {
                                         border: OutlineInputBorder(
                                             borderRadius:
                                             BorderRadius.circular(10),
-                                            borderSide: BorderSide()
+                                            borderSide: const BorderSide()
                                         ),
                                       ),
                                     )
@@ -283,12 +283,12 @@ class _Realization extends State<Realization> {
                                             },
                                             dropdownSearchDecoration: InputDecoration(
                                               labelText: "Select a customer",
-                                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                              labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                                               alignLabelWithHint: true,
-                                              contentPadding: EdgeInsets.only(left: 12),
+                                              contentPadding: const EdgeInsets.only(left: 12),
                                               border: OutlineInputBorder(
                                                   borderRadius: BorderRadius .circular(10),
-                                                  borderSide: BorderSide()),
+                                                  borderSide: const BorderSide()),
                                             ),
                                           )
                                       ),
@@ -328,7 +328,7 @@ class _Realization extends State<Realization> {
                                               border: OutlineInputBorder(
                                                   borderRadius:
                                                   BorderRadius.circular(10),
-                                                  borderSide: BorderSide()
+                                                  borderSide: const BorderSide()
                                               ),
                                             ),
                                           )
@@ -414,12 +414,12 @@ class _Realization extends State<Realization> {
                                                         },
                                                         dropdownSearchDecoration: InputDecoration(
                                                           labelText: "PIC",
-                                                          labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                          labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                                                           alignLabelWithHint: true,
-                                                          contentPadding: EdgeInsets.only(left: 12),
+                                                          contentPadding: const EdgeInsets.only(left: 12),
                                                           border: OutlineInputBorder(
                                                               borderRadius: BorderRadius .circular(10),
-                                                              borderSide: BorderSide()),
+                                                              borderSide: const BorderSide()),
                                                         ),
                                                       )
                                                   ),
@@ -506,7 +506,7 @@ class _Realization extends State<Realization> {
                                                                                 alignLabelWithHint: true,
                                                                                 border: OutlineInputBorder(
                                                                                     borderRadius: BorderRadius .circular(10),
-                                                                                    borderSide: BorderSide()),
+                                                                                    borderSide: const BorderSide()),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -556,7 +556,7 @@ class _Realization extends State<Realization> {
                                                                       alignLabelWithHint: true,
                                                                       border: OutlineInputBorder(
                                                                           borderRadius: BorderRadius .circular(10),
-                                                                          borderSide: BorderSide()),
+                                                                          borderSide: const BorderSide()),
                                                                     ),
                                                                   ),
                                                                 )
@@ -595,7 +595,7 @@ class _Realization extends State<Realization> {
                                                                   alignLabelWithHint: true,
                                                                   border: OutlineInputBorder(
                                                                       borderRadius: BorderRadius .circular(10),
-                                                                      borderSide: BorderSide()),
+                                                                      borderSide: const BorderSide()),
                                                                 ),
                                                               ),
                                                             )
@@ -663,7 +663,7 @@ class _Realization extends State<Realization> {
                                                 alignLabelWithHint: true,
                                                 border: OutlineInputBorder(
                                                     borderRadius: BorderRadius .circular(10),
-                                                    borderSide: BorderSide()),
+                                                    borderSide: const BorderSide()),
                                               ),
                                             ),
                                           ],
@@ -679,7 +679,7 @@ class _Realization extends State<Realization> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   Container(
-                                                    padding: EdgeInsets.only(top: 9, bottom: 9),
+                                                    padding: const EdgeInsets.only(top: 9, bottom: 9),
                                                     width: 163,
                                                     height: 56,
                                                     color: Colors.white,
@@ -703,7 +703,7 @@ class _Realization extends State<Realization> {
                                                     ),
                                                   ),
                                                   Container(
-                                                      padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
+                                                      padding: const EdgeInsets.only(left: 21, top: 9, bottom: 17),
                                                       child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
                                                     // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
                                                   ),

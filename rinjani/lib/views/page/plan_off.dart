@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/global.dart';
@@ -82,7 +81,7 @@ class _Off extends State<Off> {
                                   child: Container(
                                       padding: const EdgeInsets.only(left: 17),
                                       child: ImageIcon(
-                                        AssetImage(Global.CALENDAR_ICON),
+                                        const AssetImage(Global.CALENDAR_ICON),
                                         color: Color(Global.BLUE),
                                         size: 18,
                                       )
@@ -114,7 +113,7 @@ class _Off extends State<Off> {
                     ),
                   ),
                   DropdownButtonFormField<String>(
-                    hint: Text("Choose"),
+                    hint: const Text("Choose"),
                     dropdownColor: Colors.white,
                     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
                     value: offType,
@@ -139,7 +138,7 @@ class _Off extends State<Off> {
                       border: OutlineInputBorder(
                           borderRadius:
                           BorderRadius.circular(10),
-                          borderSide: BorderSide()
+                          borderSide: const BorderSide()
                       ),
                     ),
                   ),
@@ -159,7 +158,7 @@ class _Off extends State<Off> {
                         alignLabelWithHint: true,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius .circular(10),
-                            borderSide: BorderSide()),
+                            borderSide: const BorderSide()),
                       ),
                     ),
                   ) : Container()

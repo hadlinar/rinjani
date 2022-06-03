@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
 
-import '../../models/branch.dart';
 
 @immutable
 abstract class LauncherBlocState {}

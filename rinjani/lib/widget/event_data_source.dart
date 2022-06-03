@@ -55,9 +55,9 @@ class EventDataSource extends CalendarDataSource{
   @override
   Color getColor(int index) {
     if(getEvent(index).visit_id == "03") {
-      return Color(0xffffe57373);
+      return const Color(0xffffe57373);
     } else if(getEvent(index).visit_id == "01") {
-      return Color(0xffff66bb6a);
+      return const Color(0xffff66bb6a);
     }
     return Colors.lightBlue;
   }

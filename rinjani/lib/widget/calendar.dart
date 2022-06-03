@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -38,7 +37,7 @@ class _CalendarState extends State<Calendar> {
         leading: IconButton(
             onPressed: Navigator.of(context).pop,
             icon: ImageIcon(
-              AssetImage(Global.BACK_ICON),
+              const AssetImage(Global.BACK_ICON),
               color: Color(Global.BLUE),
               size: 18,
             )
@@ -111,7 +110,7 @@ class _CalendarState extends State<Calendar> {
           )
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(Global.BLUE),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(
@@ -196,7 +195,7 @@ class _CalendarState extends State<Calendar> {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.only(top: 5, bottom: 5, left: 3),
-                                      child: Text("${_visit.description.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                      child: Text(_visit.description.split(", ")[j], style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                     ),
                                     j == _visit.pic_name.split(", ").length-1 ? Container() :
                                     const Divider(
@@ -248,7 +247,7 @@ class _CalendarState extends State<Calendar> {
                               side: BorderSide(
                                   color: Theme
                                       .of(context)
-                                      .accentColor,
+                                      .colorScheme.secondary,
                                   width: 3
                               )
                           ),
@@ -277,7 +276,7 @@ class _CalendarState extends State<Calendar> {
                                 side: BorderSide(
                                     color: Theme
                                         .of(context)
-                                        .accentColor,
+                                        .colorScheme.secondary,
                                     width: 3
                                 )
                             ),
@@ -303,7 +302,7 @@ class _CalendarState extends State<Calendar> {
                         child: RaisedButton(
                             shape: RoundedRectangleBorder(
                                 side:
-                                BorderSide(color: Colors.redAccent),
+                                const BorderSide(color: Colors.redAccent),
                                 borderRadius: BorderRadius.circular(10)),
                             color: Colors.redAccent,
                             onPressed: () {

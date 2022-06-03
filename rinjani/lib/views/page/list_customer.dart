@@ -1,12 +1,8 @@
 
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rinjani/views/page/report.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import '../../models/user.dart';
-import '../../models/visit.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 
@@ -147,7 +143,7 @@ class _ListCustomer extends State<ListCustomer> {
                                   border: OutlineInputBorder(
                                       borderRadius:
                                       BorderRadius.circular(10),
-                                      borderSide: BorderSide()
+                                      borderSide: const BorderSide()
                                   ),
                                 ),
                               )
@@ -174,12 +170,12 @@ class _ListCustomer extends State<ListCustomer> {
                               finalCustName = custName.toSet().toList();
                               return Container(
                                   padding: const EdgeInsets.only(top: 17),
-                                  child: state.getRealization.length != 0 ? Container(
+                                  child: state.getRealization.isNotEmpty ? Container(
                                       child: ListView.builder(
                                           itemCount: finalCustName.length,
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, i){
                                             return ListTile(
                                                 title: Container(
@@ -197,7 +193,7 @@ class _ListCustomer extends State<ListCustomer> {
                                                               ),
                                                             ]
                                                         ),
-                                                        Divider()
+                                                        const Divider()
                                                       ]
                                                   ),
                                                 )
@@ -233,12 +229,12 @@ class _ListCustomer extends State<ListCustomer> {
                               finalCustName = custName.toSet().toList();
                               return Container(
                                   padding: const EdgeInsets.only(top: 17),
-                                  child: state.getRealizationOp.length != 0 ? Container(
+                                  child: state.getRealizationOp.isNotEmpty ? Container(
                                       child: ListView.builder(
                                           itemCount: finalCustName.length,
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, i){
                                             return ListTile(
                                                 title: Container(
@@ -256,7 +252,7 @@ class _ListCustomer extends State<ListCustomer> {
                                                               ),
                                                             ]
                                                         ),
-                                                        Divider()
+                                                        const Divider()
                                                       ]
                                                   ),
                                                 )

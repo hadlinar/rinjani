@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_source/repository/role_repository.dart';
-import 'role_state.dart';
-import 'role_event.dart';
 import 'role_bloc.dart';
 
 export 'role_state.dart';

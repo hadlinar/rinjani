@@ -36,7 +36,7 @@ class CustomTextField extends FormField<String> {
             keyboardType: inputType == INPUT_TYPE.PERSEN
                 ? TextInputType.phone
                 : keyboardType,
-            style: TextStyle(fontSize: 15, fontFamily: 'medium'),
+            style: const TextStyle(fontSize: 15, fontFamily: 'medium'),
             onChanged: onChangedHandler,
             controller: controller,
             maxLines: maxLines,
@@ -45,7 +45,7 @@ class CustomTextField extends FormField<String> {
             ],
             obscureText: obsecureText ?? false,
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(bottom: 5,left: 7,top: 5),
+                contentPadding: const EdgeInsets.only(bottom: 5,left: 7,top: 5),
                 counterText: showCounterText
                     ? "${controller?.text.length}/$maxLength"
                     : null,
@@ -53,9 +53,9 @@ class CustomTextField extends FormField<String> {
                 hintText: hint,
                 alignLabelWithHint: true,border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide()
+                borderSide: const BorderSide()
             ),
-                suffixIcon: suffixIcon ?? null
+                suffixIcon: suffixIcon
             ),validator: (value) {
             if (inputType == INPUT_TYPE.PERSEN) {
               if (int.parse(value!) < 0 || int.parse(value) > 100) {

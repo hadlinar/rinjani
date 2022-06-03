@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,7 +59,7 @@ class _Analyze extends State<Analyze> {
         bottom: false,
         child: GestureDetector (
             onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
             backgroundColor: Colors.white,
@@ -73,7 +72,7 @@ class _Analyze extends State<Analyze> {
               leading: IconButton(
                   onPressed: Navigator.of(context).pop,
                   icon: ImageIcon(
-                    AssetImage(Global.BACK_ICON),
+                    const AssetImage(Global.BACK_ICON),
                     color: Color(Global.BLUE),
                     size: 18,
                   )
@@ -294,6 +293,7 @@ class MyData extends DataTableSource {
 
   MyData(this.ranking);
 
+  @override
   DataRow? getRow(int index) {
     return DataRow.byIndex(index: index, cells: [
         DataCell(Align(
@@ -337,6 +337,7 @@ class MonitorData extends DataTableSource {
 
   MonitorData(this.monitor);
 
+  @override
   DataRow? getRow(int index) {
     return DataRow.byIndex(index: index, cells: [
       DataCell(

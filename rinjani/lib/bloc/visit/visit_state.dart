@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
 
-import '../../models/pdf.dart';
 import '../../models/visit.dart';
 
 @immutable

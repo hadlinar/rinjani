@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../../models/visit.dart';
 import '../../utils/global.dart';
@@ -67,7 +65,7 @@ class _DetailReport extends State<DetailReport> {
               leading: IconButton(
                   onPressed: Navigator.of(context).pop,
                   icon: ImageIcon(
-                    AssetImage(Global.BACK_ICON),
+                    const AssetImage(Global.BACK_ICON),
                     color: Color(Global.BLUE),
                     size: 18,
                   )
@@ -161,7 +159,7 @@ class _DetailReport extends State<DetailReport> {
                                                   itemCount: widget.realization.pic_name.split(", ").length,
                                                   scrollDirection: Axis.vertical,
                                                   shrinkWrap: true,
-                                                  physics: NeverScrollableScrollPhysics(),
+                                                  physics: const NeverScrollableScrollPhysics(),
                                                   itemBuilder: (context, j){
                                                     return Container(
                                                       padding: const EdgeInsets.only(top: 5),
@@ -266,7 +264,7 @@ class _DetailReport extends State<DetailReport> {
                                                 itemCount: widget.realization.description.split(", ").length,
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
+                                                physics: const NeverScrollableScrollPhysics(),
                                                 itemBuilder: (context, j){
                                                   return Container(
                                                     padding: const EdgeInsets.only(top: 5),
@@ -306,7 +304,7 @@ class _DetailReport extends State<DetailReport> {
                                                 itemCount: widget.realization.description_real.split(", ").length,
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
+                                                physics: const NeverScrollableScrollPhysics(),
                                                 itemBuilder: (context, j){
                                                   return Container(
                                                     padding: const EdgeInsets.only(top: 5),
