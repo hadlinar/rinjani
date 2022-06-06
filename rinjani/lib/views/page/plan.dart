@@ -292,7 +292,6 @@ class _Plan extends State<Plan> {
                                 String newCust = store.get("cust_name").toString();
                                 String catId = store.get("cat_id").toString();
 
-                                print('clicked $clicked');
                                 if(clicked == "null" || clicked == "" || clicked == "false" || clicked == false) {
                                   showDialog(
                                       context: context,
