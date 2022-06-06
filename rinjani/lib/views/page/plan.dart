@@ -353,6 +353,7 @@ class _Plan extends State<Plan> {
                                           );
                                         } else {
                                           if(savedCust) {
+                                            print(timeStart.toString());
                                             BlocProvider.of<VisitBloc>(context).add(
                                                 AddCustomerEvent(
                                                   store.get("branch_id"),

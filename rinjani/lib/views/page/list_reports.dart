@@ -95,7 +95,7 @@ class _ListReport extends State<ListReport> {
                                 Align(
                                   alignment: Alignment.topCenter,
                                   child: Container(
-                                      padding: const EdgeInsets.only(top: 17, left: 14, bottom: 65, right: 17),
+                                      padding: const EdgeInsets.only(top: 17, left: 14),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text('Filter :',
