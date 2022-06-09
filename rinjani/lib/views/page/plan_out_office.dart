@@ -810,8 +810,9 @@ class _AddPlan extends State<AddPlan> {
         }
         else if(state is LoadingCustomerState) {
           return Container(
-              padding: const EdgeInsets.only(top: 30),
-              child: CircularProgressIndicator()
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: const Center(child: CircularProgressIndicator())
           );
         }
         else {

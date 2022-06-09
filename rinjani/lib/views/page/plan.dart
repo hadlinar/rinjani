@@ -342,7 +342,7 @@ class _Plan extends State<Plan> {
                                         String position = pos.join(", ");
                                         String name1 = name.join(", ");
                                         String description = desc.join(", ");
-                                        if(position == "null" || name1 == "null" || description == "null" || name1 == "" || description == "") {
+                                        if(position == "null" || name1 == "null" || description == "null" || name.contains("") || pos.contains("") || desc.contains("")) {
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
