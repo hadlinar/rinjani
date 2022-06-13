@@ -248,7 +248,7 @@ class _Analyze extends State<Analyze> {
                                     ),
                                   ),
                                   Container(
-                                      padding: const EdgeInsets.only(right: 10, left: 10),
+                                      padding: const EdgeInsets.only(right: 10, left: 10, bottom: 50),
                                       child: PaginatedDataTable(
                                         rowsPerPage: _rowsPerPageMon,
                                         columns: <DataColumn>[

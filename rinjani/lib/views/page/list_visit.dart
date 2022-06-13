@@ -49,6 +49,7 @@ class _ListVisit extends State<ListVisit> {
         top: false,
         bottom: false,
         child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
               centerTitle: false,
@@ -71,8 +72,6 @@ class _ListVisit extends State<ListVisit> {
                 reverse: false,
                 child: Container(
                   padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -155,7 +154,7 @@ class _ListVisit extends State<ListVisit> {
                         builder: (context, state) {
                           if(state is LoadingVisitState) {
                             return Container(
-                                padding: const EdgeInsets.only(top: 20),
+                                padding: const EdgeInsets.only(top: 20, bottom: 17),
                                 child: const Center(
                                     child: CircularProgressIndicator()
                                 )
@@ -181,7 +180,7 @@ class _ListVisit extends State<ListVisit> {
                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                   children: [
                                                     Container(
-                                                      margin: const EdgeInsets.only(right: 17, top: 8),
+                                                      margin: const EdgeInsets.only(right: 17, top: 5),
                                                       child: Align(
                                                         alignment: Alignment.topLeft,
                                                         child: Text('${i + 1}.',
@@ -189,45 +188,47 @@ class _ListVisit extends State<ListVisit> {
                                                         ),
                                                       ),
                                                     ),
-                                                    Column(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Container(
-                                                          padding: const EdgeInsets.only(top: 5),
-                                                          child: Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text(
-                                                                state.getRealization[i].customer,
-                                                                style: Global.getCustomFont(Global.BLACK, 14, 'bold')
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: state.getRealization[i].pic_name.contains(",") ? Container(
-                                                                child: SizedBox(
-                                                                    width: 289,
-                                                                    child: ListView.builder(
-                                                                        itemCount: state.getRealization[i].pic_name.split(", ").length,
-                                                                        scrollDirection: Axis.vertical,
-                                                                        shrinkWrap: true,
-                                                                        physics: NeverScrollableScrollPhysics(),
-                                                                        itemBuilder: (context, j){
-                                                                          return Container(
-                                                                            padding: const EdgeInsets.only(top: 5),
-                                                                            child: Text("${state.getRealization[i].pic_name.split(", ")[j]} - ${state.getRealization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
-                                                                          );
-                                                                        }
-                                                                    )
-                                                                )
-                                                            ) : Container(
-                                                              child: Text("${state.getRealization[i].pic_name} - ${state.getRealization[i].pic_position}",
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Container(
+                                                            padding: const EdgeInsets.only(top: 5),
+                                                            child: Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text(
+                                                                  state.getRealization[i].customer,
                                                                   style: Global.getCustomFont(Global.BLACK, 14, 'bold')
                                                               ),
-                                                            )
-                                                        ),
-                                                      ],
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: state.getRealization[i].pic_name.contains(",") ? Container(
+                                                                  child: SizedBox(
+                                                                      width: 289,
+                                                                      child: ListView.builder(
+                                                                          itemCount: state.getRealization[i].pic_name.split(", ").length,
+                                                                          scrollDirection: Axis.vertical,
+                                                                          shrinkWrap: true,
+                                                                          physics: NeverScrollableScrollPhysics(),
+                                                                          itemBuilder: (context, j){
+                                                                            return Container(
+                                                                              padding: const EdgeInsets.only(top: 5),
+                                                                              child: Text("${state.getRealization[i].pic_name.split(", ")[j]} - ${state.getRealization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                            );
+                                                                          }
+                                                                      )
+                                                                  )
+                                                              ) : Container(
+                                                                child: Text("${state.getRealization[i].pic_name} - ${state.getRealization[i].pic_position}",
+                                                                    style: Global.getCustomFont(Global.BLACK, 14, 'bold')
+                                                                ),
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),

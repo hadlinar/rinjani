@@ -1013,7 +1013,7 @@ class _Report extends State<Report> {
                                                       itemCount: realization.length < 3 ? realization.length : 3,
                                                       scrollDirection: Axis.vertical,
                                                       shrinkWrap: true,
-                                                      physics: NeverScrollableScrollPhysics(),
+                                                      physics: const NeverScrollableScrollPhysics(),
                                                       itemBuilder: (context, i){
                                                         return ListTile(
                                                             title: Container(
@@ -1032,7 +1032,7 @@ class _Report extends State<Report> {
                                                                                   itemCount: realization[i].pic_name.split(", ").length,
                                                                                   scrollDirection: Axis.vertical,
                                                                                   shrinkWrap: true,
-                                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                                  physics: const NeverScrollableScrollPhysics(),
                                                                                   itemBuilder: (context, j){
                                                                                     return Container(
                                                                                       padding: const EdgeInsets.only(top: 5),
