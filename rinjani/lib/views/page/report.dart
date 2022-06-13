@@ -801,9 +801,9 @@ class _Report extends State<Report> {
                     listener: (context, state) {
                       if(state is InitialBranchBlocState || state is LoadingBranchState) {
                         Container(
-                            child: const Center(
-                                child: CircularProgressIndicator()
-                            )
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: const Center(child: CircularProgressIndicator())
                         );
                       } if (state is BranchOpList) {
                         setState(() {
@@ -872,8 +872,10 @@ class _Report extends State<Report> {
                           BlocBuilder<VisitBloc, VisitBlocState> (
                               builder: (context, state) {
                                 if (state is InitialVisitBlocState || state is LoadingVisitState) {
-                                  return const Center(
-                                      child: CircularProgressIndicator()
+                                  return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.height,
+                                      child: const Center(child: CircularProgressIndicator())
                                   );
                                 } if(state is GetRealizationState) {
                                   var realization = state.getRealization;
