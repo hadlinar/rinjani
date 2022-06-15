@@ -67,8 +67,8 @@ android {
         }
         production {
             dimension "rinjani"
-            versionCode 12
-            versionName "1.12"
+            versionCode 13
+            versionName "1.13"
         }
     }
 
