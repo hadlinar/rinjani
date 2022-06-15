@@ -164,31 +164,27 @@ class _Dashboard extends State<Dashboard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Container(
-                                  child: BlocListener<RankingBloc, RankingBlocState>(
+                                BlocListener<RankingBloc, RankingBlocState>(
+                                  listener: (context, state) {
+                                    if(state is GetRankingState) {
+                                      setState(() {
+                                        ranking = state.getRanking;
+                                      });
+
+                                    }
+                                  },
+                                  child: Container()
+                                ),
+                                BlocListener<MonitorBloc, MonitorBlocState>(
                                     listener: (context, state) {
-                                      if(state is GetRankingState) {
+                                      if(state is GetMonitorState) {
                                         setState(() {
-                                          ranking = state.getRanking;
+                                          monitor = state.getMonitor;
                                         });
 
                                       }
                                     },
                                     child: Container()
-                                  )
-                                ),
-                                Container(
-                                    child: BlocListener<MonitorBloc, MonitorBlocState>(
-                                        listener: (context, state) {
-                                          if(state is GetMonitorState) {
-                                            setState(() {
-                                              monitor = state.getMonitor;
-                                            });
-
-                                          }
-                                        },
-                                        child: Container()
-                                    )
                                 ),
                                 Column(
                                   children: <Widget>[
@@ -230,31 +226,27 @@ class _Dashboard extends State<Dashboard> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
 
-                                Container(
-                                    child: BlocListener<RankingBloc, RankingBlocState>(
-                                        listener: (context, state) {
-                                          if(state is GetRankingState) {
-                                            setState(() {
-                                              ranking = state.getRanking;
-                                            });
+                                BlocListener<RankingBloc, RankingBlocState>(
+                                    listener: (context, state) {
+                                      if(state is GetRankingState) {
+                                        setState(() {
+                                          ranking = state.getRanking;
+                                        });
 
-                                          }
-                                        },
-                                        child: Container()
-                                    )
+                                      }
+                                    },
+                                    child: Container()
                                 ),
-                                Container(
-                                    child: BlocListener<MonitorBloc, MonitorBlocState>(
-                                        listener: (context, state) {
-                                          if(state is GetMonitorState) {
-                                            setState(() {
-                                              monitor = state.getMonitor;
-                                            });
+                                BlocListener<MonitorBloc, MonitorBlocState>(
+                                    listener: (context, state) {
+                                      if(state is GetMonitorState) {
+                                        setState(() {
+                                          monitor = state.getMonitor;
+                                        });
 
-                                          }
-                                        },
-                                        child: Container()
-                                    )
+                                      }
+                                    },
+                                    child: Container()
                                 ),
                                 Column(
                                   children: <Widget>[
