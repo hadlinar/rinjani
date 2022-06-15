@@ -50,6 +50,7 @@ class _ListPIC extends State<ListPIC> {
         top: false,
         bottom: false,
         child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
               centerTitle: false,
@@ -72,8 +73,6 @@ class _ListPIC extends State<ListPIC> {
                 reverse: false,
                 child: Container(
                   padding: const EdgeInsets.only(top: 17, left: 21, right: 21),
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -161,24 +160,21 @@ class _ListPIC extends State<ListPIC> {
                       ),
                       BlocBuilder<VisitBloc, VisitBlocState> (
                           builder: (context, state) {
-                            print(state.toString());
                             if (state is LoadingVisitState) {
                               return Container(
-                                  padding: const EdgeInsets.only(top: 20),
+                                  padding: const EdgeInsets.only(top: 20, bottom: 17),
                                   child: const Center(
                                       child: CircularProgressIndicator()
                                   )
                               );
                             } else if (state is GetRealizationState) {
-                              return Container(
-                                  padding: const EdgeInsets.only(top: 17),
-                                  child: state.getRealization.length != 0 ?
-                                  Container(
-                                      child: ListView.builder(
+                              return state.getRealization.length != 0 ? Container(
+                                    padding: const EdgeInsets.only(top: 17),
+                                    child: ListView.builder(
                                           itemCount: state.getRealization.length,
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, i) {
                                             return ListTile(
                                                 title: Container(
@@ -192,7 +188,7 @@ class _ListPIC extends State<ListPIC> {
                                                           mainAxisAlignment: MainAxisAlignment.start,
                                                           children: [
                                                             Container(
-                                                              margin: const EdgeInsets.only(right: 17, top: 8),
+                                                              margin: const EdgeInsets.only(right: 17),
                                                               child: Align(
                                                                 alignment: Alignment.topLeft,
                                                                 child: Text('${i + 1}.',
@@ -200,30 +196,25 @@ class _ListPIC extends State<ListPIC> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            Container(
+                                                            Expanded(
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: [
                                                                   Align(
                                                                       alignment: Alignment.centerLeft,
-                                                                      child: state.getRealization[i].pic_name.contains(",") ? Container(
-                                                                          child: SizedBox(
-                                                                              width: 289,
-                                                                              child: ListView.builder(
+                                                                      child: state.getRealization[i].pic_name.contains(",") ? ListView.builder(
                                                                                   itemCount: state.getRealization[i].pic_name.split(", ").length,
                                                                                   scrollDirection: Axis.vertical,
                                                                                   shrinkWrap: true,
-                                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                                  physics: const NeverScrollableScrollPhysics(),
                                                                                   itemBuilder: (context, j){
                                                                                     return Container(
-                                                                                      padding: const EdgeInsets.only(top: 5),
                                                                                       child: Text("${state.getRealization[i].pic_name.split(", ")[j]} - ${state.getRealization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                                     );
                                                                                   }
                                                                               )
-                                                                          )
-                                                                      ) : Container(
+                                                                       : Container(
                                                                         child: Text("${state.getRealization[i].pic_name} - ${state.getRealization[i].pic_position}",
                                                                             style: Global.getCustomFont(Global.BLACK, 14, 'bold')
                                                                         ),
@@ -250,8 +241,7 @@ class _ListPIC extends State<ListPIC> {
                                             );
                                           }
                                       )
-                                  )
-                                      : Container(
+                                  ) : Container(
                                     padding: const EdgeInsets.only(top: 17),
                                     child: Align(
                                         alignment: Alignment.center,
@@ -268,8 +258,7 @@ class _ListPIC extends State<ListPIC> {
                                             ]
                                         )
                                     ),
-                                  )
-                              );
+                                  );
                             } else if (state is GetRealizationOpState) {
                               return Container(
                                   padding: const EdgeInsets.only(top: 17),

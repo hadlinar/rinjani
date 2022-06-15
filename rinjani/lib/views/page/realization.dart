@@ -36,6 +36,7 @@ class _Realization extends State<Realization> {
   String timeFinish = "";
 
   bool locationClicked = false;
+  bool isLoading = false;
 
   final descriptionController = TextEditingController();
   final formerDescController = TextEditingController();
@@ -63,7 +64,6 @@ class _Realization extends State<Realization> {
 
   void getCurrentLocation() async {
     Position position = await _determinePosition();
-
     setState(() {
       _position = position;
       GetAddressFromLatLong(position);
@@ -75,6 +75,7 @@ class _Realization extends State<Realization> {
     Placemark place = placemarks[0];
     setState(()  {
       locationClicked = true;
+      isLoading = false;
       Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
@@ -170,7 +171,6 @@ class _Realization extends State<Realization> {
           backgroundColor: Colors.white,
           body: BlocListener<VisitBloc, VisitBlocState>(
             listener: (context, state) {
-              print(state.toString());
               if (state is InitialVisitBlocState || state is LoadingVisitState) {
                 const Center(
                     child: CircularProgressIndicator()
@@ -672,7 +672,6 @@ class _Realization extends State<Realization> {
                                       Align(
                                           alignment: Alignment.centerLeft,
                                           child: Container(
-                                            // width: double.infinity,
                                             color: Colors.white,
                                             child: Column(
                                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -690,6 +689,9 @@ class _Realization extends State<Realization> {
                                                         ),
                                                         color: Color(Global.BLUE),
                                                         onPressed: () {
+                                                          setState(() {
+                                                            isLoading = true;
+                                                          });
                                                           getCurrentLocation();
                                                         },
                                                         child: const Text(
@@ -703,9 +705,11 @@ class _Realization extends State<Realization> {
                                                     ),
                                                   ),
                                                   Container(
-                                                      padding: EdgeInsets.only(left: 21, top: 9, bottom: 17),
-                                                      child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
-                                                    // child: Address != null ? Global.getDefaultText("Current location: " + Address.toString(), Global.BLACK) : Global.getDefaultText("No location data", Global.BLACK)
+                                                      padding: const EdgeInsets.only(left: 21, top: 9, bottom: 17),
+                                                      child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : (isLoading ? Container(
+                                                          padding: const EdgeInsets.only(top: 17),
+                                                          child: const Align(child: CircularProgressIndicator())
+                                                      ) :  Global.getDefaultText("No location", Global.BLACK))
                                                   ),
                                                 ]
                                             ),
@@ -748,66 +752,133 @@ class _Realization extends State<Realization> {
                         }
                         String picPos = pos.join(", ");
 
+                        bool isEmpty = false;
                         List<String> desc = [];
                         for(int i=0; i<listDescriptionController.length; i++) {
+                          if(listDescriptionController[i].text == "") {
+                            isEmpty = true;
+                          }
                           desc.add(listDescriptionController[i].text);
                         }
                         String descNew = desc.join(", ");
 
                         _selectedType == "In-office" ?
-                            (descriptionController.text != "" && locationClicked == true && clickedStart == true ?
-                            BlocProvider.of<VisitBloc>(context).add(
-                                AddRealizationEvent(
-                                  visitNo,
-                                  branchId,
-                                  "",
-                                  realTimeStart.toString(),
-                                  DateTime.now().toString(),
-                                  store.get("user_id"),
-                                  formerDescription,
-                                  "",
-                                  "",
-                                  "y",
-                                  _position!.latitude.toString(),
-                                  _position!.longitude.toString(),
-                                  descriptionController.text
+                            (clickedStart == false ?
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Global.defaultModal(() {
+                                      Navigator.pop(context);
+                                    }, context, Global.WARNING_ICON, "Choose realization time", "Ok", false);
+                                  }
+                              ) : (descriptionController.text == "" ?
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Global.defaultModal(() {
+                                            Navigator.pop(context);
+                                          }, context, Global.WARNING_ICON, "Fill the realization description", "Ok", false);
+                                        }
+                                    ) : (
+                                          locationClicked == false ? showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Global.defaultModal(() {
+                                                  Navigator.pop(context);
+                                                }, context, Global.WARNING_ICON, "Set a location", "Ok", false);
+                                              }
+                                          ) : BlocProvider.of<VisitBloc>(context).add(
+                                              AddRealizationEvent(
+                                                  visitNo,
+                                                  branchId,
+                                                  "",
+                                                  realTimeStart.toString(),
+                                                  DateTime.now().toString(),
+                                                  store.get("user_id"),
+                                                  formerDescription,
+                                                  "",
+                                                  "",
+                                                  "y",
+                                                  _position!.latitude.toString(),
+                                                  _position!.longitude.toString(),
+                                                  descriptionController.text
+                                              )
+                                          )
+                                        )
+                              )
+                            // ) : (descNew != "" && clickedStart == true && locationClicked == true && picPos != "" && picName != "" && custId != ""?
+                            ) : ( custId == "" ?
+                                 showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Global.defaultModal(() {
+                                      Navigator.pop(context);
+                                    }, context, Global.WARNING_ICON, "Choose a customer", "Ok", false);
+                                  }
+                                ) : (
+                                  clickedStart == false ? showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Global.defaultModal(() {
+                                          Navigator.pop(context);
+                                        }, context, Global.WARNING_ICON, "Choose realization time", "Ok", false);
+                                      }
+                                  ) : (
+                                      picPos == "" ? showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Global.defaultModal(() {
+                                              Navigator.pop(context);
+                                            }, context, Global.WARNING_ICON, "Fill PIC position", "Ok", false);
+                                          }
+                                      ) : (
+                                          picName == "" ? showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Global.defaultModal(() {
+                                                  Navigator.pop(context);
+                                                }, context, Global.WARNING_ICON, "Fill PIC name", "Ok", false);
+                                              }
+                                          ) : (
+                                              isEmpty ? showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return Global.defaultModal(() {
+                                                      Navigator.pop(context);
+                                                    }, context, Global.WARNING_ICON, "Fill the description", "Ok", false);
+                                                  }
+                                              ) : (
+                                                locationClicked == false ? showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return Global.defaultModal(() {
+                                                        Navigator.pop(context);
+                                                      }, context, Global.WARNING_ICON, "Set a location", "Ok", false);
+                                                    }
+                                                ) :
+                                                  BlocProvider.of<VisitBloc>(context).add(
+                                                      AddRealizationEvent(
+                                                          visitNo,
+                                                          branchId,
+                                                          custId,
+                                                          realTimeStart.toString(),
+                                                          DateTime.now().toString(),
+                                                          store.get("user_id"),
+                                                          formerDescription,
+                                                          picPos,
+                                                          picName,
+                                                          "y",
+                                                          _position!.latitude.toString(),
+                                                          _position!.longitude.toString(),
+                                                          descNew
+                                                      )
+                                                  )
+                                              )
+                                          )
+                                      )
+                                  )
                                 )
-                            )
-                                : showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Global.defaultModal(() {
-                                    Navigator.pop(context);
-                                  }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
-                                }
-                            ))
-                            : (descNew != "" && clickedStart == true && locationClicked == true && picPos != "" && picName != "" && custId != ""?
-
-                               BlocProvider.of<VisitBloc>(context).add(
-                                AddRealizationEvent(
-                                  visitNo,
-                                  branchId,
-                                  custId,
-                                  realTimeStart.toString(),
-                                  DateTime.now().toString(),
-                                  store.get("user_id"),
-                                  formerDescription,
-                                  picPos,
-                                  picName,
-                                  "y",
-                                  _position!.latitude.toString(),
-                                  _position!.longitude.toString(),
-                                  descNew
-                                )
-                            )
-                            : showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Global.defaultModal(() {
-                                Navigator.pop(context);
-                              }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
-                            }
-                        ));
+                        );
                       },
                       child: const Text(
                         "Save",

@@ -73,6 +73,7 @@ class _AddPlan extends State<AddPlan> {
   late List<Map<String, dynamic>> _values;
 
   List<String> customerName = [];
+  List<String> finalCust = [];
   List<Customer> customer = [];
   List<CustomerCategory> custCat = [];
   String? cusCat;
@@ -191,7 +192,7 @@ class _AddPlan extends State<AddPlan> {
               alignLabelWithHint: true,
               border: OutlineInputBorder(
                   borderRadius: BorderRadius .circular(10),
-                  borderSide: BorderSide()),
+                  borderSide: const BorderSide()),
             ),
           ),
         )
@@ -381,18 +382,14 @@ class _AddPlan extends State<AddPlan> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Container(
-                            child: Text("Add new customer",
-                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                              textAlign: TextAlign.left,
-                            )
+                        Text("Add new customer",
+                          style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                          textAlign: TextAlign.left,
                         ),
                         Container(
                           height: 17,
                         ),
-                        Container(
-                          child: CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
-                        ),
+                        CustomTextField(label: "Enter new customer's name", controller: newCustomerController),
                         Container(
                             padding: const EdgeInsets.only(bottom: 21),
                             child: DropdownButtonFormField<String>(
@@ -422,7 +419,7 @@ class _AddPlan extends State<AddPlan> {
                                 border: OutlineInputBorder(
                                     borderRadius:
                                     BorderRadius.circular(10),
-                                    borderSide: BorderSide()
+                                    borderSide: const BorderSide()
                                 ),
                               ),
                             )
@@ -520,7 +517,6 @@ class _AddPlan extends State<AddPlan> {
   @override
   Widget build(BuildContext context) {
 
-
     return BlocBuilder<CustomerBloc, CustomerBlocState>(
       builder: (context, state){
         if(state is CustomerList) {
@@ -528,6 +524,8 @@ class _AddPlan extends State<AddPlan> {
           for(int i=0; i < customer.length; i++) {
             customerName.add(customer[i].cust_name);
           }
+
+          finalCust = customerName.toSet().toList();
           return Column(
               children: <Widget> [
                 Container(
@@ -535,31 +533,34 @@ class _AddPlan extends State<AddPlan> {
                     child:
                     Column(
                       children: <Widget> [
-                        Row(
-                            children: <Widget> [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text("Pick a date: ",
-                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                  textAlign: TextAlign.left,
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 17, top: 5),
+                          child: Row(
+                              children: <Widget> [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Pick a date: ",
+                                    style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                  child: InkWell(
-                                      onTap: () {
-                                        datePicker(context);
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.only(left: 17),
-                                          child: ImageIcon(
-                                            AssetImage(Global.CALENDAR_ICON),
-                                            color: Color(Global.BLUE),
-                                            size: 18,
-                                          )
-                                      )
-                                  )
-                              )
-                            ]
+                                Container(
+                                    child: InkWell(
+                                        onTap: () {
+                                          datePicker(context);
+                                        },
+                                        child: Container(
+                                            padding: const EdgeInsets.only(left: 17),
+                                            child: ImageIcon(
+                                              const AssetImage(Global.CALENDAR_ICON),
+                                              color: Color(Global.BLUE),
+                                              size: 18,
+                                            )
+                                        )
+                                    )
+                                )
+                              ]
+                          ),
                         ),
                         Container(
                           child: Align(
@@ -601,7 +602,7 @@ class _AddPlan extends State<AddPlan> {
                                           child: Global.getDefaultText(DateFormat("HH:mm").format(timeStart), Global.GREY),
                                         ),
                                         ImageIcon(
-                                          AssetImage(Global.CLOCK_ICON),
+                                          const AssetImage(Global.CLOCK_ICON),
                                           color: Color(Global.BLUE),
                                           size: 18,
                                         )
@@ -621,7 +622,7 @@ class _AddPlan extends State<AddPlan> {
                                           child: Global.getDefaultText(DateFormat("HH:mm").format(timeEnd), Global.GREY),
                                         ),
                                         ImageIcon(
-                                          AssetImage(Global.CLOCK_ICON),
+                                          const AssetImage(Global.CLOCK_ICON),
                                           color: Color(Global.BLUE),
                                           size: 18,
                                         )
@@ -644,11 +645,11 @@ class _AddPlan extends State<AddPlan> {
                     },
                     decoration: InputDecoration(
                       labelText: 'New customer',
-                      contentPadding: EdgeInsets.only(bottom: 5,left: 7,top: 5),
+                      contentPadding: const EdgeInsets.only(bottom: 5,left: 7,top: 5),
                       alignLabelWithHint: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(),
+                        borderSide: const BorderSide(),
                       ),
                       suffixIcon: newCustomerController.text.isEmpty
                           ? null // Show nothing if the text field is empty
@@ -670,7 +671,7 @@ class _AddPlan extends State<AddPlan> {
                       mode: Mode.MENU,
                       showClearButton: true,
                       showSelectedItems: true,
-                      items: customerName,
+                      items: finalCust,
                       dropdownSearchBaseStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                       label: "Customer",
                       showSearchBox: true,
@@ -687,12 +688,12 @@ class _AddPlan extends State<AddPlan> {
                       },
                       selectedItem: _selectedCust,
                       dropdownSearchDecoration: InputDecoration(
-                        labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                        labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                         alignLabelWithHint: true,
-                        contentPadding: EdgeInsets.only(left: 12),
+                        contentPadding: const EdgeInsets.only(left: 12),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius .circular(10),
-                            borderSide: BorderSide()),
+                            borderSide: const BorderSide()),
                       ),
                     )
                 ),
@@ -809,8 +810,9 @@ class _AddPlan extends State<AddPlan> {
         }
         else if(state is LoadingCustomerState) {
           return Container(
-              padding: const EdgeInsets.only(top: 30),
-              child: CircularProgressIndicator()
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: const Center(child: CircularProgressIndicator())
           );
         }
         else {

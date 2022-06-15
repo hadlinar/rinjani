@@ -146,7 +146,7 @@ class _InOffice extends State<InOffice> {
     store.set("timeEnd", end);
     return GestureDetector (
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
             padding: const EdgeInsets.only(top: 17, left: 21, right: 21),

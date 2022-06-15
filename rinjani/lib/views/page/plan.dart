@@ -292,7 +292,6 @@ class _Plan extends State<Plan> {
                                 String newCust = store.get("cust_name").toString();
                                 String catId = store.get("cat_id").toString();
 
-                                print('clicked $clicked');
                                 if(clicked == "null" || clicked == "" || clicked == "false" || clicked == false) {
                                   showDialog(
                                       context: context,
@@ -343,7 +342,7 @@ class _Plan extends State<Plan> {
                                         String position = pos.join(", ");
                                         String name1 = name.join(", ");
                                         String description = desc.join(", ");
-                                        if(position == "null" || name1 == "null" || description == "null" || name1 == "" || description == "") {
+                                        if(position == "null" || name1 == "null" || description == "null" || name.contains("") || pos.contains("") || desc.contains("")) {
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -402,52 +401,6 @@ class _Plan extends State<Plan> {
                                     }
                                   }
                                 }
-
-                                // if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
-                                //   if(savedCust && newCust != "" && catId != "") {
-                                //     BlocProvider.of<VisitBloc>(context).add(
-                                //         AddCustomerEvent(
-                                //           store.get("branch_id"),
-                                //           newCust,
-                                //           catId,
-                                //           "02",
-                                //           "",
-                                //           timeStart.toString(),
-                                //           timeEnd.toString(),
-                                //           store.get("user_id"),
-                                //           description,
-                                //           position,
-                                //           name1,
-                                //           "n",
-                                //         )
-                                //     );
-                                //   } else {
-                                //     BlocProvider.of<VisitBloc>(context).add(
-                                //         AddVisitEvent(
-                                //           "02",
-                                //           store.get("branch_id"),
-                                //           cust_id,
-                                //           timeStart.toString(),
-                                //           timeEnd.toString(),
-                                //           store.get("user_id"),
-                                //           description,
-                                //           position,
-                                //           name1,
-                                //           "n",
-                                //         )
-                                //     );
-                                //   }
-                                // } else {
-                                //   showDialog(
-                                //       context: context,
-                                //       builder: (BuildContext context) {
-                                //         return Global.defaultModal(() {
-                                //           Navigator.pop(context);
-                                //         }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
-                                //       }
-                                //   );
-                                // }
-
                               }
                             },
                             child: const Text(

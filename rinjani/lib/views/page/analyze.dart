@@ -43,8 +43,6 @@ class _Analyze extends State<Analyze> {
   @override
   void initState() {
     super.initState();
-    print(widget.rank.length);
-    print(widget.mon.length);
     BlocProvider.of<RankingBloc>(context).add(GetRankingEvent());
     BlocProvider.of<MonitorBloc>(context).add(GetMonitorEvent());
     _data = MyData(widget.rank);
@@ -248,7 +246,7 @@ class _Analyze extends State<Analyze> {
                                     ),
                                   ),
                                   Container(
-                                      padding: const EdgeInsets.only(right: 10, left: 10),
+                                      padding: const EdgeInsets.only(right: 10, left: 10, bottom: 50),
                                       child: PaginatedDataTable(
                                         rowsPerPage: _rowsPerPageMon,
                                         columns: <DataColumn>[
