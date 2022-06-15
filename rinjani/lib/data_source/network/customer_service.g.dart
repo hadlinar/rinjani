@@ -10,7 +10,7 @@ part of 'customer_service.dart';
 
 class _CustomerService implements CustomerService {
   _CustomerService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://10.0.2.2:3001/rinjani';
+    baseUrl ??= 'http://103.140.207.25:3001/rinjani';
   }
 
   final Dio _dio;

@@ -71,7 +71,7 @@ class _Analyze extends State<Analyze> {
               leading: IconButton(
                   onPressed: Navigator.of(context).pop,
                   icon: ImageIcon(
-                    AssetImage(Global.BACK_ICON),
+                    const AssetImage(Global.BACK_ICON),
                     color: Color(Global.BLUE),
                     size: 18,
                   )
