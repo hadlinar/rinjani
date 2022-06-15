@@ -353,7 +353,6 @@ class _Plan extends State<Plan> {
                                           );
                                         } else {
                                           if(savedCust) {
-                                            print(timeStart.toString());
                                             BlocProvider.of<VisitBloc>(context).add(
                                                 AddCustomerEvent(
                                                   store.get("branch_id"),
@@ -402,52 +401,6 @@ class _Plan extends State<Plan> {
                                     }
                                   }
                                 }
-
-                                // if(position != "" && name1 != "" && description != "" && clicked == "true" && clickedStart == "true" && clickedEnd == "true") {
-                                //   if(savedCust && newCust != "" && catId != "") {
-                                //     BlocProvider.of<VisitBloc>(context).add(
-                                //         AddCustomerEvent(
-                                //           store.get("branch_id"),
-                                //           newCust,
-                                //           catId,
-                                //           "02",
-                                //           "",
-                                //           timeStart.toString(),
-                                //           timeEnd.toString(),
-                                //           store.get("user_id"),
-                                //           description,
-                                //           position,
-                                //           name1,
-                                //           "n",
-                                //         )
-                                //     );
-                                //   } else {
-                                //     BlocProvider.of<VisitBloc>(context).add(
-                                //         AddVisitEvent(
-                                //           "02",
-                                //           store.get("branch_id"),
-                                //           cust_id,
-                                //           timeStart.toString(),
-                                //           timeEnd.toString(),
-                                //           store.get("user_id"),
-                                //           description,
-                                //           position,
-                                //           name1,
-                                //           "n",
-                                //         )
-                                //     );
-                                //   }
-                                // } else {
-                                //   showDialog(
-                                //       context: context,
-                                //       builder: (BuildContext context) {
-                                //         return Global.defaultModal(() {
-                                //           Navigator.pop(context);
-                                //         }, context, Global.WARNING_ICON, "Please fill all the required form", "Ok", false);
-                                //       }
-                                //   );
-                                // }
-
                               }
                             },
                             child: const Text(
