@@ -26,6 +26,7 @@ final GlobalState store = GlobalState.instance;
 class _Realization extends State<Realization> {
   var _selectedCust = null;
   var _selectedPIC = null;
+  var _selectedPIC2 = null;
 
   late List<String> cust = [];
   String custId = "";
@@ -96,6 +97,7 @@ class _Realization extends State<Realization> {
   List<Visit> visit=[];
   List<String> custName = [];
   List<String> custPos = [];
+  List<String> custPos2 = [];
   List<String> time = [];
 
   void startTime(ctx) {
@@ -252,7 +254,6 @@ class _Realization extends State<Realization> {
                                       ),
                                     )
                                 ),
-
                                 _selectedType == "" ? Container() : Container(
                                   child: Column(
                                     children: <Widget> [
@@ -268,7 +269,9 @@ class _Realization extends State<Realization> {
                                             onChanged: (val) {
                                               setState(() {
                                                 custPos = [];
+                                                custPos2 = [];
                                                 _selectedPIC = null;
+                                                _selectedPIC2 = null;
                                                 listNameController = [];
                                                 _selectedCust = val;
                                                 picController.text = "";
@@ -276,6 +279,7 @@ class _Realization extends State<Realization> {
                                                 for(int i=0; i<visit.length; i++) {
                                                   if(visit[i].cust_name == _selectedCust) {
                                                     custPos.add(visit[i].pic_position);
+                                                    custPos2.add(visit[i].pic_position.replaceAll("%2C", ", "));
                                                     custId = visit[i].cust_id;
                                                   }
                                                 }
@@ -283,12 +287,12 @@ class _Realization extends State<Realization> {
                                             },
                                             dropdownSearchDecoration: InputDecoration(
                                               labelText: "Select a customer",
-                                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                              labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                                               alignLabelWithHint: true,
-                                              contentPadding: EdgeInsets.only(left: 12),
+                                              contentPadding: const EdgeInsets.only(left: 12),
                                               border: OutlineInputBorder(
                                                   borderRadius: BorderRadius .circular(10),
-                                                  borderSide: BorderSide()),
+                                                  borderSide: const BorderSide()),
                                             ),
                                           )
                                       ),
@@ -328,7 +332,7 @@ class _Realization extends State<Realization> {
                                               border: OutlineInputBorder(
                                                   borderRadius:
                                                   BorderRadius.circular(10),
-                                                  borderSide: BorderSide()
+                                                  borderSide: const BorderSide()
                                               ),
                                             ),
                                           )
@@ -341,15 +345,17 @@ class _Realization extends State<Realization> {
                                                       child: DropdownSearch<String>(
                                                         mode: Mode.MENU,
                                                         showClearButton: true,
-                                                        selectedItem: _selectedPIC,
-                                                        items: custPos,
+                                                        selectedItem: _selectedPIC2,
+                                                        items: custPos2,
                                                         label: "PIC",
                                                         onChanged: (String? value) {
                                                           setState(() {
-                                                            _selectedPIC = value;
+                                                            _selectedPIC = value!.replaceAll(", ", "%2C");
+                                                            _selectedPIC2 = value.replaceAll("%2C", ", ");
                                                             nameController.text = "";
                                                             listNameController = [];
                                                             listPicController = [];
+
                                                             for(int i=0; i<visit.length; i++) {
                                                               if(visit[i].pic_position == _selectedPIC) {
                                                                 nameController.text = visit[i].pic_name;
@@ -359,7 +365,6 @@ class _Realization extends State<Realization> {
                                                                 visitNo = visit[i].visit_no;
                                                                 branchId = visit[i].branch_id;
 
-
                                                                 var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
                                                                 int newHourStart = visit[i].time_start.hour+0;
                                                                 int newHourEnd = visit[i].time_finish.hour+0;
@@ -367,59 +372,52 @@ class _Realization extends State<Realization> {
                                                                 var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
                                                                 var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
 
-                                                                // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeStart.toString());
-                                                                // DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeFinish.toString());
-
                                                                 timeStart = timeStart1.toString();
                                                                 timeFinish = timeFinish1.toString();
                                                               }
                                                             }
 
                                                             listNameController = [
-                                                              for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                              for (int i = 0; i < nameController.text.split('%2C').length; i++)
                                                                 TextEditingController()
                                                             ];
 
                                                             listPicController = [
-                                                              for (int i = 0; i < _selectedPIC.split(', ').length; i++)
+                                                              for (int i = 0; i < _selectedPIC.split('%2C').length; i++)
                                                                 TextEditingController()
                                                             ];
 
                                                             listDescriptionController = [
-                                                              for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                              for (int i = 0; i < nameController.text.split('%2C').length; i++)
                                                                 TextEditingController()
                                                             ];
 
                                                             listFormerDescController = [
-                                                              for (int i = 0; i < formerDescController.text.split(', ').length; i++)
+                                                              for (int i = 0; i < formerDescController.text.split('%2C').length; i++)
                                                                 TextEditingController()
                                                             ];
 
-                                                            for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                              listNameController[i].text = nameController.text.split(', ')[i];
+                                                            for(int i = 0; i < nameController.text.split('%2C').length; i++){
+                                                              listNameController[i].text = nameController.text.split('%2C')[i];
                                                             }
 
-                                                            for(int i = 0; i < _selectedPIC.split(', ').length; i++){
-                                                              listPicController[i].text = picController.text.split(', ')[i];
+                                                            for(int i = 0; i < _selectedPIC.split('%2C').length; i++){
+                                                              listPicController[i].text = picController.text.split('%2C')[i];
                                                             }
 
-                                                            // for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                            //   listDescriptionController[i].text = nameController.text.split(', ')[i];
-                                                            // }
-
-                                                            for(int i = 0; i < formerDescController.text.split(', ').length; i++){
-                                                              listFormerDescController[i].text = formerDescController.text.split(', ')[i];
+                                                            for(int i = 0; i < formerDescController.text.split('%2C').length; i++){
+                                                              listFormerDescController[i].text = formerDescController.text.split('%2C')[i];
                                                             }
                                                           });
                                                         },
                                                         dropdownSearchDecoration: InputDecoration(
                                                           labelText: "PIC",
-                                                          labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                          labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                                                           alignLabelWithHint: true,
-                                                          contentPadding: EdgeInsets.only(left: 12),
+                                                          contentPadding: const EdgeInsets.only(left: 12),
                                                           border: OutlineInputBorder(
                                                               borderRadius: BorderRadius .circular(10),
-                                                              borderSide: BorderSide()),
+                                                              borderSide: const BorderSide()),
                                                         ),
                                                       )
                                                   ),
@@ -468,9 +466,9 @@ class _Realization extends State<Realization> {
                                                     ),
                                                   ),
                                                   _selectedPIC != null ? Container(
-                                                      child: _selectedPIC.contains(",") ? Container(
+                                                      child: _selectedPIC.contains("%2C") ? Container(
                                                           child: ListView.builder(
-                                                              itemCount:_selectedPIC.split(", ").length,
+                                                              itemCount:_selectedPIC.split("%2C").length,
                                                               scrollDirection: Axis.vertical,
                                                               shrinkWrap: true,
                                                               physics: const NeverScrollableScrollPhysics(),
@@ -510,7 +508,7 @@ class _Realization extends State<Realization> {
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          j == _selectedPIC.split(", ").length-1 ? Container() :
+                                                                          j == _selectedPIC.split("%2C").length-1 ? Container() :
                                                                           Container(
                                                                             padding: const EdgeInsets.only(top: 10, bottom: 17),
                                                                             child: const Divider(
