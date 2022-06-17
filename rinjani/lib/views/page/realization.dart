@@ -254,292 +254,331 @@ class _Realization extends State<Realization> {
                                 ),
 
                                 _selectedType == "" ? Container() : Container(
-                                  child: Column(
-                                    children: <Widget> [
-                                      _selectedType == "In-office" ? Container() : Container(
-                                          padding: const EdgeInsets.only(top: 22),
-                                          child: DropdownSearch<String>(
-                                            mode: Mode.MENU,
-                                            showClearButton: true,
-                                            selectedItem: _selectedCust,
-                                            items: custName,
-                                            label: "Customer",
-                                            showSearchBox: true,
-                                            onChanged: (val) {
-                                              setState(() {
-                                                custPos = [];
-                                                _selectedPIC = null;
-                                                listNameController = [];
-                                                _selectedCust = val;
-                                                picController.text = "";
-                                                nameController.text = "";
-                                                for(int i=0; i<visit.length; i++) {
-                                                  if(visit[i].cust_name == _selectedCust) {
-                                                    custPos.add(visit[i].pic_position);
-                                                    custId = visit[i].cust_id;
-                                                  }
-                                                }
-                                              });
-                                            },
-                                            dropdownSearchDecoration: InputDecoration(
-                                              labelText: "Select a customer",
-                                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                              alignLabelWithHint: true,
-                                              contentPadding: EdgeInsets.only(left: 12),
-                                              border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius .circular(10),
-                                                  borderSide: BorderSide()),
-                                            ),
-                                          )
-                                      ),
-                                      _selectedType == "In-office" ? Container(
-                                          padding: const EdgeInsets.only(top: 22),
-                                          child: DropdownButtonFormField<String>(
-                                            hint: const Text("Time"),
-                                            dropdownColor: Colors.white,
-                                            style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                            value: _selectedTime,
-                                            items: time.map((e) {
-                                              return DropdownMenuItem<String>(
-                                                value: e,
-                                                child: Text(DateFormat("HH:mm").format(DateFormat("yyyy-MM-dd HH:mm").parse(e))),
-                                              );
-                                            }).toList(),
-                                            onChanged: (String? value) {
-                                              setState(() {
-                                                _selectedTime = value;
-                                                for(int i=0; i<visit.length; i++) {
-                                                  if(visit[i].time_start.toString() == _selectedTime) {
-                                                    formerDescription = visit[i].description;
-                                                    visitNo = visit[i].visit_no;
-                                                    branchId = visit[i].branch_id;
-                                                    timeFinish = visit[i].time_finish.toString();
-                                                  }
-                                                }
-                                              });
-                                            },
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
-                                              labelText: "Time",
-                                              labelStyle: const TextStyle(
-                                                  color: Color(0xff757575),
-                                                  fontSize: 15,
-                                                  fontFamily: 'medium'),
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(10),
-                                                  borderSide: BorderSide()
-                                              ),
-                                            ),
-                                          )
-                                      ) : Container(
-                                          child: Container(
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Container(
-                                                      padding: const EdgeInsets.only(top: 22, bottom: 17),
-                                                      child: DropdownSearch<String>(
-                                                        mode: Mode.MENU,
-                                                        showClearButton: true,
-                                                        selectedItem: _selectedPIC,
-                                                        items: custPos,
-                                                        label: "PIC",
-                                                        onChanged: (String? value) {
-                                                          setState(() {
-                                                            _selectedPIC = value;
-                                                            nameController.text = "";
-                                                            listNameController = [];
-                                                            listPicController = [];
-                                                            for(int i=0; i<visit.length; i++) {
-                                                              if(visit[i].pic_position == _selectedPIC) {
-                                                                nameController.text = visit[i].pic_name;
-                                                                formerDescription = visit[i].description;
-                                                                formerDescController.text = visit[i].description;
-                                                                picController.text = _selectedPIC;
-                                                                visitNo = visit[i].visit_no;
-                                                                branchId = visit[i].branch_id;
-
-
-                                                                var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
-                                                                int newHourStart = visit[i].time_start.hour+0;
-                                                                int newHourEnd = visit[i].time_finish.hour+0;
-
-                                                                var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
-                                                                var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
-
-                                                                // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeStart.toString());
-                                                                // DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeFinish.toString());
-
-                                                                timeStart = timeStart1.toString();
-                                                                timeFinish = timeFinish1.toString();
-                                                              }
-                                                            }
-
-                                                            listNameController = [
-                                                              for (int i = 0; i < nameController.text.split(', ').length; i++)
-                                                                TextEditingController()
-                                                            ];
-
-                                                            listPicController = [
-                                                              for (int i = 0; i < _selectedPIC.split(', ').length; i++)
-                                                                TextEditingController()
-                                                            ];
-
-                                                            listDescriptionController = [
-                                                              for (int i = 0; i < nameController.text.split(', ').length; i++)
-                                                                TextEditingController()
-                                                            ];
-
-                                                            listFormerDescController = [
-                                                              for (int i = 0; i < formerDescController.text.split(', ').length; i++)
-                                                                TextEditingController()
-                                                            ];
-
-                                                            for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                              listNameController[i].text = nameController.text.split(', ')[i];
-                                                            }
-
-                                                            for(int i = 0; i < _selectedPIC.split(', ').length; i++){
-                                                              listPicController[i].text = picController.text.split(', ')[i];
-                                                            }
-
-                                                            // for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                            //   listDescriptionController[i].text = nameController.text.split(', ')[i];
-                                                            // }
-
-                                                            for(int i = 0; i < formerDescController.text.split(', ').length; i++){
-                                                              listFormerDescController[i].text = formerDescController.text.split(', ')[i];
-                                                            }
-                                                          });
-                                                        },
-                                                        dropdownSearchDecoration: InputDecoration(
-                                                          labelText: "PIC",
-                                                          labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                                          alignLabelWithHint: true,
-                                                          contentPadding: EdgeInsets.only(left: 12),
-                                                          border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius .circular(10),
-                                                              borderSide: BorderSide()),
-                                                        ),
-                                                      )
+                                    child: Column(
+                                        children: <Widget> [
+                                          _selectedType == "In-office" ? Container() : Container(
+                                              padding: const EdgeInsets.only(top: 22),
+                                              child: DropdownSearch<String>(
+                                                mode: Mode.MENU,
+                                                showClearButton: true,
+                                                selectedItem: _selectedCust,
+                                                items: custName,
+                                                label: "Customer",
+                                                showSearchBox: true,
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    custPos = [];
+                                                    _selectedPIC = null;
+                                                    listNameController = [];
+                                                    _selectedCust = val;
+                                                    picController.text = "";
+                                                    nameController.text = "";
+                                                    for(int i=0; i<visit.length; i++) {
+                                                      if(visit[i].cust_name == _selectedCust) {
+                                                        custPos.add(visit[i].pic_position);
+                                                        custId = visit[i].cust_id;
+                                                      }
+                                                    }
+                                                  });
+                                                },
+                                                dropdownSearchDecoration: InputDecoration(
+                                                  labelText: "Select a customer",
+                                                  labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                  alignLabelWithHint: true,
+                                                  contentPadding: EdgeInsets.only(left: 12),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius: BorderRadius .circular(10),
+                                                      borderSide: BorderSide()),
+                                                ),
+                                              )
+                                          ),
+                                          _selectedType == "In-office" ? Container(
+                                              padding: const EdgeInsets.only(top: 22),
+                                              child: DropdownButtonFormField<String>(
+                                                hint: const Text("Time"),
+                                                dropdownColor: Colors.white,
+                                                style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                value: _selectedTime,
+                                                items: time.map((e) {
+                                                  return DropdownMenuItem<String>(
+                                                    value: e,
+                                                    child: Text(DateFormat("HH:mm").format(DateFormat("yyyy-MM-dd HH:mm").parse(e))),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (String? value) {
+                                                  setState(() {
+                                                    _selectedTime = value;
+                                                    for(int i=0; i<visit.length; i++) {
+                                                      if(visit[i].time_start.toString().replaceAll("Z", "") == _selectedTime) {
+                                                        formerDescription = visit[i].description;
+                                                        visitNo = visit[i].visit_no;
+                                                        branchId = visit[i].branch_id;
+                                                        timeFinish = visit[i].time_finish.toString();
+                                                      }
+                                                    }
+                                                  });
+                                                },
+                                                decoration: InputDecoration(
+                                                  contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                                  labelText: "Time",
+                                                  labelStyle: const TextStyle(
+                                                      color: Color(0xff757575),
+                                                      fontSize: 15,
+                                                      fontFamily: 'medium'),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(10),
+                                                      borderSide: BorderSide()
                                                   ),
-                                                  Container(
-                                                      padding: const EdgeInsets.only(bottom: 17),
-                                                      child: const Divider(
-                                                        height: 10,
-                                                        thickness: 0.5,
-                                                        color: Colors.grey,
-                                                      )
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets.only(left: 10),
-                                                    child: Align(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: Text("Realization start time:",
-                                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                                        textAlign: TextAlign.left,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets.only(bottom: 17),
-                                                    child: Row(
-                                                        children: <Widget> [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: CupertinoButton(
-                                                              child: Row(
-                                                                  children: <Widget> [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets.only(right: 22),
-                                                                      child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
-                                                                    ),
-                                                                    ImageIcon(
-                                                                      const AssetImage(Global.CLOCK_ICON),
-                                                                      color: Color(Global.BLUE),
-                                                                      size: 18,
-                                                                    )
-                                                                  ]
-                                                              ),
-                                                              onPressed: () => startTime(context),
+                                                ),
+                                              )
+                                          ) : Container(
+                                              child: Container(
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Container(
+                                                          padding: const EdgeInsets.only(top: 22, bottom: 17),
+                                                          child: DropdownSearch<String>(
+                                                            mode: Mode.MENU,
+                                                            showClearButton: true,
+                                                            selectedItem: _selectedPIC,
+                                                            items: custPos,
+                                                            label: "PIC",
+                                                            onChanged: (String? value) {
+                                                              setState(() {
+                                                                _selectedPIC = value;
+                                                                nameController.text = "";
+                                                                listNameController = [];
+                                                                listPicController = [];
+                                                                for(int i=0; i<visit.length; i++) {
+                                                                  if(visit[i].pic_position == _selectedPIC) {
+                                                                    nameController.text = visit[i].pic_name;
+                                                                    formerDescription = visit[i].description;
+                                                                    formerDescController.text = visit[i].description;
+                                                                    picController.text = _selectedPIC;
+                                                                    visitNo = visit[i].visit_no;
+                                                                    branchId = visit[i].branch_id;
+
+
+                                                                    var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
+                                                                    int newHourStart = visit[i].time_start.hour+0;
+                                                                    int newHourEnd = visit[i].time_finish.hour+0;
+
+                                                                    var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
+                                                                    var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
+
+                                                                    // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeStart.toString());
+                                                                    // DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeFinish.toString());
+
+                                                                    timeStart = timeStart1.toString();
+                                                                    timeFinish = timeFinish1.toString();
+                                                                  }
+                                                                }
+
+                                                                listNameController = [
+                                                                  for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                                    TextEditingController()
+                                                                ];
+
+                                                                listPicController = [
+                                                                  for (int i = 0; i < _selectedPIC.split(', ').length; i++)
+                                                                    TextEditingController()
+                                                                ];
+
+                                                                listDescriptionController = [
+                                                                  for (int i = 0; i < nameController.text.split(', ').length; i++)
+                                                                    TextEditingController()
+                                                                ];
+
+                                                                listFormerDescController = [
+                                                                  for (int i = 0; i < formerDescController.text.split(', ').length; i++)
+                                                                    TextEditingController()
+                                                                ];
+
+                                                                for(int i = 0; i < nameController.text.split(', ').length; i++){
+                                                                  listNameController[i].text = nameController.text.split(', ')[i];
+                                                                }
+
+                                                                for(int i = 0; i < _selectedPIC.split(', ').length; i++){
+                                                                  listPicController[i].text = picController.text.split(', ')[i];
+                                                                }
+
+                                                                // for(int i = 0; i < nameController.text.split(', ').length; i++){
+                                                                //   listDescriptionController[i].text = nameController.text.split(', ')[i];
+                                                                // }
+
+                                                                for(int i = 0; i < formerDescController.text.split(', ').length; i++){
+                                                                  listFormerDescController[i].text = formerDescController.text.split(', ')[i];
+                                                                }
+                                                              });
+                                                            },
+                                                            dropdownSearchDecoration: InputDecoration(
+                                                              labelText: "PIC",
+                                                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                              alignLabelWithHint: true,
+                                                              contentPadding: EdgeInsets.only(left: 12),
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius: BorderRadius .circular(10),
+                                                                  borderSide: BorderSide()),
                                                             ),
+                                                          )
+                                                      ),
+                                                      Container(
+                                                          padding: const EdgeInsets.only(bottom: 17),
+                                                          child: const Divider(
+                                                            height: 10,
+                                                            thickness: 0.5,
+                                                            color: Colors.grey,
+                                                          )
+                                                      ),
+                                                      Container(
+                                                        padding: const EdgeInsets.only(left: 10),
+                                                        child: Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Text("Realization start time:",
+                                                            style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                            textAlign: TextAlign.left,
                                                           ),
-                                                        ]
-                                                    ),
-                                                  ),
-                                                  _selectedPIC != null ? Container(
-                                                      child: _selectedPIC.contains(",") ? Container(
-                                                          child: ListView.builder(
-                                                              itemCount:_selectedPIC.split(", ").length,
-                                                              scrollDirection: Axis.vertical,
-                                                              shrinkWrap: true,
-                                                              physics: const NeverScrollableScrollPhysics(),
-                                                              itemBuilder: (context, j){
-                                                                return Container(
-                                                                    child: Column(
-                                                                        children: <Widget> [
-                                                                          Container(
-                                                                            child: CustomTextField(label: 'PIC ${j+1}', controller: listPicController[j]),
-                                                                          ),
-                                                                          Container(
-                                                                            child: CustomTextField(label: 'Name', controller: listNameController[j]),
-                                                                          ),
-                                                                          Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Container(
-                                                                                padding: const EdgeInsets.only(bottom: 17, left: 10),
-                                                                                child: Text(
-                                                                                    "Planned description: ${listFormerDescController[j].text}",
-                                                                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding: const EdgeInsets.only(bottom: 17),
+                                                        child: Row(
+                                                            children: <Widget> [
+                                                              Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: CupertinoButton(
+                                                                  child: Row(
+                                                                      children: <Widget> [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets.only(right: 22),
+                                                                          child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
+                                                                        ),
+                                                                        ImageIcon(
+                                                                          const AssetImage(Global.CLOCK_ICON),
+                                                                          color: Color(Global.BLUE),
+                                                                          size: 18,
+                                                                        )
+                                                                      ]
+                                                                  ),
+                                                                  onPressed: () => startTime(context),
+                                                                ),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                      ),
+                                                      _selectedPIC != null ? Container(
+                                                          child: _selectedPIC.contains(",") ? Container(
+                                                              child: ListView.builder(
+                                                                  itemCount:_selectedPIC.split(", ").length,
+                                                                  scrollDirection: Axis.vertical,
+                                                                  shrinkWrap: true,
+                                                                  physics: const NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, j){
+                                                                    return Container(
+                                                                        child: Column(
+                                                                            children: <Widget> [
+                                                                              Container(
+                                                                                child: CustomTextField(label: 'PIC ${j+1}', controller: listPicController[j]),
+                                                                              ),
+                                                                              Container(
+                                                                                child: CustomTextField(label: 'Name', controller: listNameController[j]),
+                                                                              ),
+                                                                              Align(
+                                                                                  alignment: Alignment.centerLeft,
+                                                                                  child: Container(
+                                                                                    padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                                    child: Text(
+                                                                                        "Planned description: ${listFormerDescController[j].text}",
+                                                                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                                    ),
+                                                                                  )
+                                                                              ),
+                                                                              Container(
+                                                                                padding: const EdgeInsets.only(top: 5),
+                                                                                child: TextFormField(
+                                                                                  style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                                  controller: listDescriptionController[j],
+                                                                                  maxLines: 5,
+                                                                                  maxLength: 200,
+                                                                                  decoration: InputDecoration(
+                                                                                    labelText: "Description for realization",
+                                                                                    alignLabelWithHint: true,
+                                                                                    border: OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius .circular(10),
+                                                                                        borderSide: BorderSide()),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              j == _selectedPIC.split(", ").length-1 ? Container() :
+                                                                              Container(
+                                                                                padding: const EdgeInsets.only(top: 10, bottom: 17),
+                                                                                child: const Divider(
+                                                                                  height: 10,
+                                                                                  thickness: 0.5,
+                                                                                  color: Colors.grey,
                                                                                 ),
                                                                               )
-                                                                          ),
-                                                                          Container(
-                                                                            padding: const EdgeInsets.only(top: 5),
-                                                                            child: TextFormField(
-                                                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                                                              controller: listDescriptionController[j],
-                                                                              maxLines: 5,
-                                                                              maxLength: 200,
-                                                                              decoration: InputDecoration(
-                                                                                labelText: "Description for realization",
-                                                                                alignLabelWithHint: true,
-                                                                                border: OutlineInputBorder(
-                                                                                    borderRadius: BorderRadius .circular(10),
-                                                                                    borderSide: BorderSide()),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          j == _selectedPIC.split(", ").length-1 ? Container() :
-                                                                          Container(
-                                                                            padding: const EdgeInsets.only(top: 10, bottom: 17),
-                                                                            child: const Divider(
-                                                                              height: 10,
-                                                                              thickness: 0.5,
-                                                                              color: Colors.grey,
-                                                                            ),
-                                                                          )
-                                                                        ]
-                                                                    )
+                                                                            ]
+                                                                        )
 
-                                                                );
-                                                              }
+                                                                    );
+                                                                  }
+                                                              )
+                                                          ) : Container(
+                                                              child: Column(
+                                                                  children: <Widget> [
+                                                                    Container(
+                                                                      child: CustomTextField(label: 'PIC', controller: listPicController[0]),
+                                                                    ),
+                                                                    Container(
+                                                                      child: CustomTextField(label: 'Name', controller: listNameController[0]),
+                                                                    ),
+                                                                    Align(
+                                                                        alignment: Alignment.centerLeft,
+                                                                        child: Container(
+                                                                          padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                          child: Text(
+                                                                              "Planned description: ${listFormerDescController[0].text}",
+                                                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                          ),
+                                                                        )
+                                                                    ),
+                                                                    Container(
+                                                                      padding: const EdgeInsets.only(top: 5),
+                                                                      child: TextFormField(
+                                                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                        controller: listDescriptionController[0],
+                                                                        maxLines: 5,
+                                                                        maxLength: 200,
+                                                                        decoration: InputDecoration(
+                                                                          labelText: "Description for realization",
+                                                                          alignLabelWithHint: true,
+                                                                          border: OutlineInputBorder(
+                                                                              borderRadius: BorderRadius .circular(10),
+                                                                              borderSide: BorderSide()),
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  ]
+                                                              )
                                                           )
-                                                      ) : Container(
+                                                      ) :
+                                                      Container(
                                                           child: Column(
                                                               children: <Widget> [
                                                                 Container(
-                                                                  child: CustomTextField(label: 'PIC', controller: listPicController[0]),
+                                                                  child: CustomTextField(label: 'PIC', controller: picController),
                                                                 ),
                                                                 Container(
-                                                                  child: CustomTextField(label: 'Name', controller: listNameController[0]),
+                                                                  child: CustomTextField(label: 'Name', controller: nameController),
                                                                 ),
                                                                 Align(
                                                                     alignment: Alignment.centerLeft,
                                                                     child: Container(
                                                                       padding: const EdgeInsets.only(bottom: 17, left: 10),
                                                                       child: Text(
-                                                                          "Planned description: ${listFormerDescController[0].text}",
+                                                                          "Planned description: ",
                                                                           style: Global.getCustomFont(Global.BLACK, 15, 'medium')
                                                                       ),
                                                                     )
@@ -548,11 +587,11 @@ class _Realization extends State<Realization> {
                                                                   padding: const EdgeInsets.only(top: 5),
                                                                   child: TextFormField(
                                                                     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                                                    controller: listDescriptionController[0],
+                                                                    controller: descriptionController,
                                                                     maxLines: 5,
                                                                     maxLength: 200,
                                                                     decoration: InputDecoration(
-                                                                      labelText: "Description for realization",
+                                                                      labelText: "Description",
                                                                       alignLabelWithHint: true,
                                                                       border: OutlineInputBorder(
                                                                           borderRadius: BorderRadius .circular(10),
@@ -563,160 +602,121 @@ class _Realization extends State<Realization> {
                                                               ]
                                                           )
                                                       )
-                                                  ) :
-                                                  Container(
-                                                      child: Column(
-                                                          children: <Widget> [
-                                                            Container(
-                                                              child: CustomTextField(label: 'PIC', controller: picController),
-                                                            ),
-                                                            Container(
-                                                              child: CustomTextField(label: 'Name', controller: nameController),
-                                                            ),
-                                                            Align(
-                                                                alignment: Alignment.centerLeft,
-                                                                child: Container(
-                                                                  padding: const EdgeInsets.only(bottom: 17, left: 10),
-                                                                  child: Text(
-                                                                      "Planned description: ",
-                                                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium')
-                                                                  ),
-                                                                )
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 5),
-                                                              child: TextFormField(
-                                                                style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                                                controller: descriptionController,
-                                                                maxLines: 5,
-                                                                maxLength: 200,
-                                                                decoration: InputDecoration(
-                                                                  labelText: "Description",
-                                                                  alignLabelWithHint: true,
-                                                                  border: OutlineInputBorder(
-                                                                      borderRadius: BorderRadius .circular(10),
-                                                                      borderSide: BorderSide()),
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ]
-                                                      )
+                                                    ],
                                                   )
+                                              )
+                                          ),
+                                          _selectedType == "In-office" ? Container(
+                                              padding: const EdgeInsets.only(top: 17),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets.only(left: 10),
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text("Realization start time:",
+                                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                        textAlign: TextAlign.left,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                      children: <Widget> [
+                                                        Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: CupertinoButton(
+                                                            child: Row(
+                                                                children: <Widget> [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.only(right: 22),
+                                                                    child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
+                                                                  ),
+                                                                  ImageIcon(
+                                                                    const AssetImage(Global.CLOCK_ICON),
+                                                                    color: Color(Global.BLUE),
+                                                                    size: 18,
+                                                                  )
+                                                                ]
+                                                            ),
+                                                            onPressed: () => startTime(context),
+                                                          ),
+                                                        ),
+                                                      ]
+                                                  ),
+                                                  Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Container(
+                                                        padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                        child: Text(
+                                                            "Planned description: $formerDescription",
+                                                            style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                        ),
+                                                      )
+                                                  ),
+                                                  TextFormField(
+                                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                    controller: descriptionController,
+                                                    maxLines: 5,
+                                                    maxLength: 200,
+                                                    decoration: InputDecoration(
+                                                      labelText: "Description for realization",
+                                                      alignLabelWithHint: true,
+                                                      border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius .circular(10),
+                                                          borderSide: BorderSide()),
+                                                    ),
+                                                  ),
                                                 ],
                                               )
-                                          )
-                                      ),
-                                      _selectedType == "In-office" ? Container(
-                                        padding: const EdgeInsets.only(top: 17),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.only(left: 10),
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text("Realization start time:",
-                                                  style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                                children: <Widget> [
-                                                  Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: CupertinoButton(
-                                                      child: Row(
-                                                          children: <Widget> [
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(right: 22),
-                                                              child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
-                                                            ),
-                                                            ImageIcon(
-                                                              const AssetImage(Global.CLOCK_ICON),
-                                                              color: Color(Global.BLUE),
-                                                              size: 18,
-                                                            )
-                                                          ]
-                                                      ),
-                                                      onPressed: () => startTime(context),
-                                                    ),
-                                                  ),
-                                                ]
-                                            ),
-                                            Align(
+                                          ) : Container(),
+                                          Align(
                                               alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  padding: const EdgeInsets.only(bottom: 17, left: 10),
-                                                  child: Text(
-                                                      "Planned description: $formerDescription",
-                                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium')
-                                                  ),
-                                                )
-                                            ),
-                                            TextFormField(
-                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                              controller: descriptionController,
-                                              maxLines: 5,
-                                              maxLength: 200,
-                                              decoration: InputDecoration(
-                                                labelText: "Description for realization",
-                                                alignLabelWithHint: true,
-                                                border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius .circular(10),
-                                                    borderSide: BorderSide()),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ) : Container(),
-                                      Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Container(
-                                            color: Colors.white,
-                                            child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Container(
-                                                    padding: EdgeInsets.only(top: 9, bottom: 9),
-                                                    width: 163,
-                                                    height: 56,
-                                                    color: Colors.white,
-                                                    child: RaisedButton(
-                                                        shape: RoundedRectangleBorder(
-                                                            side: BorderSide(color: Color(Global.BLUE)),
-                                                            borderRadius: BorderRadius.circular(20)
+                                              child: Container(
+                                                color: Colors.white,
+                                                child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        padding: EdgeInsets.only(top: 9, bottom: 9),
+                                                        width: 163,
+                                                        height: 56,
+                                                        color: Colors.white,
+                                                        child: RaisedButton(
+                                                            shape: RoundedRectangleBorder(
+                                                                side: BorderSide(color: Color(Global.BLUE)),
+                                                                borderRadius: BorderRadius.circular(20)
+                                                            ),
+                                                            color: Color(Global.BLUE),
+                                                            onPressed: () {
+                                                              setState(() {
+                                                                isLoading = true;
+                                                              });
+                                                              getCurrentLocation();
+                                                            },
+                                                            child: const Text(
+                                                              "Set location",
+                                                              style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontFamily: 'bold',
+                                                                  fontSize: 15
+                                                              ),
+                                                            )
                                                         ),
-                                                        color: Color(Global.BLUE),
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            isLoading = true;
-                                                          });
-                                                          getCurrentLocation();
-                                                        },
-                                                        child: const Text(
-                                                          "Set location",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontFamily: 'bold',
-                                                              fontSize: 15
-                                                          ),
-                                                        )
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      padding: const EdgeInsets.only(left: 21, top: 9, bottom: 17),
-                                                      child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : (isLoading ? Container(
-                                                          padding: const EdgeInsets.only(top: 17),
-                                                          child: const Align(child: CircularProgressIndicator())
-                                                      ) :  Global.getDefaultText("No location", Global.BLACK))
-                                                  ),
-                                                ]
-                                            ),
-                                          )
-                                      ),
-                                    ]
-                                  )
+                                                      ),
+                                                      Container(
+                                                          padding: const EdgeInsets.only(left: 21, top: 9, bottom: 17),
+                                                          child: _position != null ? Global.getDefaultText(Address, Global.BLACK) : (isLoading ? Container(
+                                                              padding: const EdgeInsets.only(top: 17),
+                                                              child: const Align(child: CircularProgressIndicator())
+                                                          ) :  Global.getDefaultText("No location", Global.BLACK))
+                                                      ),
+                                                    ]
+                                                ),
+                                              )
+                                          ),
+                                        ]
+                                    )
                                 )
                               ]
                           )
@@ -763,121 +763,121 @@ class _Realization extends State<Realization> {
                         String descNew = desc.join(", ");
 
                         _selectedType == "In-office" ?
-                            (clickedStart == false ?
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Global.defaultModal(() {
-                                      Navigator.pop(context);
-                                    }, context, Global.WARNING_ICON, "Choose realization time", "Ok", false);
-                                  }
-                              ) : (descriptionController.text == "" ?
-                                    showDialog(
+                        (clickedStart == false ?
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Global.defaultModal(() {
+                                Navigator.pop(context);
+                              }, context, Global.WARNING_ICON, "Choose realization time", "Ok", false);
+                            }
+                        ) : (descriptionController.text == "" ?
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Global.defaultModal(() {
+                                Navigator.pop(context);
+                              }, context, Global.WARNING_ICON, "Fill the realization description", "Ok", false);
+                            }
+                        ) : (
+                            locationClicked == false ? showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Global.defaultModal(() {
+                                    Navigator.pop(context);
+                                  }, context, Global.WARNING_ICON, "Set a location", "Ok", false);
+                                }
+                            ) : BlocProvider.of<VisitBloc>(context).add(
+                                AddRealizationEvent(
+                                    visitNo,
+                                    branchId,
+                                    "",
+                                    realTimeStart.toString(),
+                                    DateTime.now().toString(),
+                                    store.get("user_id"),
+                                    formerDescription,
+                                    "",
+                                    "",
+                                    "y",
+                                    _position!.latitude.toString(),
+                                    _position!.longitude.toString(),
+                                    descriptionController.text
+                                )
+                            )
+                        )
+                        )
+                            // ) : (descNew != "" && clickedStart == true && locationClicked == true && picPos != "" && picName != "" && custId != ""?
+                        ) : ( custId == "" ?
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Global.defaultModal(() {
+                                Navigator.pop(context);
+                              }, context, Global.WARNING_ICON, "Choose a customer", "Ok", false);
+                            }
+                        ) : (
+                            clickedStart == false ? showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Global.defaultModal(() {
+                                    Navigator.pop(context);
+                                  }, context, Global.WARNING_ICON, "Choose realization time", "Ok", false);
+                                }
+                            ) : (
+                                picPos == "" ? showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Global.defaultModal(() {
+                                        Navigator.pop(context);
+                                      }, context, Global.WARNING_ICON, "Fill PIC position", "Ok", false);
+                                    }
+                                ) : (
+                                    picName == "" ? showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return Global.defaultModal(() {
                                             Navigator.pop(context);
-                                          }, context, Global.WARNING_ICON, "Fill the realization description", "Ok", false);
+                                          }, context, Global.WARNING_ICON, "Fill PIC name", "Ok", false);
                                         }
                                     ) : (
-                                          locationClicked == false ? showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Global.defaultModal(() {
-                                                  Navigator.pop(context);
-                                                }, context, Global.WARNING_ICON, "Set a location", "Ok", false);
-                                              }
-                                          ) : BlocProvider.of<VisitBloc>(context).add(
-                                              AddRealizationEvent(
-                                                  visitNo,
-                                                  branchId,
-                                                  "",
-                                                  realTimeStart.toString(),
-                                                  DateTime.now().toString(),
-                                                  store.get("user_id"),
-                                                  formerDescription,
-                                                  "",
-                                                  "",
-                                                  "y",
-                                                  _position!.latitude.toString(),
-                                                  _position!.longitude.toString(),
-                                                  descriptionController.text
-                                              )
-                                          )
+                                        isEmpty ? showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Global.defaultModal(() {
+                                                Navigator.pop(context);
+                                              }, context, Global.WARNING_ICON, "Fill the description", "Ok", false);
+                                            }
+                                        ) : (
+                                            locationClicked == false ? showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Global.defaultModal(() {
+                                                    Navigator.pop(context);
+                                                  }, context, Global.WARNING_ICON, "Set a location", "Ok", false);
+                                                }
+                                            ) :
+                                            BlocProvider.of<VisitBloc>(context).add(
+                                                AddRealizationEvent(
+                                                    visitNo,
+                                                    branchId,
+                                                    custId,
+                                                    realTimeStart.toString(),
+                                                    DateTime.now().toString(),
+                                                    store.get("user_id"),
+                                                    formerDescription,
+                                                    picPos,
+                                                    picName,
+                                                    "y",
+                                                    _position!.latitude.toString(),
+                                                    _position!.longitude.toString(),
+                                                    descNew
+                                                )
+                                            )
                                         )
-                              )
-                            // ) : (descNew != "" && clickedStart == true && locationClicked == true && picPos != "" && picName != "" && custId != ""?
-                            ) : ( custId == "" ?
-                                 showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Global.defaultModal(() {
-                                      Navigator.pop(context);
-                                    }, context, Global.WARNING_ICON, "Choose a customer", "Ok", false);
-                                  }
-                                ) : (
-                                  clickedStart == false ? showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Global.defaultModal(() {
-                                          Navigator.pop(context);
-                                        }, context, Global.WARNING_ICON, "Choose realization time", "Ok", false);
-                                      }
-                                  ) : (
-                                      picPos == "" ? showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Global.defaultModal(() {
-                                              Navigator.pop(context);
-                                            }, context, Global.WARNING_ICON, "Fill PIC position", "Ok", false);
-                                          }
-                                      ) : (
-                                          picName == "" ? showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Global.defaultModal(() {
-                                                  Navigator.pop(context);
-                                                }, context, Global.WARNING_ICON, "Fill PIC name", "Ok", false);
-                                              }
-                                          ) : (
-                                              isEmpty ? showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return Global.defaultModal(() {
-                                                      Navigator.pop(context);
-                                                    }, context, Global.WARNING_ICON, "Fill the description", "Ok", false);
-                                                  }
-                                              ) : (
-                                                locationClicked == false ? showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext context) {
-                                                      return Global.defaultModal(() {
-                                                        Navigator.pop(context);
-                                                      }, context, Global.WARNING_ICON, "Set a location", "Ok", false);
-                                                    }
-                                                ) :
-                                                  BlocProvider.of<VisitBloc>(context).add(
-                                                      AddRealizationEvent(
-                                                          visitNo,
-                                                          branchId,
-                                                          custId,
-                                                          realTimeStart.toString(),
-                                                          DateTime.now().toString(),
-                                                          store.get("user_id"),
-                                                          formerDescription,
-                                                          picPos,
-                                                          picName,
-                                                          "y",
-                                                          _position!.latitude.toString(),
-                                                          _position!.longitude.toString(),
-                                                          descNew
-                                                      )
-                                                  )
-                                              )
-                                          )
-                                      )
-                                  )
+                                    )
                                 )
+                            )
+                        )
                         );
                       },
                       child: const Text(
