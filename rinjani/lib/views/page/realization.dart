@@ -26,6 +26,7 @@ final GlobalState store = GlobalState.instance;
 class _Realization extends State<Realization> {
   var _selectedCust = null;
   var _selectedPIC = null;
+  var _selectedPIC2 = null;
 
   late List<String> cust = [];
   String custId = "";
@@ -96,6 +97,7 @@ class _Realization extends State<Realization> {
   List<Visit> visit=[];
   List<String> custName = [];
   List<String> custPos = [];
+  List<String> custPos2 = [];
   List<String> time = [];
 
   void startTime(ctx) {
@@ -268,7 +270,9 @@ class _Realization extends State<Realization> {
                                                 onChanged: (val) {
                                                   setState(() {
                                                     custPos = [];
+                                                    custPos2 = [];
                                                     _selectedPIC = null;
+                                                    _selectedPIC2 = null;
                                                     listNameController = [];
                                                     _selectedCust = val;
                                                     picController.text = "";
@@ -279,16 +283,25 @@ class _Realization extends State<Realization> {
                                                         custId = visit[i].cust_id;
                                                       }
                                                     }
+
+                                                    for(int i=0; i<custPos.length; i++) {
+                                                      if(custPos[i].contains("%2C")) {
+                                                        custPos2.add(custPos[i].replaceAll("%2C", ", "));
+                                                      } else {
+                                                        custPos2.add(custPos[i]);
+                                                      }
+                                                    }
+
                                                   });
                                                 },
                                                 dropdownSearchDecoration: InputDecoration(
                                                   labelText: "Select a customer",
-                                                  labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
+                                                  labelStyle: const TextStyle(fontSize: 15, fontFamily: 'medium'),
                                                   alignLabelWithHint: true,
-                                                  contentPadding: EdgeInsets.only(left: 12),
+                                                  contentPadding: const EdgeInsets.only(left: 12),
                                                   border: OutlineInputBorder(
                                                       borderRadius: BorderRadius .circular(10),
-                                                      borderSide: BorderSide()),
+                                                      borderSide: const BorderSide()),
                                                 ),
                                               )
                                           ),
@@ -333,252 +346,215 @@ class _Realization extends State<Realization> {
                                                 ),
                                               )
                                           ) : Container(
-                                              child: Container(
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                          padding: const EdgeInsets.only(top: 22, bottom: 17),
-                                                          child: DropdownSearch<String>(
-                                                            mode: Mode.MENU,
-                                                            showClearButton: true,
-                                                            selectedItem: _selectedPIC,
-                                                            items: custPos,
-                                                            label: "PIC",
-                                                            onChanged: (String? value) {
-                                                              setState(() {
-                                                                _selectedPIC = value;
-                                                                nameController.text = "";
-                                                                listNameController = [];
-                                                                listPicController = [];
-                                                                for(int i=0; i<visit.length; i++) {
-                                                                  if(visit[i].pic_position == _selectedPIC) {
-                                                                    nameController.text = visit[i].pic_name;
-                                                                    formerDescription = visit[i].description;
-                                                                    formerDescController.text = visit[i].description;
-                                                                    picController.text = _selectedPIC;
-                                                                    visitNo = visit[i].visit_no;
-                                                                    branchId = visit[i].branch_id;
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                      padding: const EdgeInsets.only(top: 22, bottom: 17),
+                                                      child: DropdownButtonFormField<String>(
+                                                        hint: const Text("PIC"),
+                                                        dropdownColor: Colors.white,
+                                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                        value: _selectedPIC2,
+                                                        items: custPos2.map((e) {
+                                                          return DropdownMenuItem<String>(
+                                                            value: custPos2.indexOf(e).toString(),
+                                                            child: Text(e),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (String? value) {
+                                                          setState(() {
+                                                            _selectedPIC2 = value;
 
+                                                            nameController.text = "";
+                                                            listNameController = [];
+                                                            listPicController = [];
+                                                            for(int i=0; i< visit.length; i++) {
+                                                              if(visit[i].pic_position == custPos[int.parse(_selectedPIC2)]) {
+                                                                _selectedPIC = visit[i].pic_position;
+                                                                nameController.text = visit[i].pic_name;
+                                                                formerDescription = visit[i].description;
+                                                                formerDescController.text = visit[i].description;
+                                                                picController.text = visit[i].pic_position;
+                                                                visitNo = visit[i].visit_no;
+                                                                branchId = visit[i].branch_id;
 
-                                                                    var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
-                                                                    int newHourStart = visit[i].time_start.hour+0;
-                                                                    int newHourEnd = visit[i].time_finish.hour+0;
+                                                                var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(visit[i].time_start.toString());
+                                                                int newHourStart = visit[i].time_start.hour+0;
+                                                                int newHourEnd = visit[i].time_finish.hour+0;
 
-                                                                    var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
-                                                                    var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
+                                                                var timeStart1 = DateTime(time.year, time.month, time.day, newHourStart, time.minute, time.second);
+                                                                var timeFinish1 = DateTime(time.year, time.month, time.day, newHourEnd, time.minute, time.second);
 
-                                                                    // String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timeStart.toString());
-                                                                    // DateTime time1 = DateFormat('yyyy-MM-dd HH:mm:ss').parse(timeFinish.toString());
+                                                                timeStart = timeStart1.toString();
+                                                                timeFinish = timeFinish1.toString();
+                                                              }
+                                                            }
 
-                                                                    timeStart = timeStart1.toString();
-                                                                    timeFinish = timeFinish1.toString();
-                                                                  }
-                                                                }
+                                                            listNameController = [
+                                                              for (int i = 0; i < nameController.text.split("%2C").length; i++)
+                                                                TextEditingController()
+                                                            ];
 
-                                                                listNameController = [
-                                                                  for (int i = 0; i < nameController.text.split(', ').length; i++)
-                                                                    TextEditingController()
-                                                                ];
+                                                            listPicController = [
+                                                              for (int i = 0; i < _selectedPIC.split("%2C").length; i++)
+                                                                TextEditingController()
+                                                            ];
 
-                                                                listPicController = [
-                                                                  for (int i = 0; i < _selectedPIC.split(', ').length; i++)
-                                                                    TextEditingController()
-                                                                ];
+                                                            listDescriptionController = [
+                                                              for (int i = 0; i < formerDescController.text.split("%2C").length; i++)
+                                                                TextEditingController()
+                                                            ];
 
-                                                                listDescriptionController = [
-                                                                  for (int i = 0; i < nameController.text.split(', ').length; i++)
-                                                                    TextEditingController()
-                                                                ];
+                                                            listFormerDescController = [
+                                                              for (int i = 0; i < formerDescController.text.split("%2C").length; i++)
+                                                                TextEditingController()
+                                                            ];
 
-                                                                listFormerDescController = [
-                                                                  for (int i = 0; i < formerDescController.text.split(', ').length; i++)
-                                                                    TextEditingController()
-                                                                ];
+                                                            for(int i = 0; i < nameController.text.split("%2C").length; i++){
+                                                              listNameController[i].text = nameController.text.split("%2C")[i];
+                                                            }
 
-                                                                for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                                  listNameController[i].text = nameController.text.split(', ')[i];
-                                                                }
+                                                            for(int i = 0; i < picController.text.split("%2C").length; i++){
+                                                              listPicController[i].text = picController.text.split("%2C")[i];
+                                                            }
 
-                                                                for(int i = 0; i < _selectedPIC.split(', ').length; i++){
-                                                                  listPicController[i].text = picController.text.split(', ')[i];
-                                                                }
-
-                                                                // for(int i = 0; i < nameController.text.split(', ').length; i++){
-                                                                //   listDescriptionController[i].text = nameController.text.split(', ')[i];
-                                                                // }
-
-                                                                for(int i = 0; i < formerDescController.text.split(', ').length; i++){
-                                                                  listFormerDescController[i].text = formerDescController.text.split(', ')[i];
-                                                                }
-                                                              });
-                                                            },
-                                                            dropdownSearchDecoration: InputDecoration(
-                                                              labelText: "PIC",
-                                                              labelStyle: TextStyle(fontSize: 15, fontFamily: 'medium'),
-                                                              alignLabelWithHint: true,
-                                                              contentPadding: EdgeInsets.only(left: 12),
-                                                              border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius .circular(10),
-                                                                  borderSide: BorderSide()),
-                                                            ),
-                                                          )
-                                                      ),
-                                                      Container(
-                                                          padding: const EdgeInsets.only(bottom: 17),
-                                                          child: const Divider(
-                                                            height: 10,
-                                                            thickness: 0.5,
-                                                            color: Colors.grey,
-                                                          )
-                                                      ),
-                                                      Container(
-                                                        padding: const EdgeInsets.only(left: 10),
-                                                        child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Text("Realization start time:",
-                                                            style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
-                                                            textAlign: TextAlign.left,
+                                                            for(int i = 0; i < formerDescController.text.split("%2C").length; i++){
+                                                              listFormerDescController[i].text = formerDescController.text.split("%2C")[i];
+                                                            }
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                                          labelText: "PIC",
+                                                          labelStyle: const TextStyle(
+                                                              color: Color(0xff757575),
+                                                              fontSize: 15,
+                                                              fontFamily: 'medium'),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                              BorderRadius.circular(10),
+                                                              borderSide: BorderSide()
                                                           ),
                                                         ),
                                                       ),
-                                                      Container(
-                                                        padding: const EdgeInsets.only(bottom: 17),
-                                                        child: Row(
-                                                            children: <Widget> [
-                                                              Align(
-                                                                alignment: Alignment.centerLeft,
-                                                                child: CupertinoButton(
-                                                                  child: Row(
-                                                                      children: <Widget> [
-                                                                        Padding(
-                                                                          padding: const EdgeInsets.only(right: 22),
-                                                                          child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
-                                                                        ),
-                                                                        ImageIcon(
-                                                                          const AssetImage(Global.CLOCK_ICON),
-                                                                          color: Color(Global.BLUE),
-                                                                          size: 18,
-                                                                        )
-                                                                      ]
-                                                                  ),
-                                                                  onPressed: () => startTime(context),
-                                                                ),
-                                                              ),
-                                                            ]
-                                                        ),
+                                                  ),
+                                                  Container(
+                                                      padding: const EdgeInsets.only(bottom: 17),
+                                                      child: const Divider(
+                                                        height: 10,
+                                                        thickness: 0.5,
+                                                        color: Colors.grey,
+                                                      )
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(left: 10),
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text("Realization start time:",
+                                                        style: TextStyle(color: Color(Global.BLACK), fontSize: 15, fontFamily: 'medium'),
+                                                        textAlign: TextAlign.left,
                                                       ),
-                                                      _selectedPIC != null ? Container(
-                                                          child: _selectedPIC.contains(",") ? Container(
-                                                              child: ListView.builder(
-                                                                  itemCount:_selectedPIC.split(", ").length,
-                                                                  scrollDirection: Axis.vertical,
-                                                                  shrinkWrap: true,
-                                                                  physics: const NeverScrollableScrollPhysics(),
-                                                                  itemBuilder: (context, j){
-                                                                    return Container(
-                                                                        child: Column(
-                                                                            children: <Widget> [
-                                                                              Container(
-                                                                                child: CustomTextField(label: 'PIC ${j+1}', controller: listPicController[j]),
-                                                                              ),
-                                                                              Container(
-                                                                                child: CustomTextField(label: 'Name', controller: listNameController[j]),
-                                                                              ),
-                                                                              Align(
-                                                                                  alignment: Alignment.centerLeft,
-                                                                                  child: Container(
-                                                                                    padding: const EdgeInsets.only(bottom: 17, left: 10),
-                                                                                    child: Text(
-                                                                                        "Planned description: ${listFormerDescController[j].text}",
-                                                                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium')
-                                                                                    ),
-                                                                                  )
-                                                                              ),
-                                                                              Container(
-                                                                                padding: const EdgeInsets.only(top: 5),
-                                                                                child: TextFormField(
-                                                                                  style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                                                                  controller: listDescriptionController[j],
-                                                                                  maxLines: 5,
-                                                                                  maxLength: 200,
-                                                                                  decoration: InputDecoration(
-                                                                                    labelText: "Description for realization",
-                                                                                    alignLabelWithHint: true,
-                                                                                    border: OutlineInputBorder(
-                                                                                        borderRadius: BorderRadius .circular(10),
-                                                                                        borderSide: BorderSide()),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              j == _selectedPIC.split(", ").length-1 ? Container() :
-                                                                              Container(
-                                                                                padding: const EdgeInsets.only(top: 10, bottom: 17),
-                                                                                child: const Divider(
-                                                                                  height: 10,
-                                                                                  thickness: 0.5,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              )
-                                                                            ]
-                                                                        )
-
-                                                                    );
-                                                                  }
-                                                              )
-                                                          ) : Container(
-                                                              child: Column(
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(bottom: 17),
+                                                    child: Row(
+                                                        children: <Widget> [
+                                                          Align(
+                                                            alignment: Alignment.centerLeft,
+                                                            child: CupertinoButton(
+                                                              child: Row(
                                                                   children: <Widget> [
-                                                                    Container(
-                                                                      child: CustomTextField(label: 'PIC', controller: listPicController[0]),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.only(right: 22),
+                                                                      child: Global.getDefaultText(DateFormat("HH:mm").format(realTimeStart), Global.GREY),
                                                                     ),
-                                                                    Container(
-                                                                      child: CustomTextField(label: 'Name', controller: listNameController[0]),
-                                                                    ),
-                                                                    Align(
-                                                                        alignment: Alignment.centerLeft,
-                                                                        child: Container(
-                                                                          padding: const EdgeInsets.only(bottom: 17, left: 10),
-                                                                          child: Text(
-                                                                              "Planned description: ${listFormerDescController[0].text}",
-                                                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium')
-                                                                          ),
-                                                                        )
-                                                                    ),
-                                                                    Container(
-                                                                      padding: const EdgeInsets.only(top: 5),
-                                                                      child: TextFormField(
-                                                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                                                        controller: listDescriptionController[0],
-                                                                        maxLines: 5,
-                                                                        maxLength: 200,
-                                                                        decoration: InputDecoration(
-                                                                          labelText: "Description for realization",
-                                                                          alignLabelWithHint: true,
-                                                                          border: OutlineInputBorder(
-                                                                              borderRadius: BorderRadius .circular(10),
-                                                                              borderSide: BorderSide()),
-                                                                        ),
-                                                                      ),
+                                                                    ImageIcon(
+                                                                      const AssetImage(Global.CLOCK_ICON),
+                                                                      color: Color(Global.BLUE),
+                                                                      size: 18,
                                                                     )
                                                                   ]
-                                                              )
+                                                              ),
+                                                              onPressed: () => startTime(context),
+                                                            ),
+                                                          ),
+                                                        ]
+                                                    ),
+                                                  ),
+                                                  _selectedPIC != null ? Container(
+                                                      child: _selectedPIC.contains("%2C") ? Container(
+                                                          child: ListView.builder(
+                                                              itemCount:_selectedPIC.split("%2C").length,
+                                                              scrollDirection: Axis.vertical,
+                                                              shrinkWrap: true,
+                                                              physics: const NeverScrollableScrollPhysics(),
+                                                              itemBuilder: (context, j){
+                                                                return Container(
+                                                                    child: Column(
+                                                                        children: <Widget> [
+                                                                          Container(
+                                                                            child: CustomTextField(label: 'PIC ${j+1}', controller: listPicController[j]),
+                                                                          ),
+                                                                          Container(
+                                                                            child: CustomTextField(label: 'Name', controller: listNameController[j]),
+                                                                          ),
+                                                                          Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Container(
+                                                                                padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                                child: Text(
+                                                                                    "Planned description: ${listFormerDescController[j].text}",
+                                                                                    style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                                ),
+                                                                              )
+                                                                          ),
+                                                                          Container(
+                                                                            padding: const EdgeInsets.only(top: 5),
+                                                                            child: TextFormField(
+                                                                              style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                              controller: listDescriptionController[j],
+                                                                              maxLines: 5,
+                                                                              maxLength: 200,
+                                                                              decoration: InputDecoration(
+                                                                                labelText: "Description for realization",
+                                                                                alignLabelWithHint: true,
+                                                                                border: OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius .circular(10),
+                                                                                    borderSide: BorderSide()),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          j == _selectedPIC.split("%2C").length-1 ? Container() :
+                                                                          Container(
+                                                                            padding: const EdgeInsets.only(top: 10, bottom: 17),
+                                                                            child: const Divider(
+                                                                              height: 10,
+                                                                              thickness: 0.5,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          )
+                                                                        ]
+                                                                    )
+
+                                                                );
+                                                              }
                                                           )
-                                                      ) :
-                                                      Container(
+                                                      ) : Container(
                                                           child: Column(
                                                               children: <Widget> [
                                                                 Container(
-                                                                  child: CustomTextField(label: 'PIC', controller: picController),
+                                                                  child: CustomTextField(label: 'PIC', controller: listPicController[0]),
                                                                 ),
                                                                 Container(
-                                                                  child: CustomTextField(label: 'Name', controller: nameController),
+                                                                  child: CustomTextField(label: 'Name', controller: listNameController[0]),
                                                                 ),
                                                                 Align(
                                                                     alignment: Alignment.centerLeft,
                                                                     child: Container(
                                                                       padding: const EdgeInsets.only(bottom: 17, left: 10),
                                                                       child: Text(
-                                                                          "Planned description: ",
+                                                                          "Planned description: ${listFormerDescController[0].text}",
                                                                           style: Global.getCustomFont(Global.BLACK, 15, 'medium')
                                                                       ),
                                                                     )
@@ -587,11 +563,11 @@ class _Realization extends State<Realization> {
                                                                   padding: const EdgeInsets.only(top: 5),
                                                                   child: TextFormField(
                                                                     style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
-                                                                    controller: descriptionController,
+                                                                    controller: listDescriptionController[0],
                                                                     maxLines: 5,
                                                                     maxLength: 200,
                                                                     decoration: InputDecoration(
-                                                                      labelText: "Description",
+                                                                      labelText: "Description for realization",
                                                                       alignLabelWithHint: true,
                                                                       border: OutlineInputBorder(
                                                                           borderRadius: BorderRadius .circular(10),
@@ -602,8 +578,46 @@ class _Realization extends State<Realization> {
                                                               ]
                                                           )
                                                       )
-                                                    ],
+                                                  ) :
+                                                  Container(
+                                                      child: Column(
+                                                          children: <Widget> [
+                                                            Container(
+                                                              child: CustomTextField(label: 'PIC', controller: picController),
+                                                            ),
+                                                            Container(
+                                                              child: CustomTextField(label: 'Name', controller: nameController),
+                                                            ),
+                                                            Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Container(
+                                                                  padding: const EdgeInsets.only(bottom: 17, left: 10),
+                                                                  child: Text(
+                                                                      "Planned description: ",
+                                                                      style: Global.getCustomFont(Global.BLACK, 15, 'medium')
+                                                                  ),
+                                                                )
+                                                            ),
+                                                            Container(
+                                                              padding: const EdgeInsets.only(top: 5),
+                                                              child: TextFormField(
+                                                                style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                                                controller: descriptionController,
+                                                                maxLines: 5,
+                                                                maxLength: 200,
+                                                                decoration: InputDecoration(
+                                                                  labelText: "Description",
+                                                                  alignLabelWithHint: true,
+                                                                  border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius .circular(10),
+                                                                      borderSide: BorderSide()),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ]
+                                                      )
                                                   )
+                                                ],
                                               )
                                           ),
                                           _selectedType == "In-office" ? Container(
@@ -678,7 +692,7 @@ class _Realization extends State<Realization> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
                                                       Container(
-                                                        padding: EdgeInsets.only(top: 9, bottom: 9),
+                                                        padding: const EdgeInsets.only(top: 9, bottom: 9),
                                                         width: 163,
                                                         height: 56,
                                                         color: Colors.white,
@@ -744,13 +758,13 @@ class _Realization extends State<Realization> {
                         for(int i=0; i<listNameController.length; i++) {
                           name.add(listNameController[i].text);
                         }
-                        String picName = name.join(", ");
+                        String picName = name.join("%2C");
 
                         List<String> pos = [];
                         for(int i=0; i<listPicController.length; i++) {
                           pos.add(listPicController[i].text);
                         }
-                        String picPos = pos.join(", ");
+                        String picPos = pos.join("%2C");
 
                         bool isEmpty = false;
                         List<String> desc = [];
@@ -760,7 +774,7 @@ class _Realization extends State<Realization> {
                           }
                           desc.add(listDescriptionController[i].text);
                         }
-                        String descNew = desc.join(", ");
+                        String descNew = desc.join("%2C");
 
                         _selectedType == "In-office" ?
                         (clickedStart == false ?
