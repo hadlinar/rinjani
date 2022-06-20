@@ -339,9 +339,9 @@ class _Plan extends State<Plan> {
                                           desc.add(res[i]['pic']['description']);
                                         }
 
-                                        String position = pos.join(", ");
-                                        String name1 = name.join(", ");
-                                        String description = desc.join(", ");
+                                        String position = pos.join("%2C");
+                                        String name1 = name.join("%2C");
+                                        String description = desc.join("%2C");
                                         if(position == "null" || name1 == "null" || description == "null" || name.contains("") || pos.contains("") || desc.contains("")) {
                                           showDialog(
                                               context: context,
