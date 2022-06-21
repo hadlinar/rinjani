@@ -175,13 +175,13 @@ class _CalendarState extends State<Calendar> {
                 _visit.visit_id == "02" ?
                 Container(
                   padding: const EdgeInsets.only(top: 5),
-                  height:  _visit.pic_name.contains(",") ? 150 : 50,
+                  height:  _visit.pic_name.contains("%2C") ? 150 : 50,
                   width: MediaQuery.of(context).size.width*0.75,
                   child: Align(
                       alignment: Alignment.centerLeft,
-                      child: _visit.pic_name.contains(",") ? Container (
+                      child: _visit.pic_name.contains("%2C") ? Container (
                           child: ListView.builder(
-                              itemCount: _visit.pic_name.split(", ").length,
+                              itemCount: _visit.pic_name.split("%2C").length,
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               // physics: NeverScrollableScrollPhysics(),
@@ -192,13 +192,13 @@ class _CalendarState extends State<Calendar> {
                                   children: <Widget>[
                                     Container(
                                       padding: const EdgeInsets.only(top: 5, left: 3),
-                                      child: Text("${_visit.pic_name.split(", ")[j]} - ${_visit.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                      child: Text("${_visit.pic_name.split("%2C")[j]} - ${_visit.pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                     ),
                                     Container(
                                       padding: const EdgeInsets.only(top: 5, bottom: 5, left: 3),
-                                      child: Text("${_visit.description.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                      child: Text("${_visit.description.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                     ),
-                                    j == _visit.pic_name.split(", ").length-1 ? Container() :
+                                    j == _visit.pic_name.split("%2C").length-1 ? Container() :
                                     const Divider(
                                       height: 10,
                                       thickness: 0.5,

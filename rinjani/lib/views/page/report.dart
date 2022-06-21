@@ -220,16 +220,16 @@ class _Report extends State<Report> {
                                                     padding: const EdgeInsets.only(top: 5),
                                                     child: Align(
                                                         alignment: Alignment.centerLeft,
-                                                        child: realization[i].pic_name.contains(",") ? Container (
+                                                        child: realization[i].pic_name.contains("%2C") ? Container (
                                                             child: ListView.builder(
-                                                                itemCount: realization[i].pic_name.split(", ").length,
+                                                                itemCount: realization[i].pic_name.split("%2C").length,
                                                                 scrollDirection: Axis.vertical,
                                                                 shrinkWrap: true,
                                                                 physics: NeverScrollableScrollPhysics(),
                                                                 itemBuilder: (context, j){
                                                                   return Container(
                                                                     padding: const EdgeInsets.only(top: 5),
-                                                                    child: Text("${realization[i].pic_name.split(", ")[j]} - ${realization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.GREY, 14, 'medium')),
+                                                                    child: Text("${realization[i].pic_name.split("%2C")[j]} - ${realization[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                                   );
                                                                 }
                                                             )
@@ -335,16 +335,16 @@ class _Report extends State<Report> {
                                                 children: <Widget>[
                                                   Align(
                                                       alignment: Alignment.centerLeft,
-                                                      child: realization[i].pic_name.contains(",") ? Container (
+                                                      child: realization[i].pic_name.contains("%2C") ? Container (
                                                           child: ListView.builder(
-                                                              itemCount: realization[i].pic_name.split(", ").length,
+                                                              itemCount: realization[i].pic_name.split("%2C").length,
                                                               scrollDirection: Axis.vertical,
                                                               shrinkWrap: true,
                                                               physics: NeverScrollableScrollPhysics(),
                                                               itemBuilder: (context, j){
                                                                 return Container(
                                                                   padding: const EdgeInsets.only(top: 5),
-                                                                  child: Text("${realization[i].pic_name.split(", ")[j]} - ${realization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                  child: Text("${realization[i].pic_name.split("%2C")[j]} - ${realization[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                 );
                                                               }
                                                           )
@@ -1029,16 +1029,16 @@ class _Report extends State<Report> {
                                                                       padding: const EdgeInsets.only(top: 5),
                                                                       child: Align(
                                                                           alignment: Alignment.centerLeft,
-                                                                          child: realization[i].pic_name.contains(",") ? Container (
+                                                                          child: realization[i].pic_name.contains("%2C") ? Container (
                                                                               child: ListView.builder(
-                                                                                  itemCount: realization[i].pic_name.split(", ").length,
+                                                                                  itemCount: realization[i].pic_name.split("%2C").length,
                                                                                   scrollDirection: Axis.vertical,
                                                                                   shrinkWrap: true,
                                                                                   physics: const NeverScrollableScrollPhysics(),
                                                                                   itemBuilder: (context, j){
                                                                                     return Container(
                                                                                       padding: const EdgeInsets.only(top: 5),
-                                                                                      child: Text("${realization[i].pic_name.split(", ")[j]} - ${realization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.GREY, 14, 'medium')),
+                                                                                      child: Text("${realization[i].pic_name.split("%2C")[j]} - ${realization[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                                                     );
                                                                                   }
                                                                               )
@@ -1144,16 +1144,16 @@ class _Report extends State<Report> {
                                                                   children: <Widget>[
                                                                     Align(
                                                                         alignment: Alignment.centerLeft,
-                                                                        child: realization[i].pic_name.contains(",") ? Container (
+                                                                        child: realization[i].pic_name.contains("%2C") ? Container (
                                                                             child: ListView.builder(
-                                                                                itemCount: realization[i].pic_name.split(", ").length,
+                                                                                itemCount: realization[i].pic_name.split("%2C").length,
                                                                                 scrollDirection: Axis.vertical,
                                                                                 shrinkWrap: true,
                                                                                 physics: NeverScrollableScrollPhysics(),
                                                                                 itemBuilder: (context, j){
                                                                                   return Container(
                                                                                     padding: const EdgeInsets.only(top: 5),
-                                                                                    child: Text("${realization[i].pic_name.split(", ")[j]} - ${realization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                                    child: Text("${realization[i].pic_name.split("%2C")[j]} - ${realization[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                                   );
                                                                                 }
                                                                             )
