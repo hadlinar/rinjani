@@ -154,18 +154,18 @@ class _DetailReport extends State<DetailReport> {
                                   ),
                                   Container(
                                       padding: const EdgeInsets.only(left: 73),
-                                      child: widget.realization.pic_name.contains(",") ? Container(
+                                      child: widget.realization.pic_name.contains("%2C") ? Container(
                                           child: SizedBox(
                                               width: 200,
                                               child: ListView.builder(
-                                                  itemCount: widget.realization.pic_name.split(", ").length,
+                                                  itemCount: widget.realization.pic_name.split("%2C").length,
                                                   scrollDirection: Axis.vertical,
                                                   shrinkWrap: true,
                                                   physics: NeverScrollableScrollPhysics(),
                                                   itemBuilder: (context, j){
                                                     return Container(
                                                       padding: const EdgeInsets.only(top: 5),
-                                                      child: Text("${widget.realization.pic_name.split(", ")[j]} - ${widget.realization.pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
+                                                      child: Text("${widget.realization.pic_name.split("%2C")[j]} - ${widget.realization.pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'bold')),
                                                     );
                                                   }
                                               )
@@ -259,18 +259,18 @@ class _DetailReport extends State<DetailReport> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(left: 24, top: 17, bottom: 17),
-                                    child: widget.realization.description.contains(",") ? Container(
+                                    child: widget.realization.description.contains("%2C") ? Container(
                                         child: SizedBox(
                                             width: 300,
                                             child: ListView.builder(
-                                                itemCount: widget.realization.description.split(", ").length,
+                                                itemCount: widget.realization.description.split("%2C").length,
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
                                                 physics: NeverScrollableScrollPhysics(),
                                                 itemBuilder: (context, j){
                                                   return Container(
                                                     padding: const EdgeInsets.only(top: 5),
-                                                    child: Text("-  ${widget.realization.description.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'book')),
+                                                    child: Text("-  ${widget.realization.description.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'book')),
                                                   );
                                                 }
                                             )
@@ -299,18 +299,18 @@ class _DetailReport extends State<DetailReport> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(left: 24, top: 17, bottom: 17),
-                                    child: widget.realization.description_real.contains(",") ? Container(
+                                    child: widget.realization.description_real.contains("%2C") ? Container(
                                         child: SizedBox(
                                             width: 300,
                                             child: ListView.builder(
-                                                itemCount: widget.realization.description_real.split(", ").length,
+                                                itemCount: widget.realization.description_real.split("%2C").length,
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
                                                 physics: NeverScrollableScrollPhysics(),
                                                 itemBuilder: (context, j){
                                                   return Container(
                                                     padding: const EdgeInsets.only(top: 5),
-                                                    child: Text("-  ${widget.realization.description_real.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'book')),
+                                                    child: Text("-  ${widget.realization.description_real.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 15, 'book')),
                                                   );
                                                 }
                                             )

@@ -203,14 +203,14 @@ class _ListPIC extends State<ListPIC> {
                                                                 children: [
                                                                   Align(
                                                                       alignment: Alignment.centerLeft,
-                                                                      child: state.getRealization[i].pic_name.contains(",") ? ListView.builder(
-                                                                                  itemCount: state.getRealization[i].pic_name.split(", ").length,
+                                                                      child: state.getRealization[i].pic_name.contains("%2C") ? ListView.builder(
+                                                                                  itemCount: state.getRealization[i].pic_name.split("%2C").length,
                                                                                   scrollDirection: Axis.vertical,
                                                                                   shrinkWrap: true,
                                                                                   physics: const NeverScrollableScrollPhysics(),
                                                                                   itemBuilder: (context, j){
                                                                                     return Container(
-                                                                                      child: Text("${state.getRealization[i].pic_name.split(", ")[j]} - ${state.getRealization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                                      child: Text("${state.getRealization[i].pic_name.split("%2C")[j]} - ${state.getRealization[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                                     );
                                                                                   }
                                                                               )
@@ -297,18 +297,18 @@ class _ListPIC extends State<ListPIC> {
                                                                 children: [
                                                                   Align(
                                                                       alignment: Alignment.centerLeft,
-                                                                      child: state.getRealizationOp[i].pic_name.contains(",") ? Container(
+                                                                      child: state.getRealizationOp[i].pic_name.contains("%2C") ? Container(
                                                                           child: SizedBox(
                                                                               width: 300,
                                                                               child: ListView.builder(
-                                                                                  itemCount: state.getRealizationOp[i].pic_name.split(", ").length,
+                                                                                  itemCount: state.getRealizationOp[i].pic_name.split("%2C").length,
                                                                                   scrollDirection: Axis.vertical,
                                                                                   shrinkWrap: true,
                                                                                   physics: NeverScrollableScrollPhysics(),
                                                                                   itemBuilder: (context, j){
                                                                                     return Container(
                                                                                       padding: const EdgeInsets.only(top: 5),
-                                                                                      child: Text("${state.getRealizationOp[i].pic_name.split(", ")[j]} - ${state.getRealizationOp[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                                      child: Text("${state.getRealizationOp[i].pic_name.split("%2C")[j]} - ${state.getRealizationOp[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                                     );
                                                                                   }
                                                                               )

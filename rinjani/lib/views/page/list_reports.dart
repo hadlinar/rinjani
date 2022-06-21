@@ -218,18 +218,18 @@ class _ListReport extends State<ListReport> {
                                                                       ),
                                                                       Align(
                                                                           alignment: Alignment.centerLeft,
-                                                                          child: state.getRealization[i].pic_name.contains(",") ? Container(
+                                                                          child: state.getRealization[i].pic_name.contains("%2C") ? Container(
                                                                               child: SizedBox(
                                                                                   width: 289,
                                                                                   child: ListView.builder(
-                                                                                      itemCount: state.getRealization[i].pic_name.split(", ").length,
+                                                                                      itemCount: state.getRealization[i].pic_name.split("%2C").length,
                                                                                       scrollDirection: Axis.vertical,
                                                                                       shrinkWrap: true,
                                                                                       physics: const NeverScrollableScrollPhysics(),
                                                                                       itemBuilder: (context, j){
                                                                                         return Container(
                                                                                           padding: const EdgeInsets.only(top: 5),
-                                                                                          child: Text("${state.getRealization[i].pic_name.split(", ")[j]} - ${state.getRealization[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                                          child: Text("${state.getRealization[i].pic_name.split("%2C")[j]} - ${state.getRealization[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                                         );
                                                                                       }
                                                                                   )
@@ -249,7 +249,28 @@ class _ListReport extends State<ListReport> {
                                                               margin: const EdgeInsets.only(right: 17, left: 30, top: 5),
                                                               child: Align(
                                                                 alignment: Alignment.topLeft,
-                                                                child: Text(state.getRealization[i].description_real, style: Global.getCustomFont(Global.GREY, 14, 'book')),
+                                                                  child: state.getRealization[i].description_real.contains("%2C") ? Container(
+                                                                      child: SizedBox(
+                                                                          width: 289,
+                                                                          child: ListView.builder(
+                                                                              itemCount: state.getRealization[i].description_real.split("%2C").length,
+                                                                              scrollDirection: Axis.vertical,
+                                                                              shrinkWrap: true,
+                                                                              physics: const NeverScrollableScrollPhysics(),
+                                                                              itemBuilder: (context, j){
+                                                                                return Container(
+                                                                                  padding: const EdgeInsets.only(top: 5),
+                                                                                  child: Text("${state.getRealization[i].description_real.split("%2C")[j]} - ${state.getRealization[i].description_real.split("%2C")[j]}", style: Global.getCustomFont(Global.GREY, 14, 'book')),
+                                                                                );
+                                                                              }
+                                                                          )
+                                                                      )
+                                                                  ) : Container(
+                                                                    child: Text("${state.getRealization[i].description_real} - ${state.getRealization[i].description_real}",
+                                                                        style: Global.getCustomFont(Global.GREY, 14, 'book')
+                                                                    ),
+                                                                  )
+                                                                // child: Text(state.getRealization[i].description_real, style: Global.getCustomFont(Global.GREY, 14, 'book')),
                                                               ),
                                                             ),
                                                           ],
@@ -321,18 +342,18 @@ class _ListReport extends State<ListReport> {
                                                                   children: [
                                                                     Align(
                                                                         alignment: Alignment.centerLeft,
-                                                                        child: state.getRealizationOp[i].pic_name.contains(",") ? Container(
+                                                                        child: state.getRealizationOp[i].pic_name.contains("%2C") ? Container(
                                                                             child: SizedBox(
                                                                                 width: 300,
                                                                                 child: ListView.builder(
-                                                                                    itemCount: state.getRealizationOp[i].pic_name.split(", ").length,
+                                                                                    itemCount: state.getRealizationOp[i].pic_name.split("%2C").length,
                                                                                     scrollDirection: Axis.vertical,
                                                                                     shrinkWrap: true,
-                                                                                    physics: NeverScrollableScrollPhysics(),
+                                                                                    physics: const NeverScrollableScrollPhysics(),
                                                                                     itemBuilder: (context, j){
                                                                                       return Container(
                                                                                         padding: const EdgeInsets.only(top: 5),
-                                                                                        child: Text("${state.getRealizationOp[i].pic_name.split(", ")[j]} - ${state.getRealizationOp[i].pic_position.split(", ")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                                        child: Text("${state.getRealizationOp[i].pic_name.split("%2C")[j]} - ${state.getRealizationOp[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
                                                                                       );
                                                                                     }
                                                                                 )
