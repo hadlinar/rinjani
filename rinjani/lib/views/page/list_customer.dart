@@ -247,9 +247,11 @@ class _ListCustomer extends State<ListCustomer> {
                                                                 alignment: Alignment.centerLeft,
                                                                 child: Text('${i+1}', style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
                                                               ),
-                                                              Container(
-                                                                padding: const EdgeInsets.only(left: 17),
-                                                                child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                              Expanded(
+                                                                child: Container(
+                                                                  padding: const EdgeInsets.only(left: 17),
+                                                                  child: Text(finalCustName[i], style: Global.getCustomFont(Global.BLACK, 14, 'bold')),
+                                                                ),
                                                               ),
                                                             ]
                                                         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../models/user.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
@@ -232,6 +233,10 @@ class _ListVisit extends State<ListVisit> {
                                                     ),
                                                   ],
                                                 ),
+                                                Align(
+                                                    alignment: Alignment.centerRight,
+                                                    child: Text(DateFormat('dd/MM/yyyy').format(state.getRealization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                ),
                                                 Divider()
                                               ]
                                           ),
@@ -287,47 +292,53 @@ class _ListVisit extends State<ListVisit> {
                                                         ),
                                                       ),
                                                     ),
-                                                    Column(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Container(
-                                                          padding: const EdgeInsets.only(top: 5),
-                                                          child: Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text(
-                                                                state.getRealizationOp[i].customer,
-                                                                style: Global.getCustomFont(Global.BLACK, 14, 'bold')
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: state.getRealizationOp[i].pic_name.contains("%2C") ? Container(
-                                                                child: SizedBox(
-                                                                    width: 300,
-                                                                    child: ListView.builder(
-                                                                        itemCount: state.getRealizationOp[i].pic_name.split("%2C").length,
-                                                                        scrollDirection: Axis.vertical,
-                                                                        shrinkWrap: true,
-                                                                        physics: NeverScrollableScrollPhysics(),
-                                                                        itemBuilder: (context, j){
-                                                                          return Container(
-                                                                            padding: const EdgeInsets.only(top: 5),
-                                                                            child: Text("${state.getRealizationOp[i].pic_name.split("%2C")[j]} - ${state.getRealizationOp[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
-                                                                          );
-                                                                        }
-                                                                    )
-                                                                )
-                                                            ) : Container(
-                                                              child: Text("${state.getRealizationOp[i].pic_name} - ${state.getRealizationOp[i].pic_position}",
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Container(
+                                                            padding: const EdgeInsets.only(top: 5),
+                                                            child: Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text(
+                                                                  state.getRealizationOp[i].customer,
                                                                   style: Global.getCustomFont(Global.BLACK, 14, 'bold')
                                                               ),
-                                                            )
-                                                        ),
-                                                      ],
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: state.getRealizationOp[i].pic_name.contains("%2C") ? Container(
+                                                                  child: SizedBox(
+                                                                      width: 300,
+                                                                      child: ListView.builder(
+                                                                          itemCount: state.getRealizationOp[i].pic_name.split("%2C").length,
+                                                                          scrollDirection: Axis.vertical,
+                                                                          shrinkWrap: true,
+                                                                          physics: NeverScrollableScrollPhysics(),
+                                                                          itemBuilder: (context, j){
+                                                                            return Container(
+                                                                              padding: const EdgeInsets.only(top: 5),
+                                                                              child: Text("${state.getRealizationOp[i].pic_name.split("%2C")[j]} - ${state.getRealizationOp[i].pic_position.split("%2C")[j]}", style: Global.getCustomFont(Global.BLACK, 14, 'medium')),
+                                                                            );
+                                                                          }
+                                                                      )
+                                                                  )
+                                                              ) : Container(
+                                                                child: Text("${state.getRealizationOp[i].pic_name} - ${state.getRealizationOp[i].pic_position}",
+                                                                    style: Global.getCustomFont(Global.BLACK, 14, 'bold')
+                                                                ),
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
+                                                ),
+                                                Align(
+                                                    alignment: Alignment.centerRight,
+                                                    child: Text(DateFormat('dd/MM/yyyy').format(state.getRealizationOp[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
                                                 ),
                                                 Divider()
                                               ]
