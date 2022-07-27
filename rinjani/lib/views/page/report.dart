@@ -240,6 +240,10 @@ class _Report extends State<Report> {
                                                         )
                                                     ),
                                                   ),
+                                                  Align(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                  ),
                                                   Divider()
                                                 ]
                                             ),
@@ -270,7 +274,7 @@ class _Report extends State<Report> {
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => ListVisit(
-                                        _selectedBranchId,
+                                        _selectedEmployeeId!,
                                         backReportOp: (int resMessage, BuildContext ctx, String id) {
                                           if (resMessage == 1) {
                                             Navigator.of(ctx).pop();
@@ -361,6 +365,10 @@ class _Report extends State<Report> {
                                                       child: Text(realization[i].customer.toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                     ),
                                                   ),
+                                                  Align(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                  ),
                                                   Divider()
                                                 ]
                                             ),
@@ -391,7 +399,7 @@ class _Report extends State<Report> {
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => ListPIC(
-                                        _selectedBranchId,
+                                        _selectedEmployeeId!,
                                         backReportOp: (int resMessage, BuildContext ctx, String id) {
                                           if (resMessage == 1) {
                                             Navigator.of(ctx).pop();
@@ -492,7 +500,7 @@ class _Report extends State<Report> {
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => ListPIC(
-                                        _selectedBranchId,
+                                        _selectedEmployeeId!,
                                         backReportOp: (int resMessage, BuildContext ctx, String id) {
                                           if (resMessage == 1) {
                                             Navigator.of(ctx).pop();
@@ -1107,6 +1115,10 @@ class _Report extends State<Report> {
                                                                           )
                                                                       ),
                                                                     ),
+                                                                    Align(
+                                                                        alignment: Alignment.centerRight,
+                                                                        child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                                    ),
                                                                     Divider()
                                                                   ]
                                                               ),
@@ -1227,6 +1239,10 @@ class _Report extends State<Report> {
                                                                         alignment: Alignment.centerLeft,
                                                                         child: Text(realization[i].customer.toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                                       ),
+                                                                    ),
+                                                                    Align(
+                                                                        alignment: Alignment.centerRight,
+                                                                        child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
                                                                     ),
                                                                     Divider()
                                                                   ]
