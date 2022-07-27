@@ -28,3 +28,13 @@ class EmployeeResponse{
 
   factory EmployeeResponse.fromJson(Map<String,dynamic> json) => _$EmployeeResponseFromJson(json);
 }
+
+@JsonSerializable()
+class EmployeeBranchResponse{
+  String message;
+  List<Employee> result;
+
+  EmployeeBranchResponse(this.message, this.result);
+
+  factory EmployeeBranchResponse.fromJson(Map<String,dynamic> json) => _$EmployeeBranchResponseFromJson(json);
+}

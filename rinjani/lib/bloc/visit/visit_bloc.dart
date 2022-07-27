@@ -191,7 +191,6 @@ class VisitBloc extends Bloc<VisitBlocEvent, VisitBlocState> {
   }
 
   Stream<VisitBlocState> _mapRealizationOpToState(GetRealizationOpEvent e) async* {
-    print("id: ${e.id}, filter: ${e.filter}");
     yield LoadingVisitState();
     final response = await _visitRepository.getRealizationOp(e.id, e.filter);
     yield GetRealizationOpState(response.result);

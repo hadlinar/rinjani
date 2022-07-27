@@ -18,3 +18,9 @@ class EmployeeList extends EmployeeBlocState{
 
   EmployeeList(this.getEmployee);
 }
+
+class EmployeeBranchList extends EmployeeBlocState{
+  List<Employee> getEmployee;
+
+  EmployeeBranchList(this.getEmployee);
+}

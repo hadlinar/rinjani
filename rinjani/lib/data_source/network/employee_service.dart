@@ -14,4 +14,7 @@ abstract class EmployeeService{
 
   @GET('/employee')
   Future<EmployeeResponse> getEmployee();
+
+  @GET('/employee/{branchId}')
+  Future<EmployeeBranchResponse> getEmployeeBranch(@Path('branchId') String branchId);
 }

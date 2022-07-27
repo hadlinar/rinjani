@@ -25,11 +25,20 @@ class EmployeeBloc extends Bloc<EmployeeBlocEvent, EmployeeBlocState> {
     if(event is GetEmployeeEvent) {
       yield* _mapEmployeeToState();
     }
+    if(event is GetEmployeeBranchEvent) {
+      yield* _mapEmployeeBranchToState(event);
+    }
   }
 
   Stream<EmployeeBlocState> _mapEmployeeToState() async* {
     yield LoadingEmployeeState();
     final response = await _employeeRepository.getEmployee();
     yield EmployeeList(response.result);
+  }
+
+  Stream<EmployeeBlocState> _mapEmployeeBranchToState(GetEmployeeBranchEvent e) async* {
+    yield LoadingEmployeeState();
+    final response = await _employeeRepository.getEmployeeBranch(e.branchId);
+    yield EmployeeBranchList(response.result);
   }
 }

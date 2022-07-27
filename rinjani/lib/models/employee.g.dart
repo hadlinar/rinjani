@@ -31,3 +31,19 @@ Map<String, dynamic> _$EmployeeResponseToJson(EmployeeResponse instance) =>
       'message': instance.message,
       'result': instance.result,
     };
+
+EmployeeBranchResponse _$EmployeeBranchResponseFromJson(
+        Map<String, dynamic> json) =>
+    EmployeeBranchResponse(
+      json['message'] as String,
+      (json['result'] as List<dynamic>)
+          .map((e) => Employee.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$EmployeeBranchResponseToJson(
+        EmployeeBranchResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'result': instance.result,
+    };
