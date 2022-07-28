@@ -5,3 +5,9 @@ import 'package:meta/meta.dart';
 abstract class EmployeeBlocEvent{}
 
 class GetEmployeeEvent extends EmployeeBlocEvent{}
+
+class GetEmployeeBranchEvent extends EmployeeBlocEvent{
+  String branchId;
+
+  GetEmployeeBranchEvent(this.branchId);
+}

@@ -16,7 +16,7 @@ class EventDataSource extends CalendarDataSource{
 
   @override
   DateTime getStartTime(int index) {
-    var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(getEvent(index).time_finish.toString());
+    var time = DateFormat("yyyy-MM-dd HH:mm:ss").parse(getEvent(index).time_start.toString());
     int newHourStart = getEvent(index).time_start.hour+0;
     // int newHourEnd = getEvent(index).time_finish.hour-7;
 

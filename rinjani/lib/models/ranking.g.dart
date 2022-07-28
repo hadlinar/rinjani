@@ -9,6 +9,7 @@ part of 'ranking.dart';
 Ranking _$RankingFromJson(Map<String, dynamic> json) => Ranking(
       json['branch_id'] as String,
       json['branch_name'] as String,
+      json['position'] as String,
       json['nik'] as String,
       json['name_emp'] as String,
       json['in_office'] as String,
@@ -20,6 +21,7 @@ Ranking _$RankingFromJson(Map<String, dynamic> json) => Ranking(
 Map<String, dynamic> _$RankingToJson(Ranking instance) => <String, dynamic>{
       'branch_id': instance.branch_id,
       'branch_name': instance.branch_name,
+      'position': instance.position,
       'nik': instance.nik,
       'name_emp': instance.name_emp,
       'in_office': instance.in_office,

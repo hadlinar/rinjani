@@ -133,7 +133,6 @@ class _Analyze extends State<Analyze> {
                                               setState(() {
                                                 _searchResult = value;
                                                 usersFiltered = ranking.where((user) => user.name_emp.toLowerCase().contains(_searchResult)).toList();
-                                                print(usersFiltered.length);
                                                 _data = MyData(usersFiltered);
                                               });
                                             }),
@@ -161,6 +160,9 @@ class _Analyze extends State<Analyze> {
                                           ),
                                           DataColumn(
                                             label: Text('Name', style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'medium')),
+                                          ),
+                                          DataColumn(
+                                            label: Text('Pos', style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'medium')),
                                           ),
                                           DataColumn(
                                             label: Text('In', style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'medium')),
@@ -299,6 +301,7 @@ class MyData extends DataTableSource {
             child: Text('${index+1}', style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'book'))
         )),
         DataCell(Text(ranking[index].name_emp, style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'medium'))),
+        DataCell(Text(ranking[index].position, style: TextStyle(color: Color(Global.BLACK), fontSize: 14, fontFamily: 'medium'))),
         DataCell(
             Align(
                 alignment: Alignment.center,

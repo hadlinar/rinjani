@@ -9,6 +9,7 @@ import 'package:rinjani/views/page/list_reports.dart';
 import 'package:rinjani/widget/rank.dart';
 
 import '../../bloc/branch/branch_bloc.dart';
+import '../../bloc/employee/employee_bloc.dart';
 import '../../bloc/ranking/ranking_bloc.dart';
 import '../../bloc/visit/visit_bloc.dart';
 import '../../models/branch.dart';
@@ -41,6 +42,7 @@ class _Report extends State<Report> {
   List<BranchOp>? branch;
 
   String? _selectedBranchName;
+  String? _selectedEmployeeId;
   String _selectedBranchId = "0";
   String? foundKey;
 
@@ -94,7 +96,7 @@ class _Report extends State<Report> {
                                     onTap: (){
                                       Navigator.push(context, MaterialPageRoute(
                                           builder: (context) => ListCustomer(
-                                            _selectedBranchId,
+                                            _selectedEmployeeId!,
                                             backReportOp: (int resMessage, BuildContext ctx, String id) {
                                               if (resMessage == 1) {
                                                 Navigator.of(ctx).pop();
@@ -114,7 +116,7 @@ class _Report extends State<Report> {
                                     onTap: (){
                                       Navigator.push(context, MaterialPageRoute(
                                           builder: (context) => ListPIC(
-                                            _selectedBranchId,
+                                            _selectedEmployeeId!,
                                             backReportOp: (int resMessage, BuildContext ctx, String id) {
                                               if (resMessage == 1) {
                                                 Navigator.of(ctx).pop();
@@ -143,7 +145,7 @@ class _Report extends State<Report> {
                                     onTap: (){
                                       Navigator.push(context, MaterialPageRoute(
                                           builder: (context) => ListVisit(
-                                            _selectedBranchId,
+                                            _selectedEmployeeId!,
                                             backReportOp: (int resMessage, BuildContext ctx, String id) {
                                               if (resMessage == 1) {
                                                 Navigator.of(ctx).pop();
@@ -163,7 +165,7 @@ class _Report extends State<Report> {
                                     onTap: (){
                                       Navigator.push(context, MaterialPageRoute(
                                           builder: (context) => ListReport(
-                                            _selectedBranchId,
+                                            _selectedEmployeeId!,
                                             backReportOp: (int resMessage, BuildContext ctx, String id) {
                                               if (resMessage == 1) {
                                                 Navigator.of(ctx).pop();
@@ -238,6 +240,10 @@ class _Report extends State<Report> {
                                                         )
                                                     ),
                                                   ),
+                                                  Align(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                  ),
                                                   Divider()
                                                 ]
                                             ),
@@ -268,7 +274,7 @@ class _Report extends State<Report> {
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => ListVisit(
-                                        _selectedBranchId,
+                                        _selectedEmployeeId!,
                                         backReportOp: (int resMessage, BuildContext ctx, String id) {
                                           if (resMessage == 1) {
                                             Navigator.of(ctx).pop();
@@ -359,6 +365,10 @@ class _Report extends State<Report> {
                                                       child: Text(realization[i].customer.toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                     ),
                                                   ),
+                                                  Align(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                  ),
                                                   Divider()
                                                 ]
                                             ),
@@ -389,7 +399,7 @@ class _Report extends State<Report> {
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => ListPIC(
-                                        _selectedBranchId,
+                                        _selectedEmployeeId!,
                                         backReportOp: (int resMessage, BuildContext ctx, String id) {
                                           if (resMessage == 1) {
                                             Navigator.of(ctx).pop();
@@ -490,7 +500,7 @@ class _Report extends State<Report> {
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => ListPIC(
-                                        _selectedBranchId,
+                                        _selectedEmployeeId!,
                                         backReportOp: (int resMessage, BuildContext ctx, String id) {
                                           if (resMessage == 1) {
                                             Navigator.of(ctx).pop();
@@ -832,8 +842,10 @@ class _Report extends State<Report> {
                                 }).toList(),
                                 onChanged: (String? value) {
                                   setState(() {
+                                    _selectedEmployeeId =  null;
                                     _selectedBranchName = value;
                                     _selectedBranchId = value!.split(", ")[0];
+                                    BlocProvider.of<EmployeeBloc>(context).add(GetEmployeeBranchEvent(_selectedBranchId));
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -851,14 +863,70 @@ class _Report extends State<Report> {
                                 ),
                               )
                           ),
-                          _selectedBranchName != null ?
+                          _selectedBranchName != null ? Container(
+                            child: BlocBuilder<EmployeeBloc, EmployeeBlocState> (
+                              builder: (context, state) {
+                                if(state is LoadingEmployeeState) {
+                                  return Container(
+                                      padding: const EdgeInsets.only(top: 20, bottom: 17),
+                                      child: const Center(
+                                          child: CircularProgressIndicator()
+                                      )
+                                  );
+                                } else if(state is EmployeeBranchList) {
+                                  return Container(
+                                      padding: const EdgeInsets.only(top: 22, right: 21, left: 21),
+                                      child: DropdownButtonFormField<String>(
+                                        hint: const Text("Choose user"),
+                                        dropdownColor: Colors.white,
+                                        style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                        value: _selectedEmployeeId,
+                                        items: state.getEmployee.map((e) {
+                                          return DropdownMenuItem<String>(
+                                            value: e.nik,
+                                            child: Text(e.name),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            _selectedEmployeeId = value;
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                          labelText: "User",
+                                          labelStyle: const TextStyle(
+                                              color: Color(0xff757575),
+                                              fontSize: 15,
+                                              fontFamily: 'medium'),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(10),
+                                              borderSide: BorderSide()
+                                          ),
+                                        ),
+                                      )
+                                  );
+                                }
+                                else {
+                                  return Container();
+                                }
+                              }
+                            )
+                          ) : Container(),
+
+
+
+                          // ========================
+                          _selectedEmployeeId != null ?
                           Container(
                             child: SingleChildScrollView(
                                 reverse: false,
-                                child: reportOp(context, _selectedBranchId)
+                                child: reportOp(context, _selectedEmployeeId!)
                             ),
-                          ):
-                          Container()
+                          ) : Container()
+                        //  ==========================
+
                         ],
                       ),
                     )
@@ -1047,6 +1115,10 @@ class _Report extends State<Report> {
                                                                           )
                                                                       ),
                                                                     ),
+                                                                    Align(
+                                                                        alignment: Alignment.centerRight,
+                                                                        child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                                    ),
                                                                     Divider()
                                                                   ]
                                                               ),
@@ -1167,6 +1239,10 @@ class _Report extends State<Report> {
                                                                         alignment: Alignment.centerLeft,
                                                                         child: Text(realization[i].customer.toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium')),
                                                                       ),
+                                                                    ),
+                                                                    Align(
+                                                                        alignment: Alignment.centerRight,
+                                                                        child: Text(DateFormat('dd/MM/yyyy').format(realization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
                                                                     ),
                                                                     Divider()
                                                                   ]

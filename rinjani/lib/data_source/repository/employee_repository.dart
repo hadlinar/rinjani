@@ -11,4 +11,9 @@ class EmployeeRepository {
     return response;
   }
 
+  Future<EmployeeBranchResponse> getEmployeeBranch(String branchId) async {
+    final response = await employeeService.getEmployeeBranch(branchId);
+    return response;
+  }
+
 }

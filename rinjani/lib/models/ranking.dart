@@ -3,6 +3,7 @@ part 'ranking.g.dart';
 
 // "branch_id": "11",
 // "branch_name": "KANTOR PUSAT",
+// "position": "GM",
 // "nik": "1988402021",
 // "name_emp": "CHRISTYARSIH,SE",
 // "in_office": "0",
@@ -14,6 +15,7 @@ part 'ranking.g.dart';
 class Ranking{
   String branch_id;
   String branch_name;
+  String position;
   String nik;
   String name_emp;
   String in_office;
@@ -24,6 +26,7 @@ class Ranking{
   Ranking(
       this.branch_id,
       this.branch_name,
+      this.position,
       this.nik,
       this.name_emp,
       this.in_office,

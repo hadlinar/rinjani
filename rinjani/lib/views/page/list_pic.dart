@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/visit/visit_bloc.dart';
-import '../../models/user.dart';
-import '../../models/visit.dart';
+import 'package:intl/intl.dart';
 import '../../utils/global.dart';
 import '../../utils/global_state.dart';
 
@@ -234,6 +233,10 @@ class _ListPIC extends State<ListPIC> {
                                                             ),
                                                           ],
                                                         ),
+                                                        Align(
+                                                            alignment: Alignment.centerRight,
+                                                            child: Text(DateFormat('dd/MM/yyyy').format(state.getRealization[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
+                                                        ),
                                                         Divider()
                                                       ]
                                                   ),
@@ -290,7 +293,7 @@ class _ListPIC extends State<ListPIC> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            Container(
+                                                            Expanded(
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,6 +335,10 @@ class _ListPIC extends State<ListPIC> {
                                                               ),
                                                             ),
                                                           ],
+                                                        ),
+                                                        Align(
+                                                            alignment: Alignment.centerRight,
+                                                            child: Text(DateFormat('dd/MM/yyyy').format(state.getRealizationOp[i].time_finish).toString(), style: Global.getCustomFont(Global.GREY, 14, 'medium'))
                                                         ),
                                                         Divider()
                                                       ]
