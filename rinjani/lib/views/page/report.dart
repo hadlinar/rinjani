@@ -57,6 +57,7 @@ class _Report extends State<Report> {
     foundKey = "";
     BlocProvider.of<VisitBloc>(context).add(GetRealizationEvent("year"));
     BlocProvider.of<BranchBloc>(context).add(GetBranchOpEvent());
+    store.get("role_id") == '4' ? BlocProvider.of<EmployeeBloc>(context).add(GetEmployeeBranchEvent(store.get("branch_id"))) : null;
   }
 
   Widget reportOp(BuildContext context, String id){
@@ -932,7 +933,134 @@ class _Report extends State<Report> {
                     )
                 )
             ) :
-            SingleChildScrollView(
+            (store.get("role_id") == '4' ? Container(
+                child: BlocListener<BranchBloc, BranchBlocState>(
+                    listener: (context, state) {
+                      if(state is InitialBranchBlocState || state is LoadingBranchState) {
+                        Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: const Center(child: CircularProgressIndicator())
+                        );
+                      } if (state is BranchOpList) {
+                        setState(() {
+                          branch = state.getBranchOp;
+                        });
+                      } else {
+                        Container();
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      reverse: false,
+                      child: Column(
+                        children: <Widget>[
+                          // Container(
+                          //     padding: const EdgeInsets.only(top: 22, right: 21, left: 21),
+                          //     child: DropdownButtonFormField<String>(
+                          //       hint: const Text("Choose branch"),
+                          //       dropdownColor: Colors.white,
+                          //       style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                          //       value: _selectedBranchName,
+                          //       items: branch?.map((e) {
+                          //         return DropdownMenuItem<String>(
+                          //           value: e.branch_id + ", " + e.branch_name,
+                          //           child: Text(e.branch_name),
+                          //         );
+                          //       }).toList(),
+                          //       onChanged: (String? value) {
+                          //         setState(() {
+                          //           _selectedEmployeeId =  null;
+                          //           _selectedBranchName = value;
+                          //           _selectedBranchId = value!.split(", ")[0];
+                          //           BlocProvider.of<EmployeeBloc>(context).add(GetEmployeeBranchEvent(_selectedBranchId));
+                          //         });
+                          //       },
+                          //       decoration: InputDecoration(
+                          //         contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                          //         labelText: "Branch",
+                          //         labelStyle: const TextStyle(
+                          //             color: Color(0xff757575),
+                          //             fontSize: 15,
+                          //             fontFamily: 'medium'),
+                          //         border: OutlineInputBorder(
+                          //             borderRadius:
+                          //             BorderRadius.circular(10),
+                          //             borderSide: BorderSide()
+                          //         ),
+                          //       ),
+                          //     )
+                          // ),
+
+
+                          Container(
+                              child: BlocBuilder<EmployeeBloc, EmployeeBlocState> (
+                                  builder: (context, state) {
+                                    if(state is LoadingEmployeeState) {
+                                      return Container(
+                                          padding: const EdgeInsets.only(top: 20, bottom: 17),
+                                          child: const Center(
+                                              child: CircularProgressIndicator()
+                                          )
+                                      );
+                                    } else if(state is EmployeeBranchList) {
+                                      return Container(
+                                          padding: const EdgeInsets.only(top: 22, right: 21, left: 21),
+                                          child: DropdownButtonFormField<String>(
+                                            hint: const Text("Choose user"),
+                                            dropdownColor: Colors.white,
+                                            style: Global.getCustomFont(Global.BLACK, 15, 'medium'),
+                                            value: _selectedEmployeeId,
+                                            items: state.getEmployee.map((e) {
+                                              return DropdownMenuItem<String>(
+                                                value: e.nik,
+                                                child: Text(e.name),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? value) {
+                                              setState(() {
+                                                _selectedEmployeeId = value;
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                              contentPadding: const EdgeInsets.only( top: 10, bottom: 10, left: 12, right: 12),
+                                              labelText: "User",
+                                              labelStyle: const TextStyle(
+                                                  color: Color(0xff757575),
+                                                  fontSize: 15,
+                                                  fontFamily: 'medium'),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(10),
+                                                  borderSide: BorderSide()
+                                              ),
+                                            ),
+                                          )
+                                      );
+                                    }
+                                    else {
+                                      return Container();
+                                    }
+                                  }
+                              )
+                          ),
+
+
+
+                          // ========================
+                          _selectedEmployeeId != null ?
+                          Container(
+                            child: SingleChildScrollView(
+                                reverse: false,
+                                child: reportOp(context, _selectedEmployeeId!)
+                            ),
+                          ) : Container()
+                          //  ==========================
+
+                        ],
+                      ),
+                    )
+                )
+            ) : SingleChildScrollView(
                 reverse: false,
                 child: Container(
                     child: Column(
@@ -1423,7 +1551,7 @@ class _Report extends State<Report> {
                         ]
                     )
                 )
-            )
+            ))
         )
     );
   }
